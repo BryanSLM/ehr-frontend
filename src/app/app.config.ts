@@ -1,3 +1,4 @@
+import Aura from '@primeng/themes/aura';
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -19,7 +20,9 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimationsAsync(),
     providePrimeNG({
-      theme: {}, //TODO: Configurar tema de se necesario
+      theme: {
+        preset: Aura,
+      },
     }),
   ],
 };
