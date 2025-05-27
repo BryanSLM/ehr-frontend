@@ -16,7 +16,9 @@
             "outputPath": "dist/ehr-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -77,8 +79,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
-
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "allowedCommonJsDependencies": [
               "core-js/modules/es.promise",
               "jspdf-autotable",
@@ -86,7 +90,6 @@
               "rgbcolor",
               "raf"
             ],
-
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {
@@ -105,11 +108,23 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "2675287e-97f7-4e46-b40f-b8dd2bfa275a"
+    "analytics": "2675287e-97f7-4e46-b40f-b8dd2bfa275a",
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }
