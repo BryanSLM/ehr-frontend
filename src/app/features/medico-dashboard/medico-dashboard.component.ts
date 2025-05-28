@@ -11,7 +11,7 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './medico-dashboard.component.html',
-  styleUrls: ['./medico-dashboard.component.css']
+  styleUrls: ['./medico-dashboard.component.css'],
 })
 export class MedicoDashboardComponent implements OnInit {
   pacientesConEvolucion: any[] = [];
@@ -25,11 +25,11 @@ export class MedicoDashboardComponent implements OnInit {
     private medicoService: MedicoService,
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.filterForm = this.fb.group({
       busqueda: [''],
-      fecha: ['']
+      fecha: [''],
     });
   }
 
@@ -48,22 +48,22 @@ export class MedicoDashboardComponent implements OnInit {
   cargarPacientesOtrosMedicos() {
     this.loading = true;
     this.medicoService.getPacientesOtrosMedicos().subscribe({
-        next: (response) => {
-            this.pacientesOtrosMedicos = response.data;
-            this.loading = false;
-        },
-        error: (error) => {
-            this.error = 'Error al cargar pacientes de otros médicos';
-            this.loading = false;
-            console.error('Error:', error);
-        }
+      next: (response) => {
+        this.pacientesOtrosMedicos = response.data;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.error = 'Error al cargar pacientes de otros médicos';
+        this.loading = false;
+        console.error('Error:', error);
+      },
     });
-}
+  }
 
-// Método para ver evoluciones de otros médicos
-verEvolucionesOtroMedico(pacienteId: number) {
-  this.router.navigate(['/doctor/evoluciones-paciente', pacienteId]);
-}
+  // Método para ver evoluciones de otros médicos
+  verEvolucionesOtroMedico(pacienteId: number) {
+    this.router.navigate(['/doctor/evoluciones-paciente', pacienteId]);
+  }
   cargarPacientesClasificados() {
     this.loading = true;
     this.medicoService.getPacientesClasificados().subscribe({
@@ -76,44 +76,44 @@ verEvolucionesOtroMedico(pacienteId: number) {
         this.error = 'Error al cargar los pacientes';
         this.loading = false;
         console.error('Error detallado:', error);
-      }
+      },
     });
   }
 
-    // Agregar nuevos métodos
-    verEvoluciones(pacienteId: number) {
-      // Verificar si hay token válido
-      if (!this.authService.isAuthenticated()) {
-        console.log('No autenticado, redirigiendo a login');
-        this.router.navigate(['/login']);
-        return;
-      }
-    
-      this.router.navigate(['/doctor/evoluciones-paciente', pacienteId]);
+  // Agregar nuevos métodos
+  verEvoluciones(pacienteId: number) {
+    // Verificar si hay token válido
+    if (!this.authService.isAuthenticated()) {
+      console.log('No autenticado, redirigiendo a login');
+      this.router.navigate(['/login']);
+      return;
     }
-  
-    editarEvolucion(evolucionId: number) {
-      this.router.navigate(['/doctor/evolucion/edit', evolucionId]);
+
+    this.router.navigate(['/doctor/evoluciones-paciente', pacienteId]);
+  }
+
+  editarEvolucion(evolucionId: number) {
+    this.router.navigate(['/doctor/evolucion/edit', evolucionId]);
+  }
+
+  eliminarEvolucion(evolucionId: number) {
+    if (confirm('¿Está seguro de eliminar esta evolución?')) {
+      this.medicoService.eliminarEvolucion(evolucionId).subscribe({
+        next: () => {
+          this.cargarPacientesClasificados();
+        },
+        error: (error) => {
+          this.error = 'Error al eliminar la evolución';
+          console.error('Error:', error);
+        },
+      });
     }
-  
-    eliminarEvolucion(evolucionId: number) {
-      if (confirm('¿Está seguro de eliminar esta evolución?')) {
-        this.medicoService.eliminarEvolucion(evolucionId).subscribe({
-          next: () => {
-            this.cargarPacientesClasificados();
-          },
-          error: (error) => {
-            this.error = 'Error al eliminar la evolución';
-            console.error('Error:', error);
-          }
-        });
-      }
-    }
+  }
 
   aplicarFiltros() {
     const filtros = this.filterForm.value;
     this.loading = true;
-    
+
     // Llamar al método sin parámetros
     this.medicoService.getPacientesConSignos().subscribe({
       next: (data) => {
@@ -124,7 +124,7 @@ verEvolucionesOtroMedico(pacienteId: number) {
       error: (error) => {
         this.error = 'Error al aplicar los filtros';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -132,23 +132,29 @@ verEvolucionesOtroMedico(pacienteId: number) {
 
   private filtrarPacientes(pacientes: any[], filtros: any): any[] {
     if (!pacientes) return [];
-    
-    return pacientes.filter(paciente => {
+
+    return pacientes.filter((paciente) => {
       let cumpleFiltros = true;
 
       if (filtros.busqueda) {
         const busqueda = filtros.busqueda.toLowerCase();
-        const nombreCompleto = `${paciente.primer_nombre} ${paciente.apellido_paterno}`.toLowerCase();
+        const nombreCompleto =
+          `${paciente.primer_nombre} ${paciente.apellido_paterno}`.toLowerCase();
         const cedula = paciente.cedula?.toLowerCase() || '';
-        cumpleFiltros = cumpleFiltros && (nombreCompleto.includes(busqueda) || cedula.includes(busqueda));
+        cumpleFiltros =
+          cumpleFiltros &&
+          (nombreCompleto.includes(busqueda) || cedula.includes(busqueda));
       }
 
       if (filtros.fecha) {
         // Solo verificamos la fecha si el paciente tiene signos vitales
         if (paciente.signosVitales && paciente.signosVitales[0]) {
           const fechaFiltro = new Date(filtros.fecha);
-          const fechaSignos = new Date(paciente.signosVitales[0].fecha_medicion);
-          cumpleFiltros = cumpleFiltros && 
+          const fechaSignos = new Date(
+            paciente.signosVitales[0].fecha_medicion,
+          );
+          cumpleFiltros =
+            cumpleFiltros &&
             fechaSignos.toDateString() === fechaFiltro.toDateString();
         } else {
           cumpleFiltros = false;
@@ -170,7 +176,7 @@ verEvolucionesOtroMedico(pacienteId: number) {
     console.log('Creando evolución para paciente:', pacienteId);
     // Cambiado de '/doctor/evolucion/nueva' a '/doctor/evolucion/new'
     this.router.navigate(['/doctor/evolucion/new'], {
-      queryParams: { pacienteId: pacienteId }
+      queryParams: { pacienteId: pacienteId },
     });
   }
 
@@ -191,4 +197,4 @@ verEvolucionesOtroMedico(pacienteId: number) {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
-  }
+}

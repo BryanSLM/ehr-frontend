@@ -10,13 +10,13 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule]
+  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class LoginComponent {
   formData = {
     username: '',
     password: '',
-    selectedRole: ''
+    selectedRole: '',
   };
 
   errorMessage = '';
@@ -25,21 +25,20 @@ export class LoginComponent {
   isTyping = false; // Para controlar si se está escribiendo
   showPassword = false; // Estado inicial del campo de contraseña
 
-
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {}
 
-// Si hay texto en el input, muestra el ojo
+  // Si hay texto en el input, muestra el ojo
   onPasswordInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.isTyping = input.value.length > 0; 
+    this.isTyping = input.value.length > 0;
   }
- // Función para alternar visibilidad de la contraseña
- togglePasswordVisibility() {
-  this.showPassword = !this.showPassword;
-}
+  // Función para alternar visibilidad de la contraseña
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
   login() {
     // Validación de campos
     if (!this.formData.username || !this.formData.password) {
@@ -50,46 +49,50 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.login(
-      this.formData.username,
-      this.formData.password
-    ).subscribe({
-      next: (response) => {
-        if (!response.user.active) {
-          this.errorMessage = 'Usuario desactivado. Contacte al administrador.';
+    this.authService
+      .login(this.formData.username, this.formData.password)
+      .subscribe({
+        next: (response) => {
+          if (!response.user.active) {
+            this.errorMessage =
+              'Usuario desactivado. Contacte al administrador.';
+            this.isLoading = false;
+            return;
+          }
+
+          // Guardar datos en localStorage
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+
+          const userRole = response.user.role.toLowerCase();
+
+          // Redirigir según el rol
+          switch (response.user.role) {
+            case 'administrador':
+              this.router.navigate(['/admin']);
+              break;
+            case 'doctor':
+              this.router.navigate(['/doctor']);
+              break;
+            case 'secretaria':
+              this.router.navigate(['/secretaria']);
+              break;
+            case 'enfermera':
+              this.router.navigate(['/enfermera']);
+              break;
+            case 'paciente':
+              this.router.navigate(['/home']);
+              break;
+            default:
+              this.router.navigate(['/']);
+          }
+        },
+        error: (error) => {
+          console.error('Error en login:', error);
+          this.errorMessage =
+            error.error?.message || 'Error en el inicio de sesión';
           this.isLoading = false;
-          return;
-        }
-
-        // Guardar datos en localStorage
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-
-        const userRole = response.user.role.toLowerCase();
-
-        // Redirigir según el rol
-        switch (response.user.role) {
-          case 'administrador':
-            this.router.navigate(['/admin']);
-            break;
-          case 'doctor':
-            this.router.navigate(['/doctor']);
-            break;
-          case 'secretaria':
-            this.router.navigate(['/secretaria']);
-            break;
-          case 'enfermera':
-            this.router.navigate(['/enfermera']);
-            break;
-          default:
-            this.router.navigate(['/']);
-        }
-      },
-      error: (error) => {
-        console.error('Error en login:', error);
-        this.errorMessage = error.error?.message || 'Error en el inicio de sesión';
-        this.isLoading = false;
-      }
-    });
+        },
+      });
   }
 }

@@ -1,20 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, Inject } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard {
   constructor(
     private authService: AuthService,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): boolean {
     console.log('AuthGuard - Verificando ruta:', state.url);
 
     if (!isPlatformBrowser(this.platformId)) {
@@ -30,12 +37,14 @@ export class AuthGuard {
     const userRole = this.authService.getUserRole();
     console.log('Rol del usuario:', userRole);
 
-    const requiredRoles = route.data['roles'] as Array<string>;
+    const requiredRoles = route.data['roles'] as string[];
     console.log('Roles requeridos:', requiredRoles);
 
     if (requiredRoles && requiredRoles.length > 0) {
       if (!requiredRoles.includes(userRole)) {
-        console.log(`Acceso denegado. Roles requeridos: ${requiredRoles}, Rol actual: ${userRole}`);
+        console.log(
+          `Acceso denegado. Roles requeridos: ${requiredRoles}, Rol actual: ${userRole}`,
+        );
         this.router.navigate(['/unauthorized']);
         return false;
       } else {

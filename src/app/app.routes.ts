@@ -1,14 +1,13 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/login/login.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { AdminComponent } from './features/admin/admin.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { PatientsComponent } from './features/patients/patients.component';
 import { ConsultoriosComponent } from './features/consultorios/consultorios.component';
-import { ReportsComponent } from './features/reports/reports.component';
 import { UnauthorizedComponent } from './features/NoAutorizado/unauthorized.component';
-import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { ForgotPasswordComponent } from './features/recuperar_contraseña/forgot-password.component';
 import { ResetPasswordComponent } from './features/recuperar_contraseña/reset-password.component';
 import { PatientFormComponent } from './features/patients/patient-form/patient-form.component';
@@ -24,42 +23,42 @@ import { EvolucionMedicaComponent } from './features/medico-dashboard/evolucion-
 import { MedicoDashboardComponent } from './features/medico-dashboard/medico-dashboard.component';
 import { EvolucionesPacienteComponent } from './features/medico-dashboard/evoluciones-paciente/evoluciones-paciente.component';
 import { PacientesMedicoComponent } from './features/medico-dashboard/pacientes-medico/pacientes-medico.component';
-
+import { DashboardPacienteComponent } from './features/dashboard-paciente/dashboard-paciente.component';
 
 export const routes: Routes = [
-  { 
-    path: '', 
-    redirectTo: '/login', 
-    pathMatch: 'full' 
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full',
   },
-  { 
-    path: 'login', 
-    component: LoginComponent 
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'patients',
     component: PatientsComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['administrador', 'doctor', 'secretaria'] } 
+    data: { roles: ['administrador', 'doctor', 'secretaria'] },
   },
   {
     path: 'patients/new',
     component: PatientFormComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['administrador','doctor', 'secretaria'] }
+    data: { roles: ['administrador', 'doctor', 'secretaria'] },
   },
   {
     path: 'patients/:id/edit',
     component: PatientFormComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['administrador','doctor', 'secretaria'] }
+    data: { roles: ['administrador', 'doctor', 'secretaria'] },
   },
   {
     path: 'admin',
     canActivate: [AuthGuard],
     component: AdminDashboardComponent,
     providers: [provideHttpClient(withInterceptorsFromDi())],
-    data: { roles: ['administrador'] }
+    data: { roles: ['administrador'] },
   },
   {
     path: 'doctor',
@@ -68,29 +67,29 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: MedicoDashboardComponent
+        component: MedicoDashboardComponent,
       },
       {
         path: 'evolucion/new',
-        component: EvolucionMedicaComponent
+        component: EvolucionMedicaComponent,
       },
       {
         path: 'evolucion/:id',
-        component: EvolucionMedicaComponent
+        component: EvolucionMedicaComponent,
       },
       {
         path: 'vital-signs/:id',
-        component: VitalSignsListComponent
+        component: VitalSignsListComponent,
       },
       {
-        path: 'evoluciones-paciente/:id',  // Corregido aquí
-        component: EvolucionesPacienteComponent
+        path: 'evoluciones-paciente/:id', // Corregido aquí
+        component: EvolucionesPacienteComponent,
       },
       {
         path: 'pacientes',
-        component: PacientesMedicoComponent
+        component: PacientesMedicoComponent,
       },
-    ]
+    ],
   },
   {
     path: 'secretaria',
@@ -101,50 +100,50 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'patients',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'patients',
-        component: PatientsComponent
+        component: PatientsComponent,
       },
       {
         path: 'consultorios',
-        component: ConsultoriosComponent
+        component: ConsultoriosComponent,
       },
       {
         path: 'citas',
         children: [
           {
             path: '',
-            component: CitasListComponent
+            component: CitasListComponent,
           },
           {
             path: 'nueva',
-            component: CitaFormComponent
+            component: CitaFormComponent,
           },
           {
             path: ':id',
-            component: CitasDetailComponent
+            component: CitasDetailComponent,
           },
           {
             path: ':id/editar',
-            component: CitaFormComponent
-          }
-        ]
-      }
-    ]
+            component: CitaFormComponent,
+          },
+        ],
+      },
+    ],
   },
-  { 
-    path: 'unauthorized', 
-    component: UnauthorizedComponent
+  {
+    path: 'unauthorized',
+    component: UnauthorizedComponent,
   },
-  { 
-    path: 'forgot-password', 
-    component: ForgotPasswordComponent 
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
   },
-  { 
-    path: 'reset-password', 
-    component: ResetPasswordComponent 
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
   },
   {
     path: 'citas',
@@ -153,21 +152,21 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: CitasListComponent
+        component: CitasListComponent,
       },
       {
         path: 'nueva',
-        component: CitaFormComponent
+        component: CitaFormComponent,
       },
       {
         path: ':id',
-        component: CitasDetailComponent
+        component: CitasDetailComponent,
       },
       {
         path: ':id/editar',
-        component: CitaFormComponent
-      }
-    ]
+        component: CitaFormComponent,
+      },
+    ],
   },
   {
     path: 'enfermera',
@@ -176,26 +175,31 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: EnfermeraDashboardComponent
+        component: EnfermeraDashboardComponent,
       },
       {
         path: 'vital-signs',
-        component: VitalSignsListComponent
+        component: VitalSignsListComponent,
       },
       {
         path: 'vital-signs/new',
-        component: VitalSignsFormComponent
+        component: VitalSignsFormComponent,
       },
       {
         path: 'vital-signs/:id/edit',
-        component: VitalSignsFormComponent
-      }
-    ]
-},
-  { 
-    path: '**', 
-    redirectTo: '/login' 
-  }
+        component: VitalSignsFormComponent,
+      },
+    ],
+  },
+  // Routes for the patient role
+  {
+    path: 'home',
+    component: DashboardPacienteComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['paciente'] }, //TODO: Adjust roles as needed
+  },
+  {
+    path: '**',
+    redirectTo: '/login',
+  },
 ];
-
-

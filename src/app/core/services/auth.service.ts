@@ -19,7 +19,7 @@ interface LoginResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
@@ -28,34 +28,35 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {}
 
   login(username: string, password: string): Observable<LoginResponse> {
     console.log('Iniciando login para:', username);
-    
-    return this.http.post<LoginResponse>(`${this.apiUrl}/api/auth/login`, { 
-      username, 
-      password 
-    }).pipe(
-      tap(response => {
-        console.log('Respuesta del login:', response);
-        if (response.token) {
-          this.setSession(response);
-        }
-      }),
-      catchError(error => {
-        console.error('Error en login:', error);
-        return throwError(() => error);
+
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/api/auth/login`, {
+        username,
+        password,
       })
-    );
+      .pipe(
+        tap((response) => {
+          console.log('Respuesta del login:', response);
+          if (response.token) {
+            this.setSession(response);
+          }
+        }),
+        catchError((error) => {
+          console.error('Error en login:', error);
+          return throwError(() => error);
+        }),
+      );
   }
 
   private setSession(response: LoginResponse): void {
     localStorage.setItem(this.tokenKey, response.token);
     localStorage.setItem(this.userKey, JSON.stringify(response.user));
   }
-  
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
@@ -95,7 +96,7 @@ export class AuthService {
     try {
       const userStr = localStorage.getItem('user');
       if (!userStr) return '';
-      
+
       const user = JSON.parse(userStr);
       return user.role || '';
     } catch (error) {
@@ -116,35 +117,38 @@ export class AuthService {
 
   forgotPassword(email: string): Observable<any> {
     console.log('Enviando solicitud de recuperación para:', { email });
-    
-    return this.http.post(`${this.apiUrl}/api/auth/forgot-password`, { 
-      email 
-    }).pipe(
-      tap(response => {
-        console.log('Respuesta de forgot password:', response);
-      }),
-      catchError(error => {
-        console.error('Error en forgot password:', error);
-        return throwError(() => error);
+
+    return this.http
+      .post(`${this.apiUrl}/api/auth/forgot-password`, {
+        email,
       })
-    );
+      .pipe(
+        tap((response) => {
+          console.log('Respuesta de forgot password:', response);
+        }),
+        catchError((error) => {
+          console.error('Error en forgot password:', error);
+          return throwError(() => error);
+        }),
+      );
   }
 
   resetPassword(token: string, newPassword: string): Observable<any> {
     console.log('Enviando reset password con token');
-    
-    return this.http.post(`${this.apiUrl}/api/auth/reset-password`, {
-        token,
-        newPassword  // Mantener como newPassword para coincidir con el backend
-    }).pipe(
-        tap(response => {
-            console.log('Respuesta del servidor reset password:', response);
-        }),
-        catchError(error => {
-            console.error('Error en reset password:', error);
-            return throwError(() => error);
-        })
-    );
-}
 
+    return this.http
+      .post(`${this.apiUrl}/api/auth/reset-password`, {
+        token,
+        newPassword, // Mantener como newPassword para coincidir con el backend
+      })
+      .pipe(
+        tap((response) => {
+          console.log('Respuesta del servidor reset password:', response);
+        }),
+        catchError((error) => {
+          console.error('Error en reset password:', error);
+          return throwError(() => error);
+        }),
+      );
+  }
 }
