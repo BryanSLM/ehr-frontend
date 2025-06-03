@@ -24,6 +24,7 @@ import { MedicoDashboardComponent } from './features/medico-dashboard/medico-das
 import { EvolucionesPacienteComponent } from './features/medico-dashboard/evoluciones-paciente/evoluciones-paciente.component';
 import { PacientesMedicoComponent } from './features/medico-dashboard/pacientes-medico/pacientes-medico.component';
 import { DashboardPacienteComponent } from './features/dashboard-paciente/dashboard-paciente.component';
+import { CitaNewComponent } from './features/citas/cita-new/cita-new.component';
 
 export const routes: Routes = [
   {
@@ -148,7 +149,7 @@ export const routes: Routes = [
   {
     path: 'citas',
     canActivate: [AuthGuard],
-    data: { roles: ['secretaria'] },
+    // data: { roles: ['secretaria'] },
     children: [
       {
         path: '',
@@ -156,7 +157,7 @@ export const routes: Routes = [
       },
       {
         path: 'nueva',
-        component: CitaFormComponent,
+        component: CitaNewComponent,
       },
       {
         path: ':id',

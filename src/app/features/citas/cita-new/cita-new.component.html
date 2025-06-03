@@ -1,0 +1,36 @@
+<div
+  class="border-2 border-red-500 w-full h-fullscreen p-8 flex items-center justify-content-center"
+>
+  <div class="w-11 border-3 border-round-xl border-black h-40rem p-4">
+    <p class="text-5xl font-bold text-center">AGENDA TU CITA</p>
+    <div
+      class="border-2 border-blue-500 w-full mt-8 flex flex-content-center gap-4"
+    >
+      <div class="flex gap-4 align-items-center">
+        <div>
+          <p-floatlabel>
+            <input id="username" pInputText [(ngModel)]="ci" />
+            <label for="username">Username</label>
+          </p-floatlabel>
+        </div>
+        <div>
+          <p-select
+            [options]="specialties"
+            [(ngModel)]="selectedSpecialty"
+            optionLabel="name"
+            placeholder="Selecciona una especialidad"
+            class="w-full md:w-56"
+          />
+        </div>
+      </div>
+      <!-- <div
+        class="h-25rem w-25rem bg-no-repeat border-2 border-red-500"
+        src="/assets/botiquin3d.png"
+        style="
+          background-image: url('/assets/botiquin3d.png');
+          object-fit: cover;
+        "
+      ></div> -->
+    </div>
+  </div>
+</div>

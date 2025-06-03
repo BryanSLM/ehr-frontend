@@ -16,12 +16,16 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withFetch(), // Añade esta línea
-      withInterceptors([authInterceptor])
+      withInterceptors([authInterceptor]),
     ),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: Aura,
+        options: {
+          darkModeSelector: 'html[data-theme="light"]',
+          lightModeSelector: 'html[data-theme="light"]',
+        },
       },
     }),
   ],
