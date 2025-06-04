@@ -148,7 +148,7 @@ export const routes: Routes = [
   },
   {
     path: 'citas',
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     // data: { roles: ['secretaria'] },
     children: [
       {

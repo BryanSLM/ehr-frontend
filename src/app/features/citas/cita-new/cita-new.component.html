@@ -1,36 +1,69 @@
 <div
   class="border-2 border-red-500 w-full h-fullscreen p-8 flex items-center justify-content-center"
 >
-  <div class="w-11 border-3 border-round-xl border-black h-40rem p-4">
+  <div
+    class="w-11 border-3 border-blue-500 border-round-xl border-black h-45rem p-4"
+  >
     <p class="text-5xl font-bold text-center">AGENDA TU CITA</p>
     <div
-      class="border-2 border-blue-500 w-full mt-8 flex flex-content-center gap-4"
-    >
-      <div class="flex gap-4 align-items-center">
-        <div>
-          <p-floatlabel>
-            <input id="username" pInputText [(ngModel)]="ci" />
-            <label for="username">Username</label>
-          </p-floatlabel>
+      class="border-3 border-blue-500 w-full h-40rem mt-4 flex justify-content-around"
+    > 
+      @if(!modeRegister){
+        <div
+        class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
+      >
+        <p class="text-5xl font-bold">Identificación</p>
+        <div class="flex gap-4 align-items-center border-2 border-red-500">
+          <div class="w-15rem">
+            <label class="mb-2">Tipo de Identificación:</label>
+            <p-select
+              optionLabel="name"
+              [optionValue]="'value'"
+              [options]="typesIdentity"
+              [(ngModel)]="selectedTypeIdentity"
+              placeholder="Tipo de Identificación"
+              class="w-full"
+              (onChange)="imprimir()"
+            />
+          </div>
+          <div class="flex flex-column w-15rem border-2 border-green-500">
+            <!-- {{selectedTypeIdentity.name}} -->
+            <!-- <p-floatlabel> -->
+              <label class="mb-2" for="identification">
+                {{ selectedTypeIdentity === 'ci' ? 'Cédula de Identidad:' : 'Pasaporte:' }}</label
+              >
+              <input
+                id="identification"
+                pInputText
+                [(ngModel)]="identification"
+                [placeholder]="selectedTypeIdentity === 'ci' ? 'Ingrese su cédula' : 'Ingrese su pasaporte'"
+              />
+              
+            <!-- </p-floatlabel> -->
+          </div>
         </div>
-        <div>
-          <p-select
-            [options]="specialties"
-            [(ngModel)]="selectedSpecialty"
-            optionLabel="name"
-            placeholder="Selecciona una especialidad"
-            class="w-full md:w-56"
-          />
+        <div
+          class="align-items-end w-full border-2 border-green-500 flex justify-content-end"
+        >
+          <p-button label="Continuar" />
         </div>
       </div>
-      <!-- <div
-        class="h-25rem w-25rem bg-no-repeat border-2 border-red-500"
+      }@else{
+        <p>Es un registro</p>
+      }
+      
+      <div
+        class="bg-no-repeat border-2 border-red-500"
         src="/assets/botiquin3d.png"
         style="
           background-image: url('/assets/botiquin3d.png');
           object-fit: cover;
+          background-size: cover;
+          background-position: center;
+          width: 35rem;
+          height: 35rem;
         "
-      ></div> -->
+      ></div>
     </div>
   </div>
 </div>

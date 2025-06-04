@@ -5,6 +5,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext'; //
 import { SelectModule } from 'primeng/select';
 import { StepsModule } from 'primeng/steps';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-cita-new',
@@ -16,18 +17,35 @@ import { StepsModule } from 'primeng/steps';
     InputTextModule,
     SelectModule,
     StepsModule,
+    ButtonModule,
   ],
   templateUrl: './cita-new.component.html',
   styleUrl: './cita-new.component.css',
 })
 export class CitaNewComponent {
-  ci = '';
-  selectedSpecialty = '';
-  specialties = [
-    { name: 'Cardiology', code: 'CARD' },
-    { name: 'Dermatology', code: 'DERM' },
-    { name: 'Neurology', code: 'NEURO' },
-    { name: 'Pediatrics', code: 'PED' },
-    { name: 'Radiology', code: 'RAD' },
+  identification = '';
+  selectedTypeIdentity = 'ci' as string | undefined;
+  typesIdentity = [
+    { name: 'Cedula de identidad', value: 'ci' },
+    { name: 'Pasaporte', value: 'passport' },
   ];
+  existUser = false;
+  modeRegister = true;
+  currentStep = 0;
+
+  nextStep() {
+    if (this.currentStep == 0 && !this.existUser) {
+      this.modeRegister = true;
+      return;
+    }
+    this.currentStep++;
+  }
+  imprimir() {
+    console.log(this.selectedTypeIdentity);
+  }
+
+  prevStep() {
+    if (this.currentStep == 0) return;
+    this.currentStep--;
+  }
 }
