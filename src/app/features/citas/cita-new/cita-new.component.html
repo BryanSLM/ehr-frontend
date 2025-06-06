@@ -7,51 +7,196 @@
     <p class="text-5xl font-bold text-center">AGENDA TU CITA</p>
     <div
       class="border-3 border-blue-500 w-full h-40rem mt-4 flex justify-content-around"
-    > 
-      @if(!modeRegister){
+    >
+      @if (!modeRegister) {
         <div
-        class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
-      >
-        <p class="text-5xl font-bold">Identificación</p>
-        <div class="flex gap-4 align-items-center border-2 border-red-500">
-          <div class="w-15rem">
-            <label class="mb-2">Tipo de Identificación:</label>
-            <p-select
-              optionLabel="name"
-              [optionValue]="'value'"
-              [options]="typesIdentity"
-              [(ngModel)]="selectedTypeIdentity"
-              placeholder="Tipo de Identificación"
-              class="w-full"
-              (onChange)="imprimir()"
-            />
-          </div>
-          <div class="flex flex-column w-15rem border-2 border-green-500">
-            <!-- {{selectedTypeIdentity.name}} -->
-            <!-- <p-floatlabel> -->
+          class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
+        >
+          <p class="text-5xl font-bold">Identificación</p>
+          <div class="flex gap-4 align-items-center border-2 border-red-500">
+            <div class="w-15rem">
+              <label class="mb-2" for="identification"> Tipo de Identificación:</label>
+              <p-select
+                optionLabel="name"
+                [optionValue]="'value'"
+                [options]="typesIdentity"
+                [(ngModel)]="selectedTypeIdentity"
+                placeholder="Tipo de Identificación"
+                class="w-full"
+                (onChange)="imprimir()"
+              />
+            </div>
+            <div class="flex flex-column w-15rem border-2 border-green-500">
+  
               <label class="mb-2" for="identification">
-                {{ selectedTypeIdentity === 'ci' ? 'Cédula de Identidad:' : 'Pasaporte:' }}</label
+                {{
+                  selectedTypeIdentity === 'ci'
+                    ? 'Cédula de Identidad:'
+                    : 'Pasaporte:'
+                }}</label
               >
               <input
                 id="identification"
                 pInputText
                 [(ngModel)]="identification"
-                [placeholder]="selectedTypeIdentity === 'ci' ? 'Ingrese su cédula' : 'Ingrese su pasaporte'"
+                [placeholder]="
+                  selectedTypeIdentity === 'ci'
+                    ? 'Ingrese su cédula'
+                    : 'Ingrese su pasaporte'
+                "
               />
-              
-            <!-- </p-floatlabel> -->
+
+              <!-- </p-floatlabel> -->
+            </div>
+          </div>
+          <div
+            class="align-items-end w-full border-2 border-green-500 flex justify-content-end"
+          >
+            <p-button label="Continuar" />
           </div>
         </div>
+      } @else {
         <div
-          class="align-items-end w-full border-2 border-green-500 flex justify-content-end"
+          class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
         >
-          <p-button label="Continuar" />
+          <p class="text-5xl font-bold">Registro</p>
+          <div
+            class="formgrid grid flex gap-4 align-items-center border-2 border-red-500"
+          >
+            <!-- <div
+              class="field col flex flex-column w-15rem border-2 border-green-500"
+            >
+              <label class="mb-2" for="identification">
+                {{
+                  selectedTypeIdentity === 'ci'
+                    ? 'Cédula de Identidad:'
+                    : 'Pasaporte:'
+                }}</label
+              >
+              <input
+                id="identification"
+                pInputText
+                [(ngModel)]="identification"
+                [placeholder]="
+                  selectedTypeIdentity === 'ci'
+                    ? 'Ingrese su cédula'
+                    : 'Ingrese su pasaporte'
+                "
+              />
+            </div> -->
+            <!-- <div
+              class="field col flex flex-column w-15rem border-2 border-green-500"
+            >
+              <label class="mb-2" for="identification">
+                {{
+                  selectedTypeIdentity === 'ci'
+                    ? 'Cédula de Identidad:'
+                    : 'Pasaporte:'
+                }}</label
+              >
+              <input
+                id="identification"
+                pInputText
+                [(ngModel)]="identification"
+                [placeholder]="
+                  selectedTypeIdentity === 'ci'
+                    ? 'Ingrese su cédula'
+                    : 'Ingrese su pasaporte'
+                "
+              />
+            </div> -->
+            <div class="grid-cols-2 column-gap-2">
+              <div class="col-9">
+                <label class="mb-2" for="identification">Tipo de Identificación:</label>
+                <p-select
+                  optionLabel="name"
+                  [optionValue]="'value'"
+                  [options]="typesIdentity"
+                  [(ngModel)]="selectedTypeIdentity"
+                  placeholder="Tipo de Identificación"
+                  class="w-full"
+                  (onChange)="imprimir()"
+                />
+              </div>
+              <div class="col-9 flex flex-column border-2 border-green-500">
+                <label class="mb-2" for="identification"
+                  >Cedula de identidad:</label
+                >
+                <input
+                  id="identification"
+                  pInputText
+                  [(ngModel)]="identification"
+                  placeholder="Ingrese su pasaporte"
+                />
+              </div>
+              <div class="col-9 flex flex-column border-2 border-green-500">
+                <label class="mb-2" for="identification">Nombres:</label>
+                <input
+                  id="identification"
+                  pInputText
+                  [(ngModel)]="identification"
+                  placeholder="Ingrese su pasaporte"
+                />
+              </div>
+              <div class="col-9 flex flex-column border-2 border-green-500">
+                <label class="mb-2" for="identification">Apellidos:</label>
+                <input
+                  id="identification"
+                  pInputText
+                  [(ngModel)]="identification"
+                  placeholder="Ingrese su pasaporte"
+                />
+              </div>
+              <div class="col-9 flex flex-column border-2 border-green-500">
+                <label class="mb-2" for="identification"
+                  >Fecha de nacimiento:</label
+                >
+                  <p-datepicker
+                    [(ngModel)]="formRegister.birthdate"
+                    [iconDisplay]="'input'"
+                    [showIcon]="true"
+                    inputId="icondisplay"
+                    placeholder="Seleccione su fecha de nacimiento"
+                  />
+              </div>
+              <div class="col-9 flex flex-column border-2 border-green-500">
+              <label class="mb-2" for="identification">Genero:</label>
+                <p-select
+                  optionLabel="name"
+                  [optionValue]="'value'"
+                  [options]="typesGender"
+                  [(ngModel)]="formRegister.gender"
+                  placeholder="Seleccione su género"
+                  class="w-full"
+                  (onChange)="imprimir()"
+                />
+              </div>
+              <div class="col-9 flex flex-column border-2 border-green-500">
+                <label class="mb-2" for="identification">Correo</label>
+                <input
+                  id="identification"
+                  pInputText
+                  [(ngModel)]="identification"
+                  placeholder="Ingrese su correo"
+                />
+              </div>
+              <div class="col-9 flex flex-column border-2 border-green-500">
+                <label class="mb-2" for="identification">Celular</label>
+                <input
+                  id="identification"
+                  pInputText
+                  [(ngModel)]="identification"
+                  placeholder="Ingrese su correo"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="">
+            <p-button label="Continuar" />
+          </div>
         </div>
-      </div>
-      }@else{
-        <p>Es un registro</p>
       }
-      
+
       <div
         class="bg-no-repeat border-2 border-red-500"
         src="/assets/botiquin3d.png"

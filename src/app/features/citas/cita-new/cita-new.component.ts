@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext'; //
 import { SelectModule } from 'primeng/select';
 import { StepsModule } from 'primeng/steps';
 import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-cita-new',
@@ -18,6 +19,7 @@ import { ButtonModule } from 'primeng/button';
     SelectModule,
     StepsModule,
     ButtonModule,
+    DatePickerModule,
   ],
   templateUrl: './cita-new.component.html',
   styleUrl: './cita-new.component.css',
@@ -29,10 +31,22 @@ export class CitaNewComponent {
     { name: 'Cedula de identidad', value: 'ci' },
     { name: 'Pasaporte', value: 'passport' },
   ];
+  typesGender = [
+    { name: 'Masculino', value: 'male' },
+    { name: 'Femenino', value: 'female' },
+  ];
   existUser = false;
   modeRegister = true;
   currentStep = 0;
-
+  formRegister = {
+    names: '',
+    identification: '',
+    lastNames: '',
+    email: '',
+    phone: '',
+    birthdate: '',
+    gender: '',
+  };
   nextStep() {
     if (this.currentStep == 0 && !this.existUser) {
       this.modeRegister = true;
