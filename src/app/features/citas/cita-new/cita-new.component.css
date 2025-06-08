@@ -8,3 +8,43 @@
     row-gap: 10px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+
+::ng-deep .custom-datepicker .p-datepicker {
+  height: 100% !important;
+   border: none !important;
+}
+
+::ng-deep .custom-datepicker .p-datepicker-header {
+  background-color: white !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 2px solid #e0f2ff !important;
+}
+
+::ng-deep .custom-datepicker .p-datepicker-calendar {
+  background-color: #f4f9ff !important; 
+}
+
+::ng-deep .custom-datepicker .p-datepicker-calendar td {
+  padding: 1rem; 
+}
+
+::ng-deep .custom-datepicker .p-datepicker-panel {
+
+  /* background-color: #e0f2ff !important;  */
+  border: 0 !important;
+}
+
+::ng-deep .custom-datepicker .p-datepicker-calendar th {
+  text-align: center;
+  vertical-align: middle;
+  padding: 1rem; /* opcional: controla el tamaño */
+  height: 3rem;   /* asegura altura uniforme */
+}
+
+/* ::ng-deep .custom-datepicker .p-datepicker-calendar td span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+} */

@@ -7,6 +7,7 @@ import { SelectModule } from 'primeng/select';
 import { StepsModule } from 'primeng/steps';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
+import { HorarioConsultorio } from '../horario/cita-horario-selector/cita-horario-selector.component';
 
 @Component({
   selector: 'app-cita-new',
@@ -36,8 +37,8 @@ export class CitaNewComponent {
     { name: 'Femenino', value: 'female' },
   ];
   existUser = false;
-  modeRegister = true;
-  currentStep = 0;
+  modeRegister = false;
+  currentStep = 1;
   formRegister = {
     names: '',
     identification: '',
@@ -47,6 +48,61 @@ export class CitaNewComponent {
     birthdate: '',
     gender: '',
   };
+  formAppointment = {
+    date: '',
+    time: '',
+    doctor: '',
+    consultorio: '',
+  };
+  doctors = [
+    {
+      name: 'Dr. Juan Perez',
+      id: '456222',
+      schedule: {
+        monday: '9:00',
+        tuesday: '9:00-12:00',
+        wednesday: '9:00-12:00',
+        thursday: '9:00-12:00',
+        friday: '9:00-12:00',
+      },
+    },
+    {
+      name: 'Dra. Maria Lopez',
+      id: '48914',
+      horarios: [
+        {
+          fecha: '2023-10-01',
+          dia: 'Lunes',
+          horaInicio: '08:00',
+          horaFin: '12:00',
+        },
+        {
+          fecha: '2023-10-02',
+          dia: 'Martes',
+          horaInicio: '08:00',
+          horaFin: '12:00',
+        },
+        {
+          fecha: '2023-10-03',
+          dia: 'Miércoles',
+          horaInicio: '08:00',
+          horaFin: '12:00',
+        },
+        {
+          fecha: '2023-10-04',
+          dia: 'Jueves',
+          horaInicio: '08:00',
+          horaFin: '12:00',
+        },
+        {
+          fecha: '2023-10-05',
+          dia: 'Viernes',
+          horaInicio: '08:00',
+          horaFin: '12:00',
+        },
+      ] as HorarioConsultorio[],
+    },
+  ];
   nextStep() {
     if (this.currentStep == 0 && !this.existUser) {
       this.modeRegister = true;
@@ -56,7 +112,9 @@ export class CitaNewComponent {
   }
   imprimir() {
     console.log(this.selectedTypeIdentity);
+    // console.log(this.calcularHorasCitas());
   }
+  // calcularHorasCitas(fecha) {}
 
   prevStep() {
     if (this.currentStep == 0) return;
