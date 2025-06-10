@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -25,7 +25,7 @@ import { HorarioConsultorio } from '../horario/cita-horario-selector/cita-horari
   templateUrl: './cita-new.component.html',
   styleUrl: './cita-new.component.css',
 })
-export class CitaNewComponent {
+export class CitaNewComponent implements OnInit {
   identification = '';
   selectedTypeIdentity = 'ci' as string | undefined;
   typesIdentity = [
@@ -38,7 +38,7 @@ export class CitaNewComponent {
   ];
   existUser = false;
   modeRegister = false;
-  currentStep = 1;
+  currentStep = 2;
   formRegister = {
     names: '',
     identification: '',
@@ -49,7 +49,7 @@ export class CitaNewComponent {
     gender: '',
   };
   formAppointment = {
-    date: '',
+    date: new Date('2025-06-09'),
     time: '',
     doctor: '',
     consultorio: '',
@@ -119,5 +119,9 @@ export class CitaNewComponent {
   prevStep() {
     if (this.currentStep == 0) return;
     this.currentStep--;
+  }
+  ngOnInit() {
+    console.log('CitaNewComponent initialized');
+    this.formAppointment.date = new Date();
   }
 }

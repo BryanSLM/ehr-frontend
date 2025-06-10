@@ -213,7 +213,7 @@
             height: 35rem;
           "
         ></div>
-      } @else {
+      } @else if (currentStep === 1) {
         <div class="" style="width: 40rem">
           <p-datepicker
             [(ngModel)]="formAppointment.date"
@@ -225,9 +225,7 @@
           class="flex flex-column items-center gap-4 border-2 border-red-500 w-full"
         >
           <div class="flex align-items-center gap-4">
-            <label class="" for="identification"
-              >Especialidad:</label
-            >
+            <label class="" for="identification">Especialidad:</label>
             <p-select
               optionLabel="name"
               [optionValue]="'value'"
@@ -265,7 +263,97 @@
             </div>
           </div>
 
-          <p>No hay un usuario existente.</p>
+          <p>No tenemos horarios disponibles para esta fecha.</p>
+        </div>
+      } @else if (currentStep === 2) {
+        <div
+          class="flex items-center justify-content-center gap-4 border-2 border-red-500 w-full"
+        >
+          <div class="flex flex-column justify-content-center">
+            <div
+              class="bg-no-repeat border-2 border-red-500"
+              src="/assets/botiquin3d.png"
+              style="
+                background-image: url('/assets/success.png');
+                object-fit: cover;
+                background-size: cover;
+                background-position: center;
+                width: 25rem;
+                height: 25rem;
+              "
+            ></div>
+            <p class="text-center text-7xl border-2" style="color: #399cce">
+              CASI LISTO!
+            </p>
+          </div>
+          <div class="border-2 col-6">
+            <p class="text-5xl font-bold">Resumen de la cita</p>
+            <div class="flex flex-column gap-4 border-2">
+                    <div class="flex gap-4">
+                <div>
+                  <label for="identification">Identificación</label>
+                  <input
+                    id="identification"
+                    type="text"
+                    class="input"
+                    value="1777777777"
+                  />
+                </div>
+                <div class="">
+                  <label for="identification">Nombre</label>
+                  <input
+                    id="identification"
+                    type="text"
+                    class="input"
+                    value="Juan Perez"
+                  />
+                </div>
+              </div>
+              <div class="flex gap-4">
+                <div>
+                  <label for="identification">Especialidad</label>
+                  <input
+                    id="identification"
+                    type="text"
+                    class="input"
+                    value="Cardióloga"
+                  />
+                </div>
+                <div>
+                  <label for="identification">Doctor</label>
+                  <input
+                    id="identification"
+                    type="text"
+                    class="input"
+                    value="Dr. Juan Pérez"
+                  />
+                </div>
+              </div>
+              <div class="flex gap-4">
+                <div>
+                  <label for="identification">Fecha</label>
+                  <input
+                    id="identification"
+                    type="text"
+                    class="input"
+                    value="10:05 am"
+                  />
+                </div>
+                <div>
+                  <label for="identification">Hora</label>
+                  <input
+                    id="identification"
+                    type="text"
+                    class="input"
+                    value="09/06/2025"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="border-2 mt-4 w-full">
+              <p-button label="Confirmar Cita" />
+            </div>
+          </div>
         </div>
       }
     </div>

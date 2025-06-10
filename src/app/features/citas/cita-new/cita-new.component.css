@@ -41,6 +41,22 @@
   height: 3rem;   /* asegura altura uniforme */
 }
 
+.group {
+ position: relative;
+}
+
+.input {
+ font-size: 16px;
+ padding: 10px 10px 10px 5px;
+ display: block;
+ width: 200px;
+ border: none;
+ border-bottom: 1px solid #515151;
+ background: transparent;
+ outline: none;
+}
+
+
 /* ::ng-deep .custom-datepicker .p-datepicker-calendar td span {
   display: inline-flex;
   justify-content: center;
