@@ -24,6 +24,7 @@ import { MedicoDashboardComponent } from './features/medico-dashboard/medico-das
 import { EvolucionesPacienteComponent } from './features/medico-dashboard/evoluciones-paciente/evoluciones-paciente.component';
 import { PacientesMedicoComponent } from './features/medico-dashboard/pacientes-medico/pacientes-medico.component';
 import { DashboardPacienteComponent } from './features/dashboard-paciente/dashboard-paciente.component';
+import { RegisterComponent } from './features/register/register.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
   },
   {
     path: 'patients',

@@ -1,0 +1,149 @@
+<div class="w-full h-screen py-4 px-8 flex flex-column justify-content-center">
+  <div class="text-left">
+    <h1 class="font-bold">{{ registerTitle }}</h1>
+    <p class="font-normal">{{ registerSubtitle }}</p>
+  </div>
+  <hr />
+  <form class="grid" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-column gap-2 col-12">
+      <label for="username" class="font-medium">Nombre de usuario*</label>
+      <input
+        pInputText
+        id="username"
+        placeholder="Crea un nombre de usuario"
+        formControlName="username"
+        [ngClass]="{
+          'border-red-500 placeholder-red':
+            registerForm.controls['username'].invalid && formSubmitted,
+        }"
+        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+      />
+      <div
+        *ngIf="
+          registerForm.controls['username'].errors?.['required'] &&
+          formSubmitted
+        "
+      >
+        <small style="color: red"
+          >El campo Nombre de usuario es obligatorio</small
+        >
+      </div>
+      <div
+        *ngIf="
+          registerForm.controls['username'].errors?.['minlength'] &&
+          formSubmitted
+        "
+      >
+        <small style="color: red">
+          El campo Nombre de usuario debe tener al menos 4 caracteres
+        </small>
+      </div>
+    </div>
+    <div class="flex flex-column gap-2 col-12">
+      <label for="cedula" class="font-medium">Cédula de identidad*</label>
+      <input
+        pInputText
+        id="cedula"
+        placeholder="Ingresa una cédula válida"
+        formControlName="cedula"
+        [ngClass]="{
+          'border-red-500 placeholder-red':
+            registerForm.controls['cedula'].invalid && formSubmitted,
+        }"
+        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+      />
+      <div
+        *ngIf="
+          registerForm.controls['cedula'].errors?.['required'] && formSubmitted
+        "
+      >
+        <small style="color: red">El campo Cédula es obligatorio</small>
+      </div>
+
+      <div
+        *ngIf="
+          registerForm.controls['cedula'].errors?.['cedulaInvalida'] &&
+          !registerForm.controls['cedula'].errors?.['required'] &&
+          formSubmitted
+        "
+      >
+        <small style="color: red">La Cédula no es válida</small>
+      </div>
+    </div>
+    <div class="flex flex-column gap-2 col-12">
+      <label for="password" class="font-medium">Contraseña*</label>
+      <input
+        pInputText
+        type="password"
+        id="password"
+        placeholder="Crea una contraseña segura"
+        formControlName="password"
+        [ngClass]="{
+          'border-red-500 placeholder-red':
+            registerForm.controls['password'].invalid && formSubmitted,
+        }"
+        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+      />
+      <div
+        *ngIf="
+          registerForm.controls['password'].errors?.['required'] &&
+          formSubmitted
+        "
+      >
+        <small style="color: red">El campo Contraseña es obligatorio</small>
+      </div>
+      <div
+        *ngIf="
+          registerForm.controls['password'].errors?.['minlength'] &&
+          formSubmitted
+        "
+      >
+        <small style="color: red"
+          >La contraseña debe tener al menos 8 caracteres</small
+        >
+      </div>
+    </div>
+    <div class="flex flex-column gap-2 col-12">
+      <label for="confirm_password" class="font-medium"
+        >Confirmar contraseña*</label
+      >
+      <input
+        pInputText
+        type="password"
+        id="confirm_password"
+        placeholder="Confirma tu contraseña"
+        formControlName="confirm_password"
+        [ngClass]="{
+          'border-red-500 placeholder-red':
+            (registerForm.controls['confirm_password'].invalid &&
+              formSubmitted) ||
+            (registerForm.errors?.['passwordMismatch'] && formSubmitted),
+        }"
+        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+      />
+      <div *ngIf="registerForm.errors?.['passwordMismatch'] && formSubmitted">
+        <small style="color: red">Las contraseñas no coinciden</small>
+      </div>
+      <div
+        *ngIf="
+          registerForm.controls['confirm_password'].errors?.['required'] &&
+          formSubmitted
+        "
+      >
+        <small style="color: red"
+          >El campo Confirmar contraseña es obligatorio</small
+        >
+      </div>
+    </div>
+
+    <div class="flex flex-column col-12 mt-4">
+      <button
+        pButton
+        class="text-white font-medium cursor-pointer"
+        style="background-color: #201c75; border: 1px solid #201c75"
+      >
+        Registrarse
+      </button>
+    </div>
+  </form>
+</div>

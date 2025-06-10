@@ -57,7 +57,7 @@ export class UserService {
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Ha ocurrido un error en el servidor';
-    
+
     if (error.error instanceof ErrorEvent) {
       // Error del lado del cliente
       errorMessage = `Error: ${error.error.message}`;
@@ -65,14 +65,14 @@ export class UserService {
       // Error del lado del servidor
       errorMessage = error.error?.message || errorMessage;
     }
-    
+
     console.error('Error en UserService:', error);
     return throwError(() => new Error(errorMessage));
   }
 
   getUsers(): Observable<User[]> {
     console.log('Obteniendo usuarios...');
-    
+
     return this.http.get<ApiResponse<User[]>>(
       `${this.apiUrl}/api/admin/users`,
       { headers: this.getHeaders() }
@@ -93,7 +93,7 @@ export class UserService {
     console.log('Creando nuevo usuario:', userData);
 
     // Validaciones básicas
-    if (!userData.username || !userData.password || !userData.role || 
+    if (!userData.username || !userData.password || !userData.role ||
         !userData.cedula || !userData.email || !userData.empresa) {
       return throwError(() => new Error('Todos los campos obligatorios deben estar completos'));
     }

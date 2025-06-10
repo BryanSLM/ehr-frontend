@@ -1,0 +1,3 @@
+.placeholder-red::placeholder {
+  color: #f44336 !important;
+}
