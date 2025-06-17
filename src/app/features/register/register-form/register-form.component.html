@@ -98,19 +98,25 @@
         <small style="color: red">La Cédula no es válida</small>
       </div>
     </div>
-    <div class="flex flex-column gap-2 col-12">
+    <div class="flex flex-column gap-2 col-12 py-2">
       <label for="password" class="font-medium">Contraseña*</label>
-      <input
-        pInputText
+      <p-password
         type="password"
         id="password"
         placeholder="Crea una contraseña segura"
         formControlName="password"
+        weakLabel="Débil"
+        mediumLabel="Media"
+        strongLabel="Fuerte"
+        promptLabel="Introduce una contraseña"
+        [toggleMask]="true"
+        [style]="{ width: '100%' }"
+        [inputStyle]="{ width: '100%' }"
         [ngClass]="{
-          'border-red-500 placeholder-red':
+          'password-invalid':
             registerForm.controls['password'].invalid && formSubmitted,
         }"
-        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        class="bg-white border-gray-300 rounded text-0 icon-pointer"
       />
       <div
         *ngIf="
@@ -131,23 +137,26 @@
         >
       </div>
     </div>
-    <div class="flex flex-column gap-2 col-12">
+    <div class="flex flex-column gap-2 col-12 py-2">
       <label for="confirm_password" class="font-medium"
         >Confirmar contraseña*</label
       >
-      <input
-        pInputText
+      <p-password
         type="password"
         id="confirm_password"
         placeholder="Confirma tu contraseña"
         formControlName="confirm_password"
+        [feedback]="false"
+        [style]="{ width: '100%' }"
+        [inputStyle]="{ width: '100%' }"
+        [toggleMask]="true"
         [ngClass]="{
-          'border-red-500 placeholder-red':
+          'password-invalid':
             (registerForm.controls['confirm_password'].invalid &&
               formSubmitted) ||
             (registerForm.errors?.['passwordMismatch'] && formSubmitted),
         }"
-        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        class="bg-white border-gray-300 rounded text-0 w-full"
       />
       <div
         *ngIf="

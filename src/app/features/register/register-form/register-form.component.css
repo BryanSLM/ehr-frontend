@@ -1,5 +1,5 @@
 .placeholder-red::placeholder {
-  color: #f44336 !important;
+  color: red !important;
 }
 :host ::ng-deep .p-select-overlay {
   background-color: white;
@@ -32,4 +32,46 @@
 
 :host ::ng-deep .error-select .p-select-label.p-placeholder {
   color: red !important;
+}
+
+:host ::ng-deep .icon-pointer .p-icon {
+  cursor: pointer;
+}
+
+:host ::ng-deep .p-password-input {
+  background-color: white;
+  border-color: #e5e7eb;
+  color: black;
+}
+
+:host ::ng-deep .password-invalid .p-password-input {
+  border-color: red !important;
+}
+:host ::ng-deep .password-invalid .p-password-input::placeholder {
+  color: red !important;
+}
+
+:host ::ng-deep .p-inputtext:enabled:focus {
+  border-color: #e5e7eb;
+}
+
+:host ::ng-deep .p-inputtext:enabled:hover {
+  border-color: #e5e7eb;
+}
+
+:host ::ng-deep .p-password-overlay {
+  background-color: white;
+  border-color: #e5e7eb;
+}
+
+:host ::ng-deep .p-password-meter {
+  background-color: #e5e7eb;
+}
+
+:host ::ng-deep .p-password-meter-text {
+  color: black;
+}
+
+:host ::ng-deep .p-password.ng-invalid.ng-dirty .p-inputtext:enabled:focus {
+  border-color: #e5e7eb;
 }
