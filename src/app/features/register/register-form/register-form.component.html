@@ -1,4 +1,4 @@
-<div class="w-full h-screen py-4 px-8 flex flex-column justify-content-center">
+<div class="w-full min-h-screen py-4 px-8 flex flex-column overflow-auto">
   <div class="text-left">
     <h1 class="font-bold">{{ registerTitle }}</h1>
     <p class="font-normal">{{ registerSubtitle }}</p>
@@ -39,22 +39,50 @@
         </small>
       </div>
     </div>
-    <div class="flex flex-column gap-2 col-12">
-      <label for="cedula" class="font-medium">Cédula de identidad*</label>
+    <div class="flex flex-column gap-2 col-6">
+      <label for="identification" class="font-medium"
+        >Tipo de identificacion*</label
+      >
+      <p-select
+        [options]="identificationTypes"
+        optionLabel="name"
+        placeholder="Selecciona un tipo de identificación"
+        class="bg-white border-gray-300"
+        formControlName="identification_type"
+        [ngClass]="{
+          'border-red-500 error-select':
+            registerForm.controls['identification_type'].invalid &&
+            formSubmitted,
+        }"
+      />
+      <div
+        *ngIf="
+          registerForm.controls['identification_type'].errors?.['required'] &&
+          formSubmitted
+        "
+      >
+        <small style="color: red"
+          >El campo Tipo de identificacion es obligatorio</small
+        >
+      </div>
+    </div>
+    <div class="flex flex-column gap-2 col-6">
+      <label for="identification" class="font-medium">Identificacion*</label>
       <input
         pInputText
-        id="cedula"
-        placeholder="Ingresa una cédula válida"
-        formControlName="cedula"
+        id="identification"
+        placeholder="Ingresa una identification válida"
+        formControlName="identification"
         [ngClass]="{
           'border-red-500 placeholder-red':
-            registerForm.controls['cedula'].invalid && formSubmitted,
+            registerForm.controls['identification'].invalid && formSubmitted,
         }"
         class="bg-white border-1 border-gray-300 p-2 rounded text-0"
       />
       <div
         *ngIf="
-          registerForm.controls['cedula'].errors?.['required'] && formSubmitted
+          registerForm.controls['identification'].errors?.['required'] &&
+          formSubmitted
         "
       >
         <small style="color: red">El campo Cédula es obligatorio</small>
@@ -62,8 +90,8 @@
 
       <div
         *ngIf="
-          registerForm.controls['cedula'].errors?.['cedulaInvalida'] &&
-          !registerForm.controls['cedula'].errors?.['required'] &&
+          registerForm.controls['identification'].errors?.['cedulaInvalida'] &&
+          !registerForm.controls['identification'].errors?.['required'] &&
           formSubmitted
         "
       >
@@ -121,18 +149,14 @@
         }"
         class="bg-white border-1 border-gray-300 p-2 rounded text-0"
       />
-      <div *ngIf="registerForm.errors?.['passwordMismatch'] && formSubmitted">
-        <small style="color: red">Las contraseñas no coinciden</small>
-      </div>
       <div
         *ngIf="
-          registerForm.controls['confirm_password'].errors?.['required'] &&
-          formSubmitted
+          (registerForm.errors?.['passwordMismatch'] && formSubmitted) ||
+          (registerForm.controls['confirm_password'].errors?.['required'] &&
+            formSubmitted)
         "
       >
-        <small style="color: red"
-          >El campo Confirmar contraseña es obligatorio</small
-        >
+        <small style="color: red">Las contraseñas no coinciden</small>
       </div>
     </div>
 

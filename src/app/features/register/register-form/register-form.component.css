@@ -1,3 +1,35 @@
 .placeholder-red::placeholder {
   color: #f44336 !important;
 }
+:host ::ng-deep .p-select-overlay {
+  background-color: white;
+  border-color: #e5e7eb;
+}
+
+:host ::ng-deep .p-select-option {
+  color: black;
+}
+:host
+  ::ng-deep
+  .p-select-option:not(.p-select-option-selected):not(.p-disabled).p-focus {
+  background-color: #201c75;
+  color: white;
+}
+
+:host ::ng-deep .p-select-option.p-select-option-selected.p-focus {
+  color: white;
+  background-color: #201c75;
+}
+
+:host ::ng-deep .p-select-option.p-select-option-selected {
+  color: white;
+  background-color: black;
+}
+
+:host ::ng-deep .p-select-label {
+  color: black;
+}
+
+:host ::ng-deep .error-select .p-select-label.p-placeholder {
+  color: red !important;
+}
