@@ -25,6 +25,7 @@ import { EvolucionesPacienteComponent } from './features/medico-dashboard/evoluc
 import { PacientesMedicoComponent } from './features/medico-dashboard/pacientes-medico/pacientes-medico.component';
 import { DashboardPacienteComponent } from './features/dashboard-paciente/dashboard-paciente.component';
 import { CitaNewComponent } from './features/citas/cita-new/cita-new.component';
+import { RegisterComponent } from './features/register/register.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
   },
   {
     path: 'patients',

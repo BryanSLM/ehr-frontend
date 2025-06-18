@@ -10,14 +10,14 @@ import { CatalogosComponent } from '../admin/catalogos/catalogos.component';
   selector: 'app-admin-dashboard',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     RouterModule,
-    AdminComponent,    // Agregar aquí
-    ConsultoriosComponent,  // Agregar aquí
-    CatalogosComponent  // Agregar aquí
+    AdminComponent, // Agregar aquí
+    ConsultoriosComponent, // Agregar aquí
+    CatalogosComponent, // Agregar aquí
   ],
   templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.css']
+  styleUrls: ['./admin-dashboard.component.css'],
 })
 export class AdminDashboardComponent implements OnInit {
   activeTab = 'admin';
@@ -25,7 +25,7 @@ export class AdminDashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {

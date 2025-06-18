@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -37,7 +41,7 @@ interface ApiResponse<T> {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private apiUrl = environment.apiUrl;
@@ -51,13 +55,13 @@ export class UserService {
     }
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Ha ocurrido un error en el servidor';
-    
+
     if (error.error instanceof ErrorEvent) {
       // Error del lado del cliente
       errorMessage = `Error: ${error.error.message}`;
@@ -65,65 +69,78 @@ export class UserService {
       // Error del lado del servidor
       errorMessage = error.error?.message || errorMessage;
     }
-    
+
     console.error('Error en UserService:', error);
     return throwError(() => new Error(errorMessage));
   }
 
   getUsers(): Observable<User[]> {
     console.log('Obteniendo usuarios...');
-    
-    return this.http.get<ApiResponse<User[]>>(
-      `${this.apiUrl}/api/admin/users`,
-      { headers: this.getHeaders() }
-    ).pipe(
-      tap(response => console.log('Respuesta del servidor:', response)),
-      map(response => {
-        if (response.data) {
-          return response.data;
-        }
-        throw new Error('No se recibieron datos de usuarios');
-      }),
-      catchError(this.handleError),
-      tap(users => console.log('Usuarios procesados:', users))
-    );
+
+    return this.http
+      .get<
+        ApiResponse<User[]>
+      >(`${this.apiUrl}/api/admin/users`, { headers: this.getHeaders() })
+      .pipe(
+        tap((response) => console.log('Respuesta del servidor:', response)),
+        map((response) => {
+          if (response.data) {
+            return response.data;
+          }
+          throw new Error('No se recibieron datos de usuarios');
+        }),
+        catchError(this.handleError),
+        tap((users) => console.log('Usuarios procesados:', users)),
+      );
   }
 
   createUser(userData: CreateUserRequest): Observable<ApiResponse<User>> {
     console.log('Creando nuevo usuario:', userData);
 
     // Validaciones básicas
-    if (!userData.username || !userData.password || !userData.role || 
-        !userData.cedula || !userData.email || !userData.empresa) {
-      return throwError(() => new Error('Todos los campos obligatorios deben estar completos'));
+    if (
+      !userData.username ||
+      !userData.password ||
+      !userData.role ||
+      !userData.cedula ||
+      !userData.email ||
+      !userData.empresa
+    ) {
+      return throwError(
+        () => new Error('Todos los campos obligatorios deben estar completos'),
+      );
     }
 
-  // Validar empresa
+    // Validar empresa
     const empresasValidas = ['CARDIOVASC', 'INVITROMED', 'Empresa 3'];
     if (!empresasValidas.includes(userData.empresa)) {
-       return throwError(() => new Error('Empresa no válida'));
-     }
+      return throwError(() => new Error('Empresa no válida'));
+    }
 
     // Validar formato de cédula
     if (!/^[0-9]{10}$/.test(userData.cedula)) {
-      return throwError(() => new Error('La cédula debe contener 10 dígitos numéricos'));
+      return throwError(
+        () => new Error('La cédula debe contener 10 dígitos numéricos'),
+      );
     }
 
     // Validar formato de email
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)) {
-      return throwError(() => new Error('El formato del correo electrónico no es válido'));
+      return throwError(
+        () => new Error('El formato del correo electrónico no es válido'),
+      );
     }
 
-    return this.http.post<ApiResponse<User>>(
-      `${this.apiUrl}/api/admin/users/create`,
-      userData,
-      { headers: this.getHeaders() }
-    ).pipe(
-      tap(response => {
-        console.log('Usuario creado exitosamente:', response);
-      }),
-      catchError(this.handleError)
-    );
+    return this.http
+      .post<
+        ApiResponse<User>
+      >(`${this.apiUrl}/api/admin/users/create`, userData, { headers: this.getHeaders() })
+      .pipe(
+        tap((response) => {
+          console.log('Usuario creado exitosamente:', response);
+        }),
+        catchError(this.handleError),
+      );
   }
 
   toggleUserStatus(userId: number): Observable<ApiResponse<User>> {
@@ -131,22 +148,22 @@ export class UserService {
       return throwError(() => new Error('Se requiere un ID de usuario válido'));
     }
 
-    return this.http.patch<ApiResponse<User>>(
-      `${this.apiUrl}/api/admin/users/${userId}/toggle-status`,
-      {},
-      { headers: this.getHeaders() }
-    ).pipe(
-      tap(response => {
-        console.log(`Estado del usuario ${userId} actualizado:`, response);
-      }),
-      catchError(this.handleError)
-    );
+    return this.http
+      .patch<
+        ApiResponse<User>
+      >(`${this.apiUrl}/api/admin/users/${userId}/toggle-status`, {}, { headers: this.getHeaders() })
+      .pipe(
+        tap((response) => {
+          console.log(`Estado del usuario ${userId} actualizado:`, response);
+        }),
+        catchError(this.handleError),
+      );
   }
 
   // Método auxiliar para validar datos del usuario
   private validateUserData(userData: CreateUserRequest): string | null {
-    if (!userData.empresa?.trim()){
-      return 'La empresa es requerida'
+    if (!userData.empresa?.trim()) {
+      return 'La empresa es requerida';
     }
     if (!userData.username?.trim()) {
       return 'El nombre de usuario es requerido';
