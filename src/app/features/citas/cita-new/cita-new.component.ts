@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext'; //
 import { SelectModule } from 'primeng/select';
@@ -22,13 +28,51 @@ import { PatientService } from '../../../core/services/patient.service';
     StepsModule,
     ButtonModule,
     DatePickerModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './cita-new.component.html',
   styleUrl: './cita-new.component.css',
 })
 export class CitaNewComponent implements OnInit {
-  constructor(private patientService: PatientService) {}
-  identification = '';
+  identificationForm: FormGroup = new FormGroup({});
+  registerForm: FormGroup = new FormGroup({});
+  appointmentForm: FormGroup = new FormGroup({});
+  specialties = [
+    { name: 'Cardiología', value: 'cardiology' },
+    { name: 'Pediatría', value: 'pediatrics' },
+    { name: 'Dermatología', value: 'dermatology' },
+    { name: 'Ginecología', value: 'gynecology' },
+    { name: 'Oftalmología', value: 'ophthalmology' },
+    { name: 'Odontología', value: 'dentistry' },
+    { name: 'Traumatología', value: 'traumatology' },
+    { name: 'Psiquiatría', value: 'psychiatry' },
+    { name: 'Neurología', value: 'neurology' },
+  ];
+  constructor(
+    private patientService: PatientService,
+    private formBuilder: FormBuilder,
+  ) {
+    this.identificationForm = this.formBuilder.group({
+      typeIdentity: ['', [Validators.required]],
+      identification: ['', [Validators.required]],
+    });
+    this.registerForm = this.formBuilder.group({
+      typeIdentity: ['', [Validators.required]],
+      identification: ['', [Validators.required]],
+      names: ['', [Validators.required]],
+      lastNames: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required]],
+      birthdate: ['', [Validators.required]],
+      gender: ['', [Validators.required]],
+    });
+    this.appointmentForm = this.formBuilder.group({
+      date: ['', [Validators.required]],
+      time: ['', [Validators.required]],
+      doctor: ['', [Validators.required]],
+      specialty: ['', [Validators.required]],
+    });
+  }
   selectedTypeIdentity = 'cedula' as string | undefined;
   typesIdentity = [
     { name: 'Cedula de identidad', value: 'cedula' },
@@ -41,31 +85,6 @@ export class CitaNewComponent implements OnInit {
   existUser = false;
   modeRegister = false;
   currentStep = 0;
-  formRegister = {
-    identification: '',
-    names: '',
-    lastNames: '',
-    email: '',
-    phone: '',
-    birthdate: '',
-    gender: '',
-  };
-
-  formAppointment = {
-    date: new Date('2025-06-09'),
-    time: '',
-    doctor: '',
-    specialty: '',
-  };
-  user: any = {
-    names: 'Juan',
-    lastNames: 'Perez',
-    identification: '123456789',
-    email: 'vladimirortiz1230@gmail.com',
-    phone: '0987654321',
-    birthdate: '1990-01-01',
-    gender: 'male',
-  };
   doctors = [
     {
       name: 'Dr. Juan Perez',
@@ -115,17 +134,7 @@ export class CitaNewComponent implements OnInit {
       ] as HorarioConsultorio[],
     },
   ];
-  specialties = [
-    { name: 'Cardiología', value: 'cardiology' },
-    { name: 'Pediatría', value: 'pediatrics' },
-    { name: 'Dermatología', value: 'dermatology' },
-    { name: 'Ginecología', value: 'gynecology' },
-    { name: 'Oftalmología', value: 'ophthalmology' },
-    { name: 'Odontología', value: 'dentistry' },
-    { name: 'Traumatología', value: 'traumatology' },
-    { name: 'Psiquiatría', value: 'psychiatry' },
-    { name: 'Neurología', value: 'neurology' },
-  ];
+
   nextStep() {
     if (this.currentStep == 0 && !this.existUser) {
       this.modeRegister = true;
@@ -136,57 +145,36 @@ export class CitaNewComponent implements OnInit {
   imprimir() {
     console.log(this.selectedTypeIdentity);
   }
-  consultarUsuario(identification: string) {
+  consultarUsuario() {
     this.patientService
-      .getPatientByIdentification(this.selectedTypeIdentity!, identification)
+      .getPatientByIdentification(
+        this.identificationForm.get('typeIdentity')?.value,
+        this.identificationForm.get('identification')?.value,
+      )
       .subscribe({
         next: (response) => {
           console.log('Usuario encontrado:', response);
-          this.user = response;
           this.existUser = true;
-
-          if (identification === '1755449004') {
-            this.formRegister = { ...this.user };
-          } else {
-            this.formRegister = {
-              names: '',
-              identification: '',
-              lastNames: '',
-              email: '',
-              phone: '',
-              birthdate: '',
-              gender: '',
-            };
-          }
+          this.registerForm.patchValue(response);
           this.nextStep();
         },
         error: (error) => {
           console.error('Error al cargar pacientes:', error);
           this.existUser = false;
-          this.formRegister = {
-            names: '',
-            identification: '',
-            lastNames: '',
-            email: '',
-            phone: '',
-            birthdate: '',
-            gender: '',
-          };
+          this.registerForm.reset();
           this.nextStep();
         },
       });
   }
   crearUsuario() {
-    console.log('Creando usuario con los siguientes datos:', this.formRegister);
-    // Aquí se podría hacer una llamada a un servicio para crear el usuario
+    console.log('Creando usuario con los siguientes datos:', this.registerForm);
     this.existUser = true; // Simulamos que el usuario fue creado exitosamente
-    this.user = { ...this.formRegister }; // Actualizamos el usuario con los datos del formulario
     this.nextStep();
   }
   seleccionarCita() {
     console.log(
       'Seleccionando cita con los siguientes datos:',
-      this.formAppointment,
+      this.appointmentForm,
     );
     this.nextStep();
   }
@@ -198,6 +186,6 @@ export class CitaNewComponent implements OnInit {
   }
   ngOnInit() {
     console.log('CitaNewComponent initialized');
-    this.formAppointment.date = new Date();
+    this.appointmentForm.patchValue({ date: new Date() });
   }
 }

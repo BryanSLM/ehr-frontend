@@ -9,7 +9,6 @@ import { cedulaValidator } from '../../../core/validator/src/app/validators/cedu
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { RegisterService } from '../service/register.service';
-import { response } from 'express';
 import { Register } from '../../../interfaces/register.interface';
 
 @Component({

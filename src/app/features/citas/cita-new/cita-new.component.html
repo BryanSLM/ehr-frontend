@@ -11,152 +11,161 @@
     >
       @if (currentStep === 0) {
         @if (!modeRegister) {
-          <div
-            class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
+          <form
+            [formGroup]="identificationForm"
+            (ngSubmit)="consultarUsuario()"
           >
-            <p class="text-5xl font-bold">Identificación</p>
-            <div class="flex gap-4 align-items-center border-2 border-red-500">
-              <div class="w-15rem">
-                <label class="mb-2" for="identification">
-                  Tipo de Identificación:</label
-                >
-                <p-select
-                  optionLabel="name"
-                  [optionValue]="'value'"
-                  [options]="typesIdentity"
-                  [(ngModel)]="selectedTypeIdentity"
-                  placeholder="Tipo de Identificación"
-                  class="w-full"
-                  (onChange)="imprimir()"
-                />
-              </div>
-              <div class="flex flex-column w-15rem border-2 border-green-500">
-                <label class="mb-2" for="identification">
-                  {{
-                    selectedTypeIdentity === 'ci'
-                      ? 'Cédula de Identidad:'
-                      : 'Pasaporte:'
-                  }}</label
-                >
-                <input
-                  id="identification"
-                  pInputText
-                  [(ngModel)]="identification"
-                  [placeholder]="
-                    selectedTypeIdentity === 'ci'
-                      ? 'Ingrese su cédula'
-                      : 'Ingrese su pasaporte'
-                  "
-                />
-
-                <!-- </p-floatlabel> -->
-              </div>
-            </div>
             <div
-              class="align-items-end w-full border-2 border-green-500 flex justify-content-start"
+              class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
             >
-              <p-button label="Continuar" (click)="consultarUsuario(identification)" />
-            </div>
-          </div>
-        } @else {
-          <div
-            class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
-          >
-            <p class="text-5xl font-bold">Registro</p>
-            <div
-              class="formgrid grid flex gap-4 align-items-center border-2 border-red-500"
-            >
-              <div class="grid-cols-2 column-gap-2">
-                <div class="col-9">
-                  <label class="mb-2" for="identification"
-                    >Tipo de Identificación:</label
+              <p class="text-5xl font-bold">Identificación</p>
+              <div
+                class="flex gap-4 align-items-center border-2 border-red-500"
+              >
+                <div class="w-15rem">
+                  <label class="mb-2" for="identification">
+                    Tipo de Identificación:</label
                   >
                   <p-select
                     optionLabel="name"
                     [optionValue]="'value'"
                     [options]="typesIdentity"
-                    [(ngModel)]="selectedTypeIdentity"
+                    formControlName="typeIdentity"
                     placeholder="Tipo de Identificación"
                     class="w-full"
                     (onChange)="imprimir()"
                   />
                 </div>
-                <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="identification"
-                    >Cedula de identidad:</label
+                <div class="flex flex-column w-15rem border-2 border-green-500">
+                  <label class="mb-2" for="identification">
+                    {{
+                      identificationForm.get('typeIdentity')?.value === 'cedula'
+                        ? 'Cédula de Identidad:'
+                        : 'Pasaporte:'
+                    }}</label
                   >
                   <input
                     id="identification"
                     pInputText
-                    [(ngModel)]="identification"
-                    placeholder="Ingrese su pasaporte"
-                  />
-                </div>
-                <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="names">Nombres:</label>
-                  <input
-                    id="names"
-                    pInputText
-                    [(ngModel)]="formRegister.names"
-                    placeholder="Ingrese su nombre"
-                  />
-                </div>
-                <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="lastNames">Apellidos:</label>
-                  <input
-                    id="lastNames"
-                    pInputText
-                    [(ngModel)]="formRegister.lastNames"
-                    placeholder="Ingrese su apellido"
-                  />
-                </div>
-                <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="birthdate">Fecha de nacimiento:</label>
-                  <p-datepicker
-                    [(ngModel)]="formRegister.birthdate"
-                    [iconDisplay]="'input'"
-                    [showIcon]="true"
-                    inputId="icondisplay"
-                    placeholder="Seleccione su fecha de nacimiento"
-                  />
-                </div>
-                <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="gender">Genero:</label>
-                  <p-select
-                    optionLabel="name"
-                    [optionValue]="'value'"
-                    [options]="typesGender"
-                    [(ngModel)]="formRegister.gender"
-                    placeholder="Seleccione su género"
-                    class="w-full"
-                    (onChange)="imprimir()"
-                  />
-                </div>
-                <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="email">Correo</label>
-                  <input
-                    id="email"
-                    pInputText
-                    [(ngModel)]="formRegister.email"
-                    placeholder="Ingrese su correo"
-                  />
-                </div>
-                <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="phone">Celular</label>
-                  <input
-                    id="phone"
-                    pInputText
-                    [(ngModel)]="formRegister.phone"
-                    placeholder="Ingrese su celular"
+                    formControlName="identification"
+                    [placeholder]="
+                      identificationForm.get('typeIdentity')?.value === 'cedula'
+                        ? 'Ingrese su cédula'
+                        : 'Ingrese su pasaporte'
+                    "
                   />
                 </div>
               </div>
+              <div
+                class="align-items-end w-full border-2 border-green-500 flex justify-content-start"
+              >
+                <p-button type="submit" label="Continuar" />
+              </div>
             </div>
-            <div class="flex gap-2">
-              <p-button label="Atrás" (click)="prevStep()" />
-              <p-button label="Continuar" (click)="crearUsuario()" />
+          </form>
+        } @else {
+          <form [formGroup]="registerForm" (ngSubmit)="crearUsuario()">
+            <div
+              class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
+            >
+              <p class="text-5xl font-bold">Registro</p>
+              <div
+                class="formgrid grid flex gap-4 align-items-center border-2 border-red-500"
+              >
+                <div class="grid-cols-2 column-gap-2">
+                  <div class="col-9">
+                    <label class="mb-2" for="identification"
+                      >Tipo de Identificación:</label
+                    >
+                    <p-select
+                      optionLabel="name"
+                      [optionValue]="'value'"
+                      formControlName="typeIdentity"
+                      [options]="typesIdentity"
+                      placeholder="Tipo de Identificación"
+                      class="w-full"
+                      (onChange)="imprimir()"
+                    />
+                  </div>
+                  <div class="col-9 flex flex-column border-2 border-green-500">
+                    <label class="mb-2" for="identification"
+                      >Cedula de identidad:</label
+                    >
+                    <input
+                      id="identification"
+                      pInputText
+                      formControlName="identification"
+                      placeholder="Ingrese su pasaporte"
+                    />
+                  </div>
+                  <div class="col-9 flex flex-column border-2 border-green-500">
+                    <label class="mb-2" for="names">Nombres:</label>
+                    <input
+                      id="names"
+                      pInputText
+                      formControlName="names"
+                      placeholder="Ingrese su nombre"
+                    />
+                  </div>
+                  <div class="col-9 flex flex-column border-2 border-green-500">
+                    <label class="mb-2" for="lastNames">Apellidos:</label>
+                    <input
+                      id="lastNames"
+                      pInputText
+                      formControlName="lastNames"
+                      placeholder="Ingrese su apellido"
+                    />
+                  </div>
+                  <div class="col-9 flex flex-column border-2 border-green-500">
+                    <label class="mb-2" for="birthdate"
+                      >Fecha de nacimiento:</label
+                    >
+                    <p-datepicker
+                      formControlName="birthdate"
+                      [iconDisplay]="'input'"
+                      [showIcon]="true"
+                      inputId="icondisplay"
+                      placeholder="Seleccione su fecha de nacimiento"
+                    />
+                  </div>
+                  <div class="col-9 flex flex-column border-2 border-green-500">
+                    <label class="mb-2" for="gender">Genero:</label>
+                    <p-select
+                      optionLabel="name"
+                      [optionValue]="'value'"
+                      [options]="typesGender"
+                      formControlName="gender"
+                      placeholder="Seleccione su género"
+                      class="w-full"
+                      (onChange)="imprimir()"
+                    />
+                  </div>
+                  <div class="col-9 flex flex-column border-2 border-green-500">
+                    <label class="mb-2" for="email">Correo</label>
+                    <input
+                      id="email"
+                      pInputText
+                      formControlName="email"
+                      placeholder="Ingrese su correo"
+                    />
+                  </div>
+                  <div class="col-9 flex flex-column border-2 border-green-500">
+                    <label class="mb-2" for="phone">Celular</label>
+                    <input
+                      id="phone"
+                      pInputText
+                      formControlName="phone"
+                      placeholder="Ingrese su celular"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <p-button label="Atrás" (click)="prevStep()" />
+                <p-button label="Continuar" type="submit" />
+              </div>
             </div>
-          </div>
+          </form>
         }
         <div
           class="bg-no-repeat border-2 border-red-500"
@@ -173,7 +182,7 @@
       } @else if (currentStep === 1) {
         <div class="" style="width: 40rem">
           <p-datepicker
-            [(ngModel)]="formAppointment.date"
+            formControlName="appointmentForm.date"
             [inline]="true"
             styleClass="w-full h-full custom-datepicker"
           />
@@ -187,7 +196,7 @@
               optionLabel="name"
               [optionValue]="'value'"
               [options]="specialties"
-              [(ngModel)]="formAppointment.specialty"
+              formControlName="appointmentForm.specialty"
               placeholder="Seleccione una especialidad"
               class=""
               (onChange)="imprimir()"
@@ -198,7 +207,10 @@
               <p class="text-2xl mb-0">DR. {{ doc.name.toUpperCase() }}</p>
               <p>Dias de atención: <span>Lunes, Martes, Miércoles </span></p>
             </div>
-            <div class=" w-full" style="height: 1px; background-color: rgb(196, 196, 196);" ></div>
+            <div
+              class="w-full"
+              style="height: 1px; background-color: rgb(196, 196, 196)"
+            ></div>
             <div class="">
               <p class="">Horarios de atención</p>
               <div class="flex flex-wrap gap-4 ml-4">
@@ -222,9 +234,9 @@
           </div>
 
           <!-- <p>No tenemos horarios disponibles para esta fecha.</p> -->
-            <div class="">
-              <p-button label="Continuar" (click)="seleccionarCita()" />
-            </div>
+          <div class="">
+            <p-button label="Continuar" (click)="seleccionarCita()" />
+          </div>
         </div>
       } @else if (currentStep === 2) {
         <div
@@ -250,7 +262,7 @@
           <div class="border-2 col-6">
             <p class="text-5xl font-bold">Resumen de la cita</p>
             <div class="flex flex-column gap-4 border-2">
-                    <div class="flex gap-4">
+              <div class="flex gap-4">
                 <div>
                   <label for="identification">Identificación</label>
                   <input
