@@ -53,9 +53,9 @@
               </div>
             </div>
             <div
-              class="align-items-end w-full border-2 border-green-500 flex justify-content-end"
+              class="align-items-end w-full border-2 border-green-500 flex justify-content-start"
             >
-              <p-button label="Continuar" />
+              <p-button label="Continuar" (click)="consultarUsuario(identification)" />
             </div>
           </div>
         } @else {
@@ -66,48 +66,6 @@
             <div
               class="formgrid grid flex gap-4 align-items-center border-2 border-red-500"
             >
-              <!-- <div
-              class="field col flex flex-column w-15rem border-2 border-green-500"
-            >
-              <label class="mb-2" for="identification">
-                {{
-                  selectedTypeIdentity === 'ci'
-                    ? 'Cédula de Identidad:'
-                    : 'Pasaporte:'
-                }}</label
-              >
-              <input
-                id="identification"
-                pInputText
-                [(ngModel)]="identification"
-                [placeholder]="
-                  selectedTypeIdentity === 'ci'
-                    ? 'Ingrese su cédula'
-                    : 'Ingrese su pasaporte'
-                "
-              />
-            </div> -->
-              <!-- <div
-              class="field col flex flex-column w-15rem border-2 border-green-500"
-            >
-              <label class="mb-2" for="identification">
-                {{
-                  selectedTypeIdentity === 'ci'
-                    ? 'Cédula de Identidad:'
-                    : 'Pasaporte:'
-                }}</label
-              >
-              <input
-                id="identification"
-                pInputText
-                [(ngModel)]="identification"
-                [placeholder]="
-                  selectedTypeIdentity === 'ci'
-                    ? 'Ingrese su cédula'
-                    : 'Ingrese su pasaporte'
-                "
-              />
-            </div> -->
               <div class="grid-cols-2 column-gap-2">
                 <div class="col-9">
                   <label class="mb-2" for="identification"
@@ -135,27 +93,25 @@
                   />
                 </div>
                 <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="identification">Nombres:</label>
+                  <label class="mb-2" for="names">Nombres:</label>
                   <input
-                    id="identification"
+                    id="names"
                     pInputText
-                    [(ngModel)]="identification"
-                    placeholder="Ingrese su pasaporte"
+                    [(ngModel)]="formRegister.names"
+                    placeholder="Ingrese su nombre"
                   />
                 </div>
                 <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="identification">Apellidos:</label>
+                  <label class="mb-2" for="lastNames">Apellidos:</label>
                   <input
-                    id="identification"
+                    id="lastNames"
                     pInputText
-                    [(ngModel)]="identification"
-                    placeholder="Ingrese su pasaporte"
+                    [(ngModel)]="formRegister.lastNames"
+                    placeholder="Ingrese su apellido"
                   />
                 </div>
                 <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="identification"
-                    >Fecha de nacimiento:</label
-                  >
+                  <label class="mb-2" for="birthdate">Fecha de nacimiento:</label>
                   <p-datepicker
                     [(ngModel)]="formRegister.birthdate"
                     [iconDisplay]="'input'"
@@ -165,7 +121,7 @@
                   />
                 </div>
                 <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="identification">Genero:</label>
+                  <label class="mb-2" for="gender">Genero:</label>
                   <p-select
                     optionLabel="name"
                     [optionValue]="'value'"
@@ -177,27 +133,28 @@
                   />
                 </div>
                 <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="identification">Correo</label>
+                  <label class="mb-2" for="email">Correo</label>
                   <input
-                    id="identification"
+                    id="email"
                     pInputText
-                    [(ngModel)]="identification"
+                    [(ngModel)]="formRegister.email"
                     placeholder="Ingrese su correo"
                   />
                 </div>
                 <div class="col-9 flex flex-column border-2 border-green-500">
-                  <label class="mb-2" for="identification">Celular</label>
+                  <label class="mb-2" for="phone">Celular</label>
                   <input
-                    id="identification"
+                    id="phone"
                     pInputText
-                    [(ngModel)]="identification"
-                    placeholder="Ingrese su correo"
+                    [(ngModel)]="formRegister.phone"
+                    placeholder="Ingrese su celular"
                   />
                 </div>
               </div>
             </div>
-            <div class="">
-              <p-button label="Continuar" />
+            <div class="flex gap-2">
+              <p-button label="Atrás" (click)="prevStep()" />
+              <p-button label="Continuar" (click)="crearUsuario()" />
             </div>
           </div>
         }
@@ -229,33 +186,34 @@
             <p-select
               optionLabel="name"
               [optionValue]="'value'"
-              [options]="typesIdentity"
-              [(ngModel)]="selectedTypeIdentity"
-              placeholder="Tipo de Identificación"
+              [options]="specialties"
+              [(ngModel)]="formAppointment.specialty"
+              placeholder="Seleccione una especialidad"
               class=""
               (onChange)="imprimir()"
             />
           </div>
           <div *ngFor="let doc of doctors">
-            <div class="border-2">
+            <div class="">
               <p class="text-2xl mb-0">DR. {{ doc.name.toUpperCase() }}</p>
               <p>Dias de atención: <span>Lunes, Martes, Miércoles </span></p>
             </div>
-            <div class="border-2">
+            <div class=" w-full" style="height: 1px; background-color: rgb(196, 196, 196);" ></div>
+            <div class="">
               <p class="">Horarios de atención</p>
               <div class="flex flex-wrap gap-4 ml-4">
                 <p
-                  class="inline border-2 border-green-500 border-round-md block px-5 py-2"
+                  class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
                 >
                   8:00
                 </p>
                 <p
-                  class="inline border-2 border-green-500 border-round-md block px-5 py-2"
+                  class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
                 >
                   8:00 - 9:00
                 </p>
                 <p
-                  class="inline border-2 border-green-500 border-round-md block px-5 py-2"
+                  class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
                 >
                   8:00 - 9:00
                 </p>
@@ -263,7 +221,10 @@
             </div>
           </div>
 
-          <p>No tenemos horarios disponibles para esta fecha.</p>
+          <!-- <p>No tenemos horarios disponibles para esta fecha.</p> -->
+            <div class="">
+              <p-button label="Continuar" (click)="seleccionarCita()" />
+            </div>
         </div>
       } @else if (currentStep === 2) {
         <div
