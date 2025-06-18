@@ -39,6 +39,38 @@
         </small>
       </div>
     </div>
+    <div class="flex flex-column gap-2 col-12">
+      <label for="email" class="font-medium">Correo electronico*</label>
+      <input
+        pInputText
+        id="email"
+        placeholder="Ingresa tu correo electrónico"
+        formControlName="email"
+        [ngClass]="{
+          'border-red-500 placeholder-red':
+            registerForm.controls['email'].invalid && formSubmitted,
+        }"
+        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+      />
+      <div
+        *ngIf="
+          registerForm.controls['email'].errors?.['required'] && formSubmitted
+        "
+      >
+        <small style="color: red"
+          >El campo Correo electronico es obligatorio</small
+        >
+      </div>
+      <div
+        *ngIf="
+          registerForm.controls['email'].errors?.['email'] && formSubmitted
+        "
+      >
+        <small style="color: red"
+          >El campo Correo electronico ingresado es invalido</small
+        >
+      </div>
+    </div>
     <div class="flex flex-column gap-2 col-6">
       <label for="identification" class="font-medium"
         >Tipo de identificacion*</label

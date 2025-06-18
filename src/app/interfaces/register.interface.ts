@@ -2,6 +2,8 @@ export interface Register {
   username: string;
   password: string;
   role: string;
-  cedula: string;
+  especialidad?: string;
+  empresa: string;
   email: string;
+  identification: string;
 }
