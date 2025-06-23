@@ -125,8 +125,8 @@
                       [(ngModel)]="newUser.especialidad"
                       [required]="shouldShowEspecialidad()">
                 <option value="">Seleccione una especialidad</option>
-                <option *ngFor="let esp of especialidades" [value]="esp">
-                  {{ esp }}
+                <option *ngFor="let esp of especialidades" [value]="esp.id">
+                  {{ esp.name }}
                 </option>
               </select>
             </div>
@@ -182,7 +182,7 @@
               </td>
               <td>
                 <span *ngIf="user.role === 'doctor'">
-                  {{ user.especialidad || 'No especificada' }}
+                  {{ user?.especialidades?.name || 'No especificada' }}
                 </span>
                 <span *ngIf="user.role !== 'doctor'">-</span>
               </td>

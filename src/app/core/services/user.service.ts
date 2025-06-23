@@ -49,7 +49,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = localStorage?.getItem('token');
     if (!token) {
       console.warn('No se encontró token de autenticación');
     }
@@ -134,7 +134,7 @@ export class UserService {
     return this.http
       .post<
         ApiResponse<User>
-      >(`${this.apiUrl}/admin/users/create`, userData, { headers: this.getHeaders() })
+      >(`${this.apiUrl}/admin/create`, userData, { headers: this.getHeaders() })
       .pipe(
         tap((response) => {
           console.log('Usuario creado exitosamente:', response);

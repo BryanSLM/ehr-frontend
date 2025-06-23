@@ -55,4 +55,8 @@ export class PatientService {
       `${this.apiUrl}/${typeIdentification}/${identification}`,
     );
   }
+
+  getScheduleAvailable(specialty: string, date: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/consultorios/${specialty}/${date}`);
+  }
 }

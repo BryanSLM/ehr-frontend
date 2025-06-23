@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { HorarioConsultorio } from '../horario/cita-horario-selector/cita-horario-selector.component';
 import { PatientService } from '../../../core/services/patient.service';
+import { CatalogosService } from '../../../core/services/catalogos.service';
 
 @Component({
   selector: 'app-cita-new',
@@ -38,7 +39,7 @@ export class CitaNewComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
   appointmentForm: FormGroup = new FormGroup({});
   specialties = [
-    { name: 'Cardiología', value: 'cardiology' },
+    { name: 'Nefrologia', value: 'Nefrologia' },
     { name: 'Pediatría', value: 'pediatrics' },
     { name: 'Dermatología', value: 'dermatology' },
     { name: 'Ginecología', value: 'gynecology' },
@@ -51,6 +52,7 @@ export class CitaNewComponent implements OnInit {
   constructor(
     private patientService: PatientService,
     private formBuilder: FormBuilder,
+    private catalogosService: CatalogosService, // Asumiendo que tienes un servicio para obtener catálogos
   ) {
     this.identificationForm = this.formBuilder.group({
       typeIdentity: ['', [Validators.required]],
@@ -84,7 +86,7 @@ export class CitaNewComponent implements OnInit {
   ];
   existUser = false;
   modeRegister = false;
-  currentStep = 0;
+  currentStep = 1;
   doctors = [
     {
       name: 'Dr. Juan Perez',
@@ -134,6 +136,14 @@ export class CitaNewComponent implements OnInit {
       ] as HorarioConsultorio[],
     },
   ];
+  especialidades: { id: string; name: string }[] = [];
+  ngOnInit() {
+    this.appointmentForm.patchValue({ date: new Date() });
+    if (typeof window !== 'undefined') {
+      this.getSpecialties();
+    }
+    console.log('CitaNewComponent initialized');
+  }
 
   nextStep() {
     if (this.currentStep == 0 && !this.existUser) {
@@ -146,6 +156,11 @@ export class CitaNewComponent implements OnInit {
     console.log(this.selectedTypeIdentity);
   }
   consultarUsuario() {
+    if (this.identificationForm.invalid) {
+      console.log('Formulario de identificación inválido');
+      this.identificationForm.markAllAsTouched(); // Marca todo como tocado para mostrar errores
+      return;
+    }
     this.patientService
       .getPatientByIdentification(
         this.identificationForm.get('typeIdentity')?.value,
@@ -167,6 +182,11 @@ export class CitaNewComponent implements OnInit {
       });
   }
   crearUsuario() {
+    if (this.registerForm.invalid) {
+      console.log('Formulario de identificación inválido');
+      this.registerForm.markAllAsTouched(); // Marca todo como tocado para mostrar errores
+      return;
+    }
     console.log('Creando usuario con los siguientes datos:', this.registerForm);
     this.existUser = true; // Simulamos que el usuario fue creado exitosamente
     this.nextStep();
@@ -178,14 +198,50 @@ export class CitaNewComponent implements OnInit {
     );
     this.nextStep();
   }
+  consultarHorarioDisponible() {
+    // if (this.appointmentForm.invalid) {
+    //   console.log('Formulario de cita inválido');
+    //   this.appointmentForm.markAllAsTouched(); // Marca todo como tocado para mostrar errores
+    //   return;
+    // }
+
+    this.patientService
+      .getScheduleAvailable(
+        this.appointmentForm.get('specialty')?.value,
+        this.appointmentForm.get('date')?.value,
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Horario disponible:', response);
+        },
+      });
+    // const selectedDate = this.appointmentForm.get('date')?.value;
+    // const selectedDoctor = this.appointmentForm.get('doctor')?.value;
+    // const selectedSpecialty = this.appointmentForm.get('specialty')?.value;
+
+    // console.log(
+    //   `Consultando horario disponible para el doctor ${selectedDoctor} en la fecha ${selectedDate} y especialidad ${selectedSpecialty}`,
+    // );
+    // Aquí se debería implementar la lógica para consultar el horario disponible
+    // this.nextStep();
+  }
   // calcularHorasCitas(fecha) {}
+
+  getSpecialties() {
+    // this.isLoading = true;
+
+    this.catalogosService.getEspecialidades().subscribe({
+      next: (specialty) => {
+        this.especialidades = specialty.data;
+      },
+      error: (error) => {
+        console.log('Error al cargar las especialidades:', error);
+      },
+    });
+  }
 
   prevStep() {
     if (this.currentStep == 0) return;
     this.currentStep--;
-  }
-  ngOnInit() {
-    console.log('CitaNewComponent initialized');
-    this.appointmentForm.patchValue({ date: new Date() });
   }
 }
