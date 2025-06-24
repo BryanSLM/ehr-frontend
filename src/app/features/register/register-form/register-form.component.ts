@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { ReactiveFormsModule } from '@angular/forms';
 import { passwordMatchValidator } from '../../../core/validator/src/app/validators/password-match.validator';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -9,7 +13,6 @@ import { cedulaValidator } from '../../../core/validator/src/app/validators/cedu
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { RegisterService } from '../service/register.service';
-import { response } from 'express';
 import { Register } from '../../../interfaces/register.interface';
 
 @Component({
@@ -43,9 +46,14 @@ export class RegisterFormComponent {
     role: 'paciente', // Default value for role
     empresa: 'CARDIOVASC', // Default value for empresa
   };
+  registerError = false;
+  registerErrorMessage = '';
+  @Output() registerSuccess: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
+
   constructor(
-    private formBuilder: FormBuilder,
-    private registerService: RegisterService,
+    private readonly formBuilder: FormBuilder,
+    private readonly registerService: RegisterService,
   ) {
     this.registerForm = this.formBuilder.group(
       {
@@ -73,17 +81,24 @@ export class RegisterFormComponent {
         role: 'paciente',
         empresa: 'CARDIOVASC',
       };
-      this.registerUser();
+      // this.registerUser();
+      //TODO: Uncomment and implement registerUser method to register user in the backend
+
+      // this.registerForm.reset();
     }
+    this.registerSuccess.emit(true);
   }
 
   registerUser() {
     this.registerService.register(this.registerData).subscribe(
       (response) => {
         console.log(response);
+        this.registerSuccess.emit(true);
+        this.registerForm.reset();
       },
       (err) => {
         console.error(err);
+        this.registerError = true;
       },
     );
   }

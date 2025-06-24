@@ -5,6 +5,12 @@
     <app-register-side-image></app-register-side-image>
   </div>
   <div class="col-12 md:col-7 bg-white border-round p-0">
-    <app-register-form></app-register-form>
+    <app-register-form
+      (registerSuccess)="toggleDialog($event)"
+    ></app-register-form>
   </div>
+  <app-activate-account-dialog
+    [isDialogOpen]="isDialogOpen"
+    (emitDialogToogleStatus)="toggleDialog($event)"
+  ></app-activate-account-dialog>
 </div>
