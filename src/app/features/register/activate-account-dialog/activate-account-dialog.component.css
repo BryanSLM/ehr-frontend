@@ -1,0 +1,14 @@
+:host ::ng-deep .p-dialog {
+  background-color: #201c75 !important;
+  border-color: #201c75 !important;
+  color: white;
+}
+:host ::ng-deep .p-dialog-close-button.p-button-text {
+  color: white;
+}
+
+.otp-input {
+  background-color: #e5e7eb;
+  color: black;
+  border-color: #e5e7eb;
+}

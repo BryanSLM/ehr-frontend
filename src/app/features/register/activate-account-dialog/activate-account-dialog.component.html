@@ -1,25 +1,27 @@
 <p-dialog
   [(visible)]="isDialogOpen"
   [modal]="true"
-  [style]="{ width: '25rem' }"
+  [style]="{ width: '30rem' }"
   (onHide)="closeDialog()"
 >
   <ng-template #header>
-    <div class="inline-flex items-center justify-center gap-2">
-      ¡ <span class="font-bold whitespace-nowrap">Amy Elsner</span>
-    </div>
+    <h1 class="font-bold">Activa tu cuenta</h1>
   </ng-template>
-  <span class="text-surface-500 dark:text-surface-400 block mb-8"
-    >Update your information.</span
-  >
-  <div class="flex items-center gap-4 mb-4">
-    <label for="username" class="font-semibold w-24">Username</label>
-    <input pInputText id="username" class="flex-auto" autocomplete="off" />
+  <p class="font-normal">{{ activateAccountMessage }}</p>
+
+  <div class="flex gap-2 justify-center my-4">
+    <input
+      *ngFor="let digit of [0, 1, 2, 3, 4, 5]; let i = index"
+      maxlength="1"
+      type="text"
+      class="w-10 h-30 text-center border otp-input rounded text-xl"
+      autocomplete="one-time-code"
+      #otpInput
+      (input)="onOtpInput($event, i)"
+      (keydown.backspace)="onOtpBackspace($event, i)"
+    />
   </div>
-  <div class="flex items-center gap-4 mb-2">
-    <label for="email" class="font-semibold w-24">Email</label>
-    <input pInputText id="email" class="flex-auto" autocomplete="off" />
-  </div>
+
   <ng-template #footer>
     <p-button
       label="Cancel"
@@ -32,8 +34,8 @@
       label="Save"
       [outlined]="true"
       severity="secondary"
-      (click)="closeDialog()"
-      (keydown.enter)="closeDialog()"
+      (click)="onSubmit()"
+      (keydown.enter)="onSubmit()"
     />
   </ng-template>
 </p-dialog>
