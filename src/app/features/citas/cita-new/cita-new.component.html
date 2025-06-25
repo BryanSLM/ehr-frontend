@@ -322,6 +322,7 @@
               formControlName="date"
               [inline]="true"
               styleClass="w-full h-full custom-datepicker"
+              (onSelect)="consultarHorarioDisponible()"
             />
           </div>
           <div
@@ -332,7 +333,7 @@
               <!-- formControlName="appointmentForm.specialty" -->
               <p-select
                 optionLabel="name"
-                [optionValue]="'value'"
+                [optionValue]="'id'"
                 [options]="specialties"
                 placeholder="Seleccione una especialidad"
                 class=""
@@ -341,44 +342,55 @@
               />
             </div>
             @if (this.appointmentForm.get('specialty')?.value) {
-              <div *ngFor="let doc of doctors">
-                <div class="">
-                  <p class="text-2xl mb-0">DR. {{ doc.name.toUpperCase() }}</p>
-                  <p>
-                    Dias de atención: <span>Lunes, Martes, Miércoles </span>
-                  </p>
-                </div>
-                <div
-                  class="w-full"
-                  style="height: 1px; background-color: rgb(196, 196, 196)"
-                ></div>
-                <div class="">
-                  <p class="">Horarios de atención</p>
-                  <div class="flex flex-wrap gap-4 ml-4">
-                    <p
-                      class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
-                    >
-                      8:00
-                    </p>
-                    <p
-                      class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
-                    >
-                      8:00 - 9:00
-                    </p>
-                    <p
-                      class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
-                    >
-                      8:00 - 9:00
+              @if (appointmentsAvailable.length > 0) {
+                <div *ngFor="let item of appointmentsAvailable">
+                  <div class="">
+                    <p class="text-2xl mb-0">
+                      DR. {{ item.consultorio.doctor.username.toUpperCase() }}
                     </p>
                   </div>
+                  <div
+                    class="w-full"
+                    style="height: 1px; background-color: rgb(196, 196, 196)"
+                  ></div>
+                  <div class="">
+                    <p class="">Horarios de atención</p>
+                    <div class="flex flex-wrap gap-4 ml-4">
+                      <div
+                        *ngFor="let times of item.intervalos"
+                        [ngClass]="{
+                          'bg-blue-500 text-white':
+                            times === appointmentForm.get('time')?.value,
+                          'hover:bg-blue-200':
+                            times !== appointmentForm.get('time')?.value,
+                        }"
+                        class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
+                        tabindex="0"
+                        role="button"
+                        (click)="
+                          seleccionarHora(times, item.consultorio.doctor.id)
+                        "
+                        (keydown.enter)="
+                          seleccionarHora(times, item.consultorio.doctor.id)
+                        "
+                        (keydown.space)="
+                          seleccionarHora(times, item.consultorio.doctor.id)
+                        "
+                      >
+                        {{ times }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              } @else {
+                <p class="text-2xl mb-0">No hay doctores disponibles</p>
+              }
             } @else {
               <p class="text-2xl mb-0">Seleccione una especialidad</p>
             }
 
             <div class="">
-              <p-button label="Continuar" (click)="seleccionarCita()" />
+              <p-button label="Continuar" (click)="aceptarHorario()" />
             </div>
           </div>
         </form>
@@ -413,16 +425,16 @@
                     id="identification"
                     type="text"
                     class="input"
-                    value="1777777777"
+                    [value]="this.registerForm.get('identification')?.value"
                   />
                 </div>
                 <div class="">
-                  <label for="identification">Nombre</label>
+                  <label for="name">Nombre</label>
                   <input
-                    id="identification"
+                    id="name"
                     type="text"
                     class="input"
-                    value="Juan Perez"
+                    [value]="this.registerForm.get('names')?.value"
                   />
                 </div>
               </div>
@@ -433,7 +445,8 @@
                     id="identification"
                     type="text"
                     class="input"
-                    value="Cardióloga"
+                    [value]="specialtyName"
+                    readonly
                   />
                 </div>
                 <div>
@@ -442,7 +455,8 @@
                     id="identification"
                     type="text"
                     class="input"
-                    value="Dr. Juan Pérez"
+                    [value]="nameDoctor"
+                    readonly
                   />
                 </div>
               </div>
@@ -453,7 +467,7 @@
                     id="identification"
                     type="text"
                     class="input"
-                    value="10:05 am"
+                   [value]="formatDate(this.appointmentForm.get('date')?.value)"
                   />
                 </div>
                 <div>
@@ -462,7 +476,7 @@
                     id="identification"
                     type="text"
                     class="input"
-                    value="09/06/2025"
+                    [value]="this.appointmentForm.get('time')?.value"
                   />
                 </div>
               </div>
