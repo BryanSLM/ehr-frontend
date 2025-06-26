@@ -39,24 +39,14 @@ export class CitaNewComponent implements OnInit {
   identificationForm: FormGroup = new FormGroup({});
   registerForm: FormGroup = new FormGroup({});
   appointmentForm: FormGroup = new FormGroup({});
-  specialties: { id: string; name: string }[] = [
-    // { name: 'Nefrologia', value: 'Nefrologia' },
-    // { name: 'Pediatría', value: 'pediatrics' },
-    // { name: 'Dermatología', value: 'dermatology' },
-    // { name: 'Ginecología', value: 'gynecology' },
-    // { name: 'Oftalmología', value: 'ophthalmology' },
-    // { name: 'Odontología', value: 'dentistry' },
-    // { name: 'Traumatología', value: 'traumatology' },
-    // { name: 'Psiquiatría', value: 'psychiatry' },
-    // { name: 'Neurología', value: 'neurology' },
-  ];
+  specialties: { id: string; name: string }[] = [];
   constructor(
     private patientService: PatientService,
     private formBuilder: FormBuilder,
     private catalogosService: CatalogosService, // Asumiendo que tienes un servicio para obtener catálogos
   ) {
     this.identificationForm = this.formBuilder.group({
-      typeIdentity: ['', [Validators.required]],
+      typeIdentity: ['cedula', [Validators.required]],
       identification: ['', [Validators.required]],
     });
     this.registerForm = this.formBuilder.group({
@@ -87,7 +77,7 @@ export class CitaNewComponent implements OnInit {
   ];
   existUser = false;
   modeRegister = false;
-  currentStep = 1;
+  currentStep = 0;
   doctors = [
     {
       name: 'Dr. Juan Perez',
@@ -301,7 +291,12 @@ export class CitaNewComponent implements OnInit {
   }
 
   prevStep() {
-    if (this.currentStep == 0) return;
+    if (this.currentStep == 0) {
+      if (this.modeRegister) {
+        this.modeRegister = false;
+      }
+      return;
+    }
     this.currentStep--;
   }
 }

@@ -1,36 +1,57 @@
-<div
-  class="border-2 border-red-500 w-full h-fullscreen p-8 flex items-center justify-content-center"
->
-  <div
-    class="w-11 border-3 border-blue-500 border-round-xl border-black h-45rem p-4"
-  >
-    <p class="text-5xl font-bold text-center">AGENDA TU CITA</p>
-
-    <div
-      class="border-3 border-blue-500 w-full h-40rem mt-4 flex justify-content-around p-4"
-    >
+<div class="w-full h-fullscreen flex items-center justify-content-center">
+  <div class="bg-blue-500 flex flex-column pt-4" style="width: 60%">
+    <div class="flex align-items-center justify-content-center">
+      <img
+        src="/assets/logo.png"
+        alt="Logo"
+        class="w-7rem h-7rem object-cover"
+      />
+      <p class="text-7xl text-white mb-0">Cardiovasc</p>
+    </div>
+    <img
+      src="/assets/doctor.png"
+      alt="Logo"
+      class="w-full object-cover align-items-end"
+    />
+  </div>
+  <div class="w-11 border-round-xl border-black h-45rem p-4">
+    <p class="text-7xl text-blue-500 font-bold text-center mt-3">
+      Agenda tu cita
+    </p>
+    <div class="mt-8 w-full h-40rem mt-4 flex justify-content-around  p-4">
       @if (currentStep === 0) {
         @if (!modeRegister) {
           <form
             [formGroup]="identificationForm"
             (ngSubmit)="consultarUsuario()"
+            class="border-2 p-4 border-blue-500 border-round-lg mt-6  shadow-2"
           >
             <div
-              class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
+              class="flex flex-column justify-content-center items-center gap-4 p-4"
             >
-              <p class="text-5xl font-bold">Identificación</p>
-              <div
-                class="flex gap-4 align-items-center border-2 border-red-500"
-              >
+              <div class="">
+                <p class="text-5xl text-center font-bold mb-0 text-blue-500">
+                  Identificación
+                </p>
+                <p class="text-sm text-center font-bold text-gray-400">
+                  Ingresa tu identificación para continuar el proceso
+                </p>
+              </div>
+              <div class="flex gap-4 align-items-center">
                 <div class="w-15rem">
                   <label
-                    class="mb-2"
+                    class="mb-2 font-bold"
                     for="identification"
-                    [ngClass]="{
-                      'text-red-500':
+                    [class.text-red-500]="
+                      identificationForm.get('typeIdentity')?.invalid &&
+                      identificationForm.get('typeIdentity')?.touched
+                    "
+                    [class.text-blue-500]="
+                      !(
                         identificationForm.get('typeIdentity')?.invalid &&
-                        identificationForm.get('typeIdentity')?.touched,
-                    }"
+                        identificationForm.get('typeIdentity')?.touched
+                      )
+                    "
                   >
                     Tipo de Identificación:</label
                   >
@@ -49,14 +70,14 @@
                     }"
                   />
                 </div>
-                <div class="flex flex-column w-15rem border-2 border-green-500">
+                <div class="flex flex-column w-15rem">
                   <label
-                    class="mb-2"
+                    class="mb-2 text-blue-500 font-bold"
                     for="identification"
                     [ngClass]="{
                       'text-red-500':
-                        identificationForm.get('typeIdentity')?.invalid &&
-                        identificationForm.get('typeIdentity')?.touched,
+                        identificationForm.get('identification')?.invalid &&
+                        identificationForm.get('identification')?.touched,
                     }"
                   >
                     {{
@@ -82,26 +103,28 @@
                   />
                 </div>
               </div>
-              <div
-                class="align-items-end w-full border-2 border-green-500 flex justify-content-start"
-              >
-                <p-button type="submit" label="Continuar" />
+              <div class="flex justify-content-end w-full ">
+                <p-button type="submit" label="Continuar" styleClass="w-10rem"  />
               </div>
             </div>
           </form>
         } @else {
           <form [formGroup]="registerForm" (ngSubmit)="crearUsuario()">
             <div
-              class="flex flex-column justify-content-center border-2 border-yellow-500 items-center gap-4 p-4"
+              class="flex flex-column justify-content-center text-blue-500 items-center gap-4"
             >
-              <p class="text-5xl font-bold">Registro</p>
-              <div
-                class="formgrid grid flex gap-4 align-items-center border-2 border-red-500"
-              >
+              <div class="">
+                <p class="text-5xl font-bold mb-0">Registro</p>
+                <p class="text-sm font-bold text-gray-400 mb-0">
+                  Llena los siguientes datos para crear la cuenta y poder
+                  asignarte una cita
+                </p>
+              </div>
+              <div class="formgrid grid flex align-items-center">
                 <div class="grid-cols-2 column-gap-2">
-                  <div class="col-9">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="identification"
                       [ngClass]="{
                         'text-red-500':
@@ -116,7 +139,7 @@
                       formControlName="typeIdentity"
                       [options]="typesIdentity"
                       placeholder="Tipo de Identificación"
-                      class="w-full"
+                      class="min-w-20rem border-2"
                       (onChange)="imprimir()"
                       [ngClass]="{
                         'ng-invalid ng-dirty':
@@ -125,9 +148,9 @@
                       }"
                     />
                   </div>
-                  <div class="col-9 flex flex-column border-2 border-green-500">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="identification"
                       [ngClass]="{
                         'text-red-500':
@@ -148,9 +171,9 @@
                       }"
                     />
                   </div>
-                  <div class="col-9 flex flex-column border-2 border-green-500">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="names"
                       [ngClass]="{
                         'text-red-500':
@@ -171,9 +194,9 @@
                       }"
                     />
                   </div>
-                  <div class="col-9 flex flex-column border-2 border-green-500">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="lastNames"
                       [ngClass]="{
                         'text-red-500':
@@ -194,9 +217,9 @@
                       }"
                     />
                   </div>
-                  <div class="col-9 flex flex-column border-2 border-green-500">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="birthdate"
                       [ngClass]="{
                         'text-red-500':
@@ -218,9 +241,9 @@
                       }"
                     />
                   </div>
-                  <div class="col-9 flex flex-column border-2 border-green-500">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="gender"
                       [ngClass]="{
                         'text-red-500':
@@ -244,9 +267,9 @@
                       }"
                     />
                   </div>
-                  <div class="col-9 flex flex-column border-2 border-green-500">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="email"
                       [ngClass]="{
                         'text-red-500':
@@ -267,9 +290,9 @@
                       }"
                     />
                   </div>
-                  <div class="col-9 flex flex-column border-2 border-green-500">
+                  <div class="col-12 flex flex-column">
                     <label
-                      class="mb-2"
+                      class="mb-2 font-bold"
                       for="phone"
                       [ngClass]="{
                         'text-red-500':
@@ -292,45 +315,48 @@
                   </div>
                 </div>
               </div>
-              <div class="flex gap-2">
-                <p-button label="Atrás" (click)="prevStep()" />
-                <p-button label="Continuar" type="submit" />
+              <div class="flex justify-content-between gap-2">
+                <p-button
+                  variant="outlined"
+                  styleClass="w-15rem text-base"
+                  label="Atrás"
+                  (click)="prevStep()"
+                />
+                <p-button
+                  styleClass="w-15rem text-base"
+                  label="Continuar"
+                  type="submit"
+                />
               </div>
             </div>
           </form>
         }
-        <div
-          class="bg-no-repeat border-2 border-red-500"
-          src="/assets/botiquin3d.png"
-          style="
-            background-image: url('/assets/botiquin3d.png');
-            object-fit: cover;
-            background-size: cover;
-            background-position: center;
-            width: 35rem;
-            height: 35rem;
-          "
-        ></div>
       } @else if (currentStep === 1) {
         <form
           [formGroup]="appointmentForm"
-          class="border-2 flex"
+          class="flex w-full gap-4"
           (ngSubmit)="crearUsuario()"
         >
-          <div class="" style="width: 40rem">
+          <div class="flex align-items-center" style="width: 35rem">
             <p-datepicker
               formControlName="date"
               [inline]="true"
-              styleClass="w-full h-full custom-datepicker"
+              styleClass=" custom-datepicker"
               (onSelect)="consultarHorarioDisponible()"
             />
+            <!-- <p-datepicker
+              styleClass="max-w-full"
+              formControlName="date"
+              [inline]="true"
+            /> -->
           </div>
-          <div
-            class="flex flex-column items-center gap-4 border-2 border-red-500 w-full"
-          >
+          <div class="flex flex-column items-center gap-4 w-full">
             <div class="flex align-items-center gap-4">
-              <label class="" for="identification">Especialidad:</label>
-              <!-- formControlName="appointmentForm.specialty" -->
+              <label
+                class="text-3xl text-blue-500 font-bold"
+                for="identification"
+                >Especialidad:</label
+              >
               <p-select
                 optionLabel="name"
                 [optionValue]="'id'"
@@ -350,9 +376,11 @@
                     </p>
                   </div>
                   <div
-                    class="w-full"
+                    class="w-full bg-blue-500"
                     style="height: 1px; background-color: rgb(196, 196, 196)"
-                  ></div>
+
+                    ></div>
+                    <!-- style="height: 1px; background-color: rgb(196, 196, 196)" -->
                   <div class="">
                     <p class="">Horarios de atención</p>
                     <div class="flex flex-wrap gap-4 ml-4">
@@ -383,15 +411,48 @@
                   </div>
                 </div>
               } @else {
-                <p class="text-2xl mb-0">No hay doctores disponibles</p>
+                <div class="w-full flex align-items-center flex-column">
+                  <img
+                    src="/assets/no-available.png"
+                    alt="Logo"
+                    class="w-20rem h-20em"
+                  />
+
+                  <p class="text-5xl text-blue-500 font-bold mb-0">
+                    No hay doctores disponibles
+                  </p>
+                </div>
               }
             } @else {
-              <p class="text-2xl mb-0">Seleccione una especialidad</p>
-            }
+              <div class="w-full flex align-items-center flex-column">
+                <div class="overflow-hidden w-30rem">
+                  <div
+                    class="bg-cover bg-center border-primary-500 border-round h-20rem w-full"
+                    style="background-image: url('/assets/waiting.png')"
+                  ></div>
+                </div>
 
-            <div class="">
-              <p-button label="Continuar" (click)="aceptarHorario()" />
+                <p class="text-5xl text-blue-500 font-bold mb-0">
+                  Seleccione una especialidad
+                </p>
+              </div>
+            }
+            <div class="flex justify-content-between gap-2">
+              <p-button
+                variant="outlined"
+                styleClass="w-15rem text-base"
+                label="Atrás"
+                (click)="prevStep()"
+              />
+              <p-button
+                styleClass="w-15rem text-base"
+                label="Continuar"
+                (click)="aceptarHorario()"
+              />
             </div>
+            <!-- <div class="border-2">
+              <p-button label="Continuar" (click)="aceptarHorario()" />
+            </div> -->
           </div>
         </form>
       } @else if (currentStep === 2) {
@@ -467,7 +528,9 @@
                     id="identification"
                     type="text"
                     class="input"
-                   [value]="formatDate(this.appointmentForm.get('date')?.value)"
+                    [value]="
+                      formatDate(this.appointmentForm.get('date')?.value)
+                    "
                   />
                 </div>
                 <div>
