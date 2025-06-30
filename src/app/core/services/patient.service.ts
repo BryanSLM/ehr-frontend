@@ -56,6 +56,10 @@ export class PatientService {
     );
   }
 
+  createPatientExternal(body: any) {
+    return this.http.post(`${this.apiUrl}/external/create-patient`, body);
+  }
+
   getScheduleAvailable(specialty: string, date: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/consultorios/${specialty}/${date}`);
   }

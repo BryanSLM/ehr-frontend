@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -72,8 +72,8 @@ export class CitaNewComponent implements OnInit {
     { name: 'Pasaporte', value: 'pasaporte' },
   ];
   typesGender = [
-    { name: 'Masculino', value: 'male' },
-    { name: 'Femenino', value: 'female' },
+    { name: 'Masculino', value: 'M' },
+    { name: 'Femenino', value: 'F' },
   ];
   existUser = false;
   modeRegister = false;
@@ -142,6 +142,8 @@ export class CitaNewComponent implements OnInit {
     };
     intervalos: string[];
   }[] = [];
+  loadingForm = false;
+
   ngOnInit() {
     this.appointmentForm.patchValue({ date: new Date() });
     if (typeof window !== 'undefined') {
@@ -163,9 +165,13 @@ export class CitaNewComponent implements OnInit {
   consultarUsuario() {
     if (this.identificationForm.invalid) {
       console.log('Formulario de identificación inválido');
-      this.identificationForm.markAllAsTouched(); // Marca todo como tocado para mostrar errores
+      this.identificationForm.markAllAsTouched();
+      this.loadingForm = false;
+
       return;
     }
+    this.loadingForm = true;
+
     this.patientService
       .getPatientByIdentification(
         this.identificationForm.get('typeIdentity')?.value,
@@ -177,30 +183,51 @@ export class CitaNewComponent implements OnInit {
           this.existUser = true;
           this.registerForm.patchValue(response);
           this.nextStep();
+          this.loadingForm = false;
         },
         error: (error) => {
           console.error('Error al cargar pacientes:', error);
           this.existUser = false;
           this.registerForm.reset();
           this.nextStep();
+          this.loadingForm = false;
         },
       });
   }
   crearUsuario() {
     if (this.registerForm.invalid) {
       console.log('Formulario de identificación inválido');
-      this.registerForm.markAllAsTouched(); // Marca todo como tocado para mostrar errores
+      this.registerForm.markAllAsTouched();
       return;
     }
-    console.log('Creando usuario con los siguientes datos:', this.registerForm);
-    this.existUser = true; // Simulamos que el usuario fue creado exitosamente
-    this.nextStep();
+    this.loadingForm = true;
+    this.patientService
+      .createPatientExternal(this.registerForm.value)
+      .subscribe({
+        next: (response) => {
+          console.log('Usuario creado:', response);
+          this.existUser = true;
+          this.loadingForm = false;
+          this.nextStep();
+        },
+        error: (error) => {
+          console.error('Error al crear usuario:', error);
+          this.existUser = false;
+          this.loadingForm = false;
+        },
+      });
+    // console.log('Creando usuario con los siguientes datos:', this.registerForm);
+    // this.existUser = true;
+    // this.loadingForm = false;
+    // this.nextStep();
   }
   seleccionarCita() {
+    this.loadingForm = true;
     console.log(
       'Seleccionando cita con los siguientes datos:',
       this.appointmentForm,
     );
+    this.loadingForm = false;
     this.nextStep();
   }
   get specialtyName(): string | undefined {
@@ -270,8 +297,11 @@ export class CitaNewComponent implements OnInit {
       },
     });
   }
-  formatDate(date: Date): string {
-    return dayjs(date).format('YYYY-MM-DD');
+  formatDate(
+    date: Date,
+    format: 'YYYY-MM-DD' | 'DD-MM-YYYY' | 'YYYY-MM-DD HH:mm:ss' = 'DD-MM-YYYY',
+  ): string {
+    return dayjs(date).format(format);
   }
   aceptarHorario() {
     if (!this.appointmentForm.get('time')?.value) {
@@ -288,6 +318,14 @@ export class CitaNewComponent implements OnInit {
     );
     // Aquí se debería implementar la lógica para confirmar la cita
     this.nextStep();
+  }
+  submitAppointment() {
+    if (this.appointmentForm.invalid) {
+      console.log('Formulario de cita inválido');
+      this.appointmentForm.markAllAsTouched(); // Marca todo como tocado para mostrar errores
+      return;
+    }
+    console.log('Cita creada con los siguientes datos:', this.appointmentForm);
   }
 
   prevStep() {
