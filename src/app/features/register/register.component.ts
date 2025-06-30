@@ -17,8 +17,6 @@ import { ActivateAccountDialogComponent } from './activate-account-dialog/activa
 export class RegisterComponent {
   isDialogOpen = false;
 
-  constructor() {}
-
   toggleDialog(isDialogOpen: boolean): void {
     this.isDialogOpen = isDialogOpen;
     console.log('Dialog status:', this.isDialogOpen);
