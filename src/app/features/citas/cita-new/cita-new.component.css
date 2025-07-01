@@ -10,7 +10,7 @@
 }
 
 ::ng-deep .custom-datepicker .p-datepicker {
-  height: 100% !important;
+  height: 90% !important;
    border: none !important;
 }
 
@@ -25,7 +25,7 @@
 }
 
 ::ng-deep .custom-datepicker .p-datepicker-calendar td {
-  padding: 0.5rem; 
+  padding: 0.4rem; 
 }
 
 ::ng-deep .custom-datepicker .p-datepicker-panel {
