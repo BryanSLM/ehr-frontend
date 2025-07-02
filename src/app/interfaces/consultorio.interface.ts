@@ -4,17 +4,21 @@ export interface Consultorio {
   descripcion?: string;
   doctorId: number;
   estado: string;
-  doctor?: {
-    id: number;
-    username: string;
-    especialidad: string;
-  };
-  horarios?: {
-    id: number;
-    dia: string;
-    horaInicio: string;
-    horaFin: string;
-  }[];
+  doctor?: DoctorConsultorio;
+  horarios?: HorarioConsultorio[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface DoctorConsultorio {
+  id: number;
+  username: string;
+  especialidad: string;
+}
+
+export interface HorarioConsultorio {
+  id: number;
+  dia: string;
+  horaInicio: string;
+  horaFin: string;
 }

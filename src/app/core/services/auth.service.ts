@@ -35,7 +35,7 @@ export class AuthService {
     console.log('Iniciando login para:', username);
 
     return this.http
-      .post<LoginResponse>(`${this.apiUrl}/api/auth/login`, {
+      .post<LoginResponse>(`${this.apiUrl}/auth/login`, {
         username,
         password,
       })

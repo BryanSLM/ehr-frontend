@@ -49,7 +49,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = localStorage?.getItem('token');
     if (!token) {
       console.warn('No se encontró token de autenticación');
     }
@@ -80,7 +80,7 @@ export class UserService {
     return this.http
       .get<
         ApiResponse<User[]>
-      >(`${this.apiUrl}/api/admin/users`, { headers: this.getHeaders() })
+      >(`${this.apiUrl}/admin/users`, { headers: this.getHeaders() })
       .pipe(
         tap((response) => console.log('Respuesta del servidor:', response)),
         map((response) => {
@@ -134,7 +134,7 @@ export class UserService {
     return this.http
       .post<
         ApiResponse<User>
-      >(`${this.apiUrl}/api/admin/users/create`, userData, { headers: this.getHeaders() })
+      >(`${this.apiUrl}/admin/create`, userData, { headers: this.getHeaders() })
       .pipe(
         tap((response) => {
           console.log('Usuario creado exitosamente:', response);
@@ -151,7 +151,7 @@ export class UserService {
     return this.http
       .patch<
         ApiResponse<User>
-      >(`${this.apiUrl}/api/admin/users/${userId}/toggle-status`, {}, { headers: this.getHeaders() })
+      >(`${this.apiUrl}/admin/users/${userId}/toggle-status`, {}, { headers: this.getHeaders() })
       .pipe(
         tap((response) => {
           console.log(`Estado del usuario ${userId} actualizado:`, response);

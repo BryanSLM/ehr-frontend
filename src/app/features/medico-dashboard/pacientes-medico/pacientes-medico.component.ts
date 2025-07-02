@@ -11,14 +11,13 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './pacientes-medico.component.html',
-  styleUrls: ['./pacientes-medico.component.css']
+  styleUrls: ['./pacientes-medico.component.css'],
 })
 export class PacientesMedicoComponent extends PatientsComponent {
-  
   constructor(
     patientService: PatientService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     super(patientService);
   }
@@ -33,7 +32,7 @@ export class PacientesMedicoComponent extends PatientsComponent {
 
     // Usar la ruta correcta que coincide con tu configuración
     this.router.navigate(['/doctor/evolucion/new'], {
-      queryParams: { pacienteId: pacienteId }
+      queryParams: { pacienteId: pacienteId },
     });
   }
   cerrarSesion() {

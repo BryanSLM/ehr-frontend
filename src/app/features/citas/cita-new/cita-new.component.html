@@ -1,0 +1,564 @@
+<div class="w-full h-fullscreen flex items-center justify-content-center">
+  <div class="bg-blue-500 flex flex-column pt-4" style="width: 60%">
+    <div class="flex align-items-center justify-content-center">
+      <img
+        src="/assets/logo.png"
+        alt="Logo"
+        class="w-7rem h-7rem object-cover"
+      />
+      <p class="text-7xl text-white mb-0">Cardiovasc</p>
+    </div>
+    <img
+      src="/assets/doctor.png"
+      alt="Logo"
+      class="w-full object-cover align-items-end"
+    />
+  </div>
+  <div class="w-11 border-round-xl border-black h-45rem p-4">
+    <p class="text-7xl text-blue-500 font-bold text-center mt-3">
+      Agenda tu cita
+    </p>
+    <div class="mt-8 w-full h-40rem mt-4 flex justify-content-around p-4">
+      @if (currentStep === 0) {
+        @if (!modeRegister) {
+          <form
+            [formGroup]="identificationForm"
+            (ngSubmit)="consultarUsuario()"
+            class="border-2 p-4 border-blue-500 border-round-lg mt-6 shadow-2"
+          >
+            <div
+              class="flex flex-column justify-content-center items-center gap-4 p-4"
+            >
+              <div class="">
+                <p class="text-5xl text-center font-bold mb-0 text-blue-500">
+                  Identificación
+                </p>
+                <p class="text-sm text-center font-bold text-gray-400">
+                  Ingresa tu identificación para continuar el proceso
+                </p>
+              </div>
+              <div class="flex gap-4 align-items-center">
+                <div class="w-15rem">
+                  <label
+                    class="mb-2 font-bold"
+                    for="identification"
+                    [class.text-red-500]="
+                      identificationForm.get('typeIdentity')?.invalid &&
+                      identificationForm.get('typeIdentity')?.touched
+                    "
+                    [class.text-blue-500]="
+                      !(
+                        identificationForm.get('typeIdentity')?.invalid &&
+                        identificationForm.get('typeIdentity')?.touched
+                      )
+                    "
+                  >
+                    Tipo de Identificación:</label
+                  >
+                  <p-select
+                    optionLabel="name"
+                    [optionValue]="'value'"
+                    [options]="typesIdentity"
+                    formControlName="typeIdentity"
+                    placeholder="Tipo de Identificación"
+                    class="w-full"
+                    (onChange)="imprimir()"
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                        identificationForm.get('typeIdentity')?.invalid &&
+                        identificationForm.get('typeIdentity')?.touched,
+                    }"
+                  />
+                </div>
+                <div class="flex flex-column w-15rem">
+                  <label
+                    class="mb-2 text-blue-500 font-bold"
+                    for="identification"
+                    [ngClass]="{
+                      'text-red-500':
+                        identificationForm.get('identification')?.invalid &&
+                        identificationForm.get('identification')?.touched,
+                    }"
+                  >
+                    {{
+                      identificationForm.get('typeIdentity')?.value === 'cedula'
+                        ? 'Cédula de Identidad:'
+                        : 'Pasaporte:'
+                    }}</label
+                  >
+                  <input
+                    id="identification"
+                    pInputText
+                    formControlName="identification"
+                    [placeholder]="
+                      identificationForm.get('typeIdentity')?.value === 'cedula'
+                        ? 'Ingrese su cédula'
+                        : 'Ingrese su pasaporte'
+                    "
+                    [ngClass]="{
+                      'ng-invalid ng-dirty':
+                        identificationForm.get('identification')?.invalid &&
+                        identificationForm.get('identification')?.touched,
+                    }"
+                  />
+                </div>
+              </div>
+              <div class="flex justify-content-end w-full">
+                <p-button
+                  type="submit"
+                  label="Continuar"
+                  styleClass="w-10rem"
+                  [loading]="loadingForm"
+                />
+              </div>
+            </div>
+          </form>
+        } @else {
+          <form [formGroup]="registerForm" (ngSubmit)="crearUsuario()">
+            <div
+              class="flex flex-column justify-content-center text-blue-500 items-center gap-4"
+            >
+              <div class="">
+                <p class="text-5xl font-bold mb-0">Registro</p>
+                <p class="text-sm font-bold text-gray-400 mb-0">
+                  Llena los siguientes datos para crear la cuenta y poder
+                  asignarte una cita
+                </p>
+              </div>
+              <div class="formgrid grid flex align-items-center">
+                <div class="grid-cols-2 column-gap-2">
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="identification"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('typeIdentity')?.invalid &&
+                          registerForm.get('typeIdentity')?.touched,
+                      }"
+                      >Tipo de Identificación:</label
+                    >
+                    <p-select
+                      optionLabel="name"
+                      [optionValue]="'value'"
+                      formControlName="typeIdentity"
+                      [options]="typesIdentity"
+                      placeholder="Tipo de Identificación"
+                      class="min-w-20rem border-2"
+                      (onChange)="imprimir()"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('typeIdentity')?.invalid &&
+                          registerForm.get('typeIdentity')?.touched,
+                      }"
+                    />
+                  </div>
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="identification"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('typeIdentity')?.invalid &&
+                          registerForm.get('typeIdentity')?.touched,
+                      }"
+                      >Cedula de identidad:</label
+                    >
+                    <input
+                      id="identification"
+                      pInputText
+                      formControlName="identification"
+                      placeholder="Ingrese su pasaporte"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('identification')?.invalid &&
+                          registerForm.get('identification')?.touched,
+                      }"
+                    />
+                  </div>
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="names"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('names')?.invalid &&
+                          registerForm.get('names')?.touched,
+                      }"
+                      >Nombres:</label
+                    >
+                    <input
+                      id="names"
+                      pInputText
+                      formControlName="names"
+                      placeholder="Ingrese su nombre"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('names')?.invalid &&
+                          registerForm.get('names')?.touched,
+                      }"
+                    />
+                  </div>
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="lastNames"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('lastNames')?.invalid &&
+                          registerForm.get('lastNames')?.touched,
+                      }"
+                      >Apellidos:</label
+                    >
+                    <input
+                      id="lastNames"
+                      pInputText
+                      formControlName="lastNames"
+                      placeholder="Ingrese su apellido"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('lastNames')?.invalid &&
+                          registerForm.get('lastNames')?.touched,
+                      }"
+                    />
+                  </div>
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="birthdate"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('birthdate')?.invalid &&
+                          registerForm.get('birthdate')?.touched,
+                      }"
+                      >Fecha de nacimiento:</label
+                    >
+                    <p-datepicker
+                      formControlName="birthdate"
+                      [iconDisplay]="'input'"
+                      [showIcon]="true"
+                      inputId="icondisplay"
+                      placeholder="Seleccione su fecha de nacimiento"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('birthdate')?.invalid &&
+                          registerForm.get('birthdate')?.touched,
+                      }"
+                    />
+                  </div>
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="gender"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('gender')?.invalid &&
+                          registerForm.get('gender')?.touched,
+                      }"
+                      >Genero:</label
+                    >
+                    <p-select
+                      optionLabel="name"
+                      [optionValue]="'value'"
+                      [options]="typesGender"
+                      formControlName="gender"
+                      placeholder="Seleccione su género"
+                      class="w-full"
+                      (onChange)="imprimir()"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('gender')?.invalid &&
+                          registerForm.get('gender')?.touched,
+                      }"
+                    />
+                  </div>
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="email"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('email')?.invalid &&
+                          registerForm.get('email')?.touched,
+                      }"
+                      >Correo</label
+                    >
+                    <input
+                      id="email"
+                      pInputText
+                      formControlName="email"
+                      placeholder="Ingrese su correo"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('email')?.invalid &&
+                          registerForm.get('email')?.touched,
+                      }"
+                    />
+                  </div>
+                  <div class="col-12 flex flex-column">
+                    <label
+                      class="mb-2 font-bold"
+                      for="phone"
+                      [ngClass]="{
+                        'text-red-500':
+                          registerForm.get('phone')?.invalid &&
+                          registerForm.get('phone')?.touched,
+                      }"
+                      >Celular</label
+                    >
+                    <input
+                      id="phone"
+                      pInputText
+                      formControlName="phone"
+                      placeholder="Ingrese su celular"
+                      [ngClass]="{
+                        'ng-invalid ng-dirty':
+                          registerForm.get('phone')?.invalid &&
+                          registerForm.get('phone')?.touched,
+                      }"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-content-between gap-2">
+                <p-button
+                  variant="outlined"
+                  styleClass="w-15rem text-base"
+                  label="Atrás"
+                  (click)="prevStep()"
+                />
+                <p-button
+                  styleClass="w-15rem text-base"
+                  label="Continuar"
+                  type="submit"
+                />
+              </div>
+            </div>
+          </form>
+        }
+      } @else if (currentStep === 1) {
+        <form
+          [formGroup]="appointmentForm"
+          class="flex w-full gap-4"
+          (ngSubmit)="crearUsuario()"
+        >
+          <div class="flex align-items-center" style="width: 35rem">
+            <p-datepicker
+              formControlName="date"
+              [inline]="true"
+              styleClass=" custom-datepicker"
+              (onSelect)="consultarHorarioDisponible()"
+            />
+            <!-- <p-datepicker
+              styleClass="max-w-full"
+              formControlName="date"
+              [inline]="true"
+            /> -->
+          </div>
+          <div class="flex flex-column items-center gap-4 w-full">
+            <div class="flex align-items-center gap-4">
+              <label
+                class="text-3xl text-blue-500 font-bold"
+                for="identification"
+                >Especialidad:</label
+              >
+              <p-select
+                optionLabel="name"
+                [optionValue]="'id'"
+                [options]="specialties"
+                placeholder="Seleccione una especialidad"
+                class=""
+                formControlName="specialty"
+                (onChange)="consultarHorarioDisponible()"
+              />
+            </div>
+            @if (this.appointmentForm.get('specialty')?.value) {
+              @if (appointmentsAvailable.length > 0) {
+                <div *ngFor="let item of appointmentsAvailable">
+                  <div class="">
+                    <p class="text-2xl mb-0">
+                      DR. {{ item.consultorio.doctor.username.toUpperCase() }}
+                    </p>
+                  </div>
+                  <div
+                    class="w-full bg-blue-500"
+                    style="height: 1px; background-color: rgb(196, 196, 196)"
+                  ></div>
+                  <!-- style="height: 1px; background-color: rgb(196, 196, 196)" -->
+                  <div class="">
+                    <p class="">Horarios de atención</p>
+                    <div class="flex flex-wrap gap-4 ml-4">
+                      <div
+                        *ngFor="let times of item.intervalos"
+                        [ngClass]="{
+                          'bg-blue-500 text-white':
+                            times === appointmentForm.get('time')?.value,
+                          'hover:bg-blue-200':
+                            times !== appointmentForm.get('time')?.value,
+                        }"
+                        class="inline border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
+                        tabindex="0"
+                        role="button"
+                        (click)="
+                          seleccionarHora(times, item.consultorio.doctor.id)
+                        "
+                        (keydown.enter)="
+                          seleccionarHora(times, item.consultorio.doctor.id)
+                        "
+                        (keydown.space)="
+                          seleccionarHora(times, item.consultorio.doctor.id)
+                        "
+                      >
+                        {{ times }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              } @else {
+                <div class="w-full flex align-items-center flex-column">
+                  <img
+                    src="/assets/no-available.png"
+                    alt="Logo"
+                    class="w-20rem h-20em"
+                  />
+
+                  <p class="text-5xl text-blue-500 font-bold mb-0">
+                    No hay doctores disponibles
+                  </p>
+                </div>
+              }
+            } @else {
+              <div class="w-full flex align-items-center flex-column">
+                <div class="overflow-hidden w-30rem">
+                  <div
+                    class="bg-cover bg-center border-primary-500 border-round h-20rem w-full"
+                    style="background-image: url('/assets/waiting.png')"
+                  ></div>
+                </div>
+
+                <p class="text-5xl text-blue-500 font-bold mb-0">
+                  Seleccione una especialidad
+                </p>
+              </div>
+            }
+            <div class="flex justify-content-between gap-2">
+              <p-button
+                variant="outlined"
+                styleClass="w-15rem text-base"
+                label="Atrás"
+                (click)="prevStep()"
+              />
+              <p-button
+                styleClass="w-15rem text-base"
+                label="Continuar"
+                (click)="aceptarHorario()"
+              />
+            </div>
+            <!-- <div class="border-2">
+              <p-button label="Continuar" (click)="aceptarHorario()" />
+            </div> -->
+          </div>
+        </form>
+      } @else if (currentStep === 2) {
+        <div class="border-2 p-4 border-blue-500 border-round-lg mt-0 shadow-2">
+          <div
+            class="flex flex-column justify-content-center items-center gap-4 p-4"
+          >
+            <div class="">
+              <p class="text-5xl text-center font-bold mb-0 text-blue-500">
+                Resumen de la cita
+              </p>
+              <p class="text-sm text-center font-bold text-gray-400">
+                Revisa los datos de tu cita antes de confirmar
+              </p>
+            </div>
+            <div class="flex gap-4 align-items-center">
+              <div class="w-15rem">
+                <label
+                  class="mb-2 font-bold text-blue-500"
+                  for="identification"
+                >
+                  Identificación:</label
+                >
+                <input
+                  id="identification"
+                  pInputText
+                  [value]="this.identificationForm.get('identification')?.value"
+                />
+              </div>
+              <div class="flex flex-column w-15rem">
+                <label class="mb-2 text-blue-500 font-bold" for="names">
+                  Nombres:</label
+                >
+                <input
+                  id="names"
+                  pInputText
+                  [value]="this.registerForm.get('names')?.value"
+                />
+              </div>
+            </div>
+            <div class="flex gap-4 align-items-center">
+              <div class="w-15rem">
+                <label class="mb-2 font-bold text-blue-500" for="specialty">
+                  Especialidad:</label
+                >
+                <input
+                  id="specialty"
+                  pInputText
+                  readonly
+                  [value]="specialtyName"
+                />
+              </div>
+              <div class="flex flex-column w-15rem">
+                <label class="mb-2 text-blue-500 font-bold" for="doctor">
+                  Doctor:</label
+                >
+                <input
+                  id="doctor"
+                  pInputText
+                  [value]="this.appointmentForm.get('doctor')?.value"
+                />
+              </div>
+            </div>
+            <div class="flex gap-4 align-items-center">
+              <div class="w-15rem">
+                <label class="mb-2 font-bold text-blue-500" for="date">
+                  Fecha:</label
+                >
+                <input
+                  id="date"
+                  pInputText
+                  readonly
+                  [value]="formatDate(this.appointmentForm.get('date')?.value)"
+                />
+              </div>
+              <div class="flex flex-column w-15rem">
+                <label class="mb-2 text-blue-500 font-bold" for="time">
+                  Hora:</label
+                >
+                <input
+                  id="time"
+                  pInputText
+                  [value]="this.appointmentForm.get('time')?.value"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-content-between gap-2 p-4">
+            <p-button
+              variant="outlined"
+              styleClass="w-13rem text-base"
+              label="Atrás"
+              (click)="prevStep()"
+            />
+            <p-button
+              styleClass="w-15rem text-base"
+              label="Confirmar Cita"
+              (click)="submitAppointment()"
+            />
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

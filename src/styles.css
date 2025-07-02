@@ -1,2 +1,82 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
+
+/* Configuración global de la fuente Tilt Neon */
+:root {
+  --primary-color: #3b82f6;
+  --primary-color-text: #ffffff;
+}
+* {
+  font-family: 'Tilt Neon', sans-serif;
+}
+
+/* Configuración específica para elementos de PrimeNG y PrimeFlex */
+.p-component,
+.p-element,
+.p-button,
+.p-inputtext,
+.p-dropdown,
+.p-calendar,
+.p-datatable,
+.p-dialog,
+.p-toast,
+.p-menubar,
+.p-sidebar,
+.p-panel,
+.p-card,
+.p-toolbar,
+.p-message {
+  font-family: 'Tilt Neon', sans-serif !important;
+}
+
+/* Asegurar que los títulos y textos también usen la fuente */
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, button,
+input, textarea, select,
+label, th, td {
+  font-family: 'Tilt Neon', sans-serif;
+}
+
+.h-fullscreen {
+    height: 100dvh;
+}
+
+/* Configuración global de la fuente Tilt Neon */
+:root {
+  --primary-color: #3b82f6;
+  --primary-color-text: #ffffff;
+}
+* {
+  font-family: 'Tilt Neon', sans-serif;
+}
+
+/* Configuración específica para elementos de PrimeNG y PrimeFlex */
+.p-component,
+.p-element,
+.p-button,
+.p-inputtext,
+.p-dropdown,
+.p-calendar,
+.p-datatable,
+.p-dialog,
+.p-toast,
+.p-menubar,
+.p-sidebar,
+.p-panel,
+.p-card,
+.p-toolbar,
+.p-message {
+  font-family: 'Tilt Neon', sans-serif !important;
+}
+
+/* Asegurar que los títulos y textos también usen la fuente */
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, button,
+input, textarea, select,
+label, th, td {
+  font-family: 'Tilt Neon', sans-serif;
+}
+
+.h-fullscreen {
+    height: 100dvh;
+}

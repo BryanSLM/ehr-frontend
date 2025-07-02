@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
+import { CatalogosService } from '../../core/services/catalogos.service';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
 })
 export class AdminComponent implements OnInit {
   users: any[] = [];
@@ -19,30 +20,25 @@ export class AdminComponent implements OnInit {
     especialidad: '',
     cedula: '',
     email: '',
-    empresa: '' // Aseguramos que este campo sea obligatorio
+    empresa: '',
   };
   errorMessage = '';
   successMessage = '';
   isLoading = false;
 
   // Listas para el dropdown
-  especialidades: string[] = [
-    'Cardiologia Adultos',
-    'Cardiologia Pediatrica',
-    'Angiologia',
-    'Nefrologia',
-    'Endocrinologia',
-    'Medicina Interna',
-    'Nutricion',
-    'Geriatria'
-  ];
+  especialidades: { id: string; name: string }[] = [];
   roles = ['doctor', 'secretaria', 'enfermera'];
   empresas: string[] = ['CARDIOVASC', 'INVITROMED', 'Empresa 3'];
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private catalogosService: CatalogosService,
+  ) {}
 
   ngOnInit() {
     this.loadUsers();
+    this.getSpecialties();
   }
 
   // Carga de usuarios
@@ -58,14 +54,33 @@ export class AdminComponent implements OnInit {
         console.error('Error al cargar usuarios:', error);
         this.errorMessage = 'Error al cargar usuarios';
         this.isLoading = false;
-      }
+      },
+    });
+  }
+  getSpecialties() {
+    this.isLoading = true;
+
+    this.catalogosService.getEspecialidades().subscribe({
+      next: (specialty) => {
+        this.especialidades = specialty.data;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = 'Error al cargar usuarios';
+        this.isLoading = false;
+      },
     });
   }
 
   // Crear un nuevo usuario
   createUser() {
     console.log('Datos enviados al backend:', this.newUser); // Confirmación previa
-    if (!this.newUser.username || !this.newUser.password || !this.newUser.role || !this.newUser.empresa) {
+    if (
+      !this.newUser.username ||
+      !this.newUser.password ||
+      !this.newUser.role ||
+      !this.newUser.empresa
+    ) {
       this.errorMessage = 'Por favor complete todos los campos';
       return;
     }
@@ -76,7 +91,8 @@ export class AdminComponent implements OnInit {
     }
 
     if (this.newUser.role === 'doctor' && !this.newUser.especialidad) {
-      this.errorMessage = 'Por favor seleccione una especialidad para el doctor';
+      this.errorMessage =
+        'Por favor seleccione una especialidad para el doctor';
       return;
     }
 
@@ -97,7 +113,7 @@ export class AdminComponent implements OnInit {
       },
       complete: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -105,12 +121,15 @@ export class AdminComponent implements OnInit {
     this.userService.toggleUserStatus(user.id).subscribe({
       next: (response) => {
         user.active = !user.active;
-        this.successMessage = 'Estado del usuario ' + (user.active ? 'activado' : 'desactivado') + ' exitosamente';
+        this.successMessage =
+          'Estado del usuario ' +
+          (user.active ? 'activado' : 'desactivado') +
+          ' exitosamente';
       },
       error: (error) => {
         console.error('Error al actualizar estado del usuario:', error);
         this.errorMessage = 'Error al actualizar estado del usuario';
-      }
+      },
     });
   }
 
@@ -135,7 +154,7 @@ export class AdminComponent implements OnInit {
       especialidad: '',
       cedula: '',
       email: '',
-      empresa: '' // Restablecer empresa
+      empresa: '',
     };
   }
 
