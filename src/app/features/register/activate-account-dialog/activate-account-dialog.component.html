@@ -1,0 +1,66 @@
+<p-dialog
+  [(visible)]="isDialogOpen"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  (onHide)="closeDialog()"
+>
+  <ng-template #header>
+    <h1 class="font-bold">Activa tu cuenta</h1>
+  </ng-template>
+
+  <ng-container *ngIf="!otpValidationSuccess; else successContent">
+    <p class="font-normal">{{ activateAccountMessage }}</p>
+    <form [formGroup]="otpForm">
+      <div formArrayName="otpCode">
+        <div class="flex gap-1 justify-center my-4">
+          <input
+            *ngFor="let ctrl of otpCodeArray.controls; let i = index"
+            maxlength="1"
+            type="text"
+            [formControlName]="i"
+            class="w-10 h-30 text-center border otp-input rounded text-xl"
+            autocomplete="one-time-code"
+            #otpInput
+            (input)="onOtpInput($event, i)"
+            (keydown.backspace)="onOtpBackspace($event, i)"
+          />
+        </div>
+      </div>
+      <div *ngIf="hasRequiredOtpError() && formSubmitted">
+        <small style="color: red" class="text-center font-normal text-xl"
+          >Todos los campos son obligatorios</small
+        >
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-template #footer>
+    <ng-container *ngIf="!otpValidationSuccess">
+      <p-button
+        label="Cancelar"
+        [text]="true"
+        severity="secondary"
+        (click)="closeDialog()"
+        (keydown.enter)="closeDialog()"
+      />
+      <p-button
+        label="Validar"
+        [outlined]="true"
+        severity="primary"
+        (click)="onSubmit()"
+        (keydown.enter)="onSubmit()"
+      />
+    </ng-container>
+  </ng-template>
+
+  <ng-template #successContent>
+    <div
+      class="flex flex-column align-items-center justify-content-center gap-2"
+    >
+      <i class="pi pi-check-circle" style="color: green; font-size: 3rem"></i>
+      <span class="font-bold text-xl" style="color: green"
+        >{{ validationSuccessMessage }}</span
+      >
+    </div>
+  </ng-template>
+</p-dialog>

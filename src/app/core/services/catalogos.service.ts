@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CatalogosService {
-  private apiUrl = `${environment.apiUrl}/catalogos`; // Agregamos '/api' a la ruta
+  private readonly apiUrl = `${environment.apiUrl}/catalogos`; // Agregamos '/api' a la ruta
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Provincias
   getProvincias(): Observable<any> {
@@ -121,5 +121,9 @@ export class CatalogosService {
 
   getEspecialidades(): Observable<any> {
     return this.http.get(`${this.apiUrl}/especialidades`);
+  }
+
+  getIdentificationTypes(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/tipos-identificacion`);
   }
 }
