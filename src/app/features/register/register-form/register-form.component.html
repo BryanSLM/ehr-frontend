@@ -4,211 +4,372 @@
     <p class="font-normal">{{ registerSubtitle }}</p>
   </div>
   <hr />
-  <form class="grid" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div class="flex flex-column gap-2 col-12">
-      <label for="username" class="font-medium">Nombre de usuario*</label>
-      <input
-        pInputText
-        id="username"
-        placeholder="Crea un nombre de usuario"
-        formControlName="username"
-        [ngClass]="{
-          'border-red-500 placeholder-red':
-            registerForm.controls['username'].invalid && formSubmitted,
-        }"
-        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
-      />
-      <div
-        *ngIf="
+  @if (currentStep === 1) {
+    <form class="grid" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="flex flex-column gap-2 col-12">
+        <label for="username" class="font-medium">Nombre de usuario*</label>
+        <input
+          pInputText
+          id="username"
+          placeholder="Crea un nombre de usuario"
+          formControlName="username"
+          [ngClass]="{
+            'border-red-500 placeholder-red':
+              registerForm.controls['username'].invalid && formSubmitted,
+          }"
+          class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        />
+        @if (
           registerForm.controls['username'].errors?.['required'] &&
           formSubmitted
-        "
-      >
-        <small style="color: red"
-          >El campo Nombre de usuario es obligatorio</small
-        >
-      </div>
-      <div
-        *ngIf="
+        ) {
+          <small style="color: red"
+            >El campo Nombre de usuario es obligatorio</small
+          >
+        }
+        @if (
           registerForm.controls['username'].errors?.['minlength'] &&
           formSubmitted
-        "
-      >
-        <small style="color: red">
-          El campo Nombre de usuario debe tener al menos 4 caracteres
-        </small>
+        ) {
+          <small style="color: red">
+            El campo Nombre de usuario debe tener al menos 4 caracteres
+          </small>
+        }
       </div>
-    </div>
-    <div class="flex flex-column gap-2 col-12">
-      <label for="email" class="font-medium">Correo electronico*</label>
-      <input
-        pInputText
-        id="email"
-        placeholder="Ingresa tu correo electrónico"
-        formControlName="email"
-        [ngClass]="{
-          'border-red-500 placeholder-red':
-            registerForm.controls['email'].invalid && formSubmitted,
-        }"
-        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
-      />
-      <div
-        *ngIf="
+      <div class="flex flex-column gap-2 col-12">
+        <label for="email" class="font-medium">Correo electronico*</label>
+        <input
+          pInputText
+          id="email"
+          placeholder="Ingresa tu correo electrónico"
+          formControlName="email"
+          [ngClass]="{
+            'border-red-500 placeholder-red':
+              registerForm.controls['email'].invalid && formSubmitted,
+          }"
+          class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        />
+        @if (
           registerForm.controls['email'].errors?.['required'] && formSubmitted
-        "
-      >
-        <small style="color: red"
-          >El campo Correo electronico es obligatorio</small
-        >
-      </div>
-      <div
-        *ngIf="
+        ) {
+          <small style="color: red"
+            >El campo Correo electronico es obligatorio</small
+          >
+        }
+        @if (
           registerForm.controls['email'].errors?.['email'] && formSubmitted
-        "
-      >
-        <small style="color: red"
-          >El campo Correo electronico ingresado es invalido</small
-        >
+        ) {
+          <small style="color: red"
+            >El campo Correo electronico ingresado es invalido</small
+          >
+        }
       </div>
-    </div>
-    <div class="flex flex-column gap-2 col-6">
-      <label for="identification" class="font-medium"
-        >Tipo de identificacion*</label
-      >
-      <p-select
-        [options]="identificationTypes"
-        optionLabel="name"
-        placeholder="Selecciona un tipo de identificación"
-        class="bg-white border-gray-300"
-        formControlName="identification_type"
-        [ngClass]="{
-          'border-red-500 error-select':
-            registerForm.controls['identification_type'].invalid &&
-            formSubmitted,
-        }"
-      />
-      <div
-        *ngIf="
+      <div class="flex flex-column gap-2 col-6">
+        <label for="identification" class="font-medium"
+          >Tipo de identificacion*</label
+        >
+        <p-select
+          [options]="identificationTypes"
+          optionLabel="name"
+          optionValue="code"
+          placeholder="Selecciona un tipo de identificación"
+          class="bg-white border-gray-300"
+          formControlName="identification_type"
+          [ngClass]="{
+            'border-red-500 error-select':
+              registerForm.controls['identification_type'].invalid &&
+              formSubmitted,
+          }"
+        />
+        @if (
           registerForm.controls['identification_type'].errors?.['required'] &&
           formSubmitted
-        "
-      >
-        <small style="color: red"
-          >El campo Tipo de identificacion es obligatorio</small
-        >
+        ) {
+          <small style="color: red"
+            >El campo Tipo de identificacion es obligatorio</small
+          >
+        }
+        @if (
+          registerForm.controls['identification_type'].errors && formSubmitted
+        ) {
+          <small style="color: red">La</small>
+        }
       </div>
-    </div>
-    <div class="flex flex-column gap-2 col-6">
-      <label for="identification" class="font-medium">Identificacion*</label>
-      <input
-        pInputText
-        id="identification"
-        placeholder="Ingresa una identification válida"
-        formControlName="identification"
-        [ngClass]="{
-          'border-red-500 placeholder-red':
-            registerForm.controls['identification'].invalid && formSubmitted,
-        }"
-        class="bg-white border-1 border-gray-300 p-2 rounded text-0"
-      />
-      <div
-        *ngIf="
+      <div class="flex flex-column gap-2 col-6">
+        <label for="identification" class="font-medium">Identificacion*</label>
+        <input
+          pInputText
+          id="identification"
+          placeholder="Ingresa una identification válida"
+          formControlName="identification"
+          [ngClass]="{
+            'border-red-500 placeholder-red':
+              registerForm.controls['identification'].invalid && formSubmitted,
+          }"
+          class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        />
+        @if (
           registerForm.controls['identification'].errors?.['required'] &&
           formSubmitted
-        "
-      >
-        <small style="color: red">El campo Cédula es obligatorio</small>
-      </div>
-
-      <div
-        *ngIf="
-          registerForm.controls['identification'].errors?.['cedulaInvalida'] &&
-          !registerForm.controls['identification'].errors?.['required'] &&
+        ) {
+          <small style="color: red">El campo Cédula es obligatorio</small>
+        }
+        @if (
+          (registerForm.controls['identification'].errors?.['maxlength'] ||
+            registerForm.controls['identification'].errors?.['minlength'] ||
+            registerForm.controls['identification'].errors?.['pattern']) &&
           formSubmitted
-        "
-      >
-        <small style="color: red">La Cédula no es válida</small>
+        ) {
+          <small style="color: red">La cédula es inválida</small>
+        }
       </div>
-    </div>
-    <div class="flex flex-column gap-2 col-12 py-2">
-      <label for="password" class="font-medium">Contraseña*</label>
-      <p-password
-        type="password"
-        id="password"
-        placeholder="Crea una contraseña segura"
-        formControlName="password"
-        weakLabel="Débil"
-        mediumLabel="Media"
-        strongLabel="Fuerte"
-        promptLabel="Introduce una contraseña"
-        [toggleMask]="true"
-        [style]="{ width: '100%' }"
-        [inputStyle]="{ width: '100%' }"
-        [ngClass]="{
-          'password-invalid':
-            registerForm.controls['password'].invalid && formSubmitted,
-        }"
-        class="bg-white border-gray-300 rounded text-0 icon-pointer"
-      />
-      <div
-        *ngIf="
+      <div class="flex flex-column gap-2 col-12 py-2">
+        <label for="password" class="font-medium">Contraseña*</label>
+        <p-password
+          type="password"
+          id="password"
+          placeholder="Crea una contraseña segura"
+          formControlName="password"
+          weakLabel="Débil"
+          mediumLabel="Media"
+          strongLabel="Fuerte"
+          promptLabel="Introduce una contraseña"
+          [toggleMask]="true"
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+          [ngClass]="{
+            'password-invalid':
+              registerForm.controls['password'].invalid && formSubmitted,
+          }"
+          class="bg-white border-gray-300 rounded text-0 icon-pointer"
+        />
+        @if (
           registerForm.controls['password'].errors?.['required'] &&
           formSubmitted
-        "
-      >
-        <small style="color: red">El campo Contraseña es obligatorio</small>
-      </div>
-      <div
-        *ngIf="
+        ) {
+          <small style="color: red">El campo Contraseña es obligatorio</small>
+        }
+        @if (
           registerForm.controls['password'].errors?.['minlength'] &&
           formSubmitted
-        "
-      >
-        <small style="color: red"
-          >La contraseña debe tener al menos 8 caracteres</small
-        >
+        ) {
+          <small style="color: red"
+            >La contraseña debe tener al menos 8 caracteres</small
+          >
+        }
       </div>
-    </div>
-    <div class="flex flex-column gap-2 col-12 py-2">
-      <label for="confirm_password" class="font-medium"
-        >Confirmar contraseña*</label
-      >
-      <p-password
-        type="password"
-        id="confirm_password"
-        placeholder="Confirma tu contraseña"
-        formControlName="confirm_password"
-        [feedback]="false"
-        [style]="{ width: '100%' }"
-        [inputStyle]="{ width: '100%' }"
-        [toggleMask]="true"
-        [ngClass]="{
-          'password-invalid':
-            (registerForm.controls['confirm_password'].invalid &&
-              formSubmitted) ||
-            (registerForm.errors?.['passwordMismatch'] && formSubmitted),
-        }"
-        class="bg-white border-gray-300 rounded text-0 w-full"
-      />
-      <div
-        *ngIf="
+      <div class="flex flex-column gap-2 col-12 py-2">
+        <label for="confirm_password" class="font-medium"
+          >Confirmar contraseña*</label
+        >
+        <p-password
+          type="password"
+          id="confirm_password"
+          placeholder="Confirma tu contraseña"
+          formControlName="confirm_password"
+          [feedback]="false"
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+          [toggleMask]="true"
+          [ngClass]="{
+            'password-invalid':
+              (registerForm.controls['confirm_password'].invalid &&
+                formSubmitted) ||
+              (registerForm.errors?.['passwordMismatch'] && formSubmitted),
+          }"
+          class="bg-white border-gray-300 rounded text-0 w-full"
+        />
+        @if (
           (registerForm.errors?.['passwordMismatch'] && formSubmitted) ||
           (registerForm.controls['confirm_password'].errors?.['required'] &&
             formSubmitted)
-        "
-      >
-        <small style="color: red">Las contraseñas no coinciden</small>
+        ) {
+          <small style="color: red">Las contraseñas no coinciden</small>
+        }
       </div>
-    </div>
 
-    <div class="flex flex-column col-12 mt-4">
-      <button
-        pButton
-        class="text-white font-medium cursor-pointer"
-        style="background-color: #201c75; border: 1px solid #201c75"
-      >
-        Registrarse
-      </button>
-    </div>
-  </form>
+      <div class="flex flex-column col-4 mt-4">
+        <button
+          pButton
+          class="text-white font-medium cursor-pointer"
+          style="background-color: #201c75; border: 1px solid #201c75"
+        >
+          {{ registerButtonNextStep }}
+        </button>
+      </div>
+    </form>
+  }
+  @if (currentStep === 2) {
+    <form
+      class="grid"
+      [formGroup]="registerDetailsForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="flex flex-column gap-2 col-6">
+        <label for="firstName" class="font-medium">Nombre*</label>
+        <input
+          pInputText
+          id="firstName"
+          placeholder="Ingresa tu nombre"
+          formControlName="firstName"
+          [ngClass]="{
+            'border-red-500 placeholder-red':
+              registerDetailsForm.controls['firstName'].invalid &&
+              formSubmitted,
+          }"
+          class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        />
+        @if (
+          registerDetailsForm.controls['firstName'].errors?.['required'] &&
+          formSubmitted
+        ) {
+          <small style="color: red">El campo Nombres es obligatorio</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-2 col-6">
+        <label for="lastName" class="font-medium">Apellido*</label>
+        <input
+          pInputText
+          id="lastName"
+          placeholder="Ingresa tu apellido"
+          formControlName="lastName"
+          [ngClass]="{
+            'border-red-500 placeholder-red':
+              registerDetailsForm.controls['lastName'].invalid && formSubmitted,
+          }"
+          class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        />
+        @if (
+          registerDetailsForm.controls['lastName'].errors?.['required'] &&
+          formSubmitted
+        ) {
+          <small style="color: red">El campo Apellidos es obligatorio</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-2 col-12">
+        <label for="birthDate" class="font-medium">Fecha de Nacimiento*</label>
+        <p-datepicker
+          [iconDisplay]="'input'"
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+          [showIcon]="true"
+          inputId="icondisplay"
+          formControlName="birthDate"
+          [ngClass]="{
+            'invalid-date':
+              registerDetailsForm.controls['birthDate'].invalid &&
+              formSubmitted,
+          }"
+          placeholder="Selecciona tu fecha de nacimiento"
+          dateFormat="yy-mm-dd"
+        />
+        @if (
+          registerDetailsForm.controls['birthDate'].errors?.['required'] &&
+          formSubmitted
+        ) {
+          <small style="color: red"
+            >El campo Fecha de Nacimiento es obligatorio</small
+          >
+        }
+        @if (
+          !registerDetailsForm.controls['birthDate'].errors?.['required'] &&
+          formSubmitted
+        ) {
+          @if (
+            registerDetailsForm.controls['birthDate'].errors?.[
+              'birthDateInvalid'
+            ]
+          ) {
+            <small style="color: red">La fecha ingresada no es valida</small>
+          }
+          @if (
+            registerDetailsForm.controls['birthDate'].errors?.[
+              'birthDateFuture'
+            ]
+          ) {
+            <small style="color: red">La fecha no puede ser futura</small>
+          }
+        }
+      </div>
+
+      <div class="flex flex-column gap-2 col-6">
+        <label for="gender" class="font-medium">Género*</label>
+        <p-select
+          [options]="[
+            { label: 'Masculino', value: 'H' },
+            { label: 'Femenino', value: 'M' },
+          ]"
+          placeholder="Selecciona tu género"
+          formControlName="gender"
+          [ngClass]="{
+            'border-red-500 error-select':
+              registerDetailsForm.controls['gender'].invalid && formSubmitted,
+          }"
+          class="bg-white border-gray-300"
+        ></p-select>
+        @if (
+          registerDetailsForm.controls['gender'].errors?.['required'] &&
+          formSubmitted
+        ) {
+          <small style="color: red">El campo Género es obligatorio</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-2 col-6">
+        <label for="phone" class="font-medium">Celular*</label>
+        <input
+          pInputText
+          id="phone"
+          placeholder="Ingresa tu número de celular"
+          formControlName="phone"
+          [ngClass]="{
+            'border-red-500 placeholder-red':
+              registerDetailsForm.controls['phone'].invalid && formSubmitted,
+          }"
+          class="bg-white border-1 border-gray-300 p-2 rounded text-0"
+        />
+        @if (
+          registerDetailsForm.controls['phone'].errors?.['required'] &&
+          formSubmitted
+        ) {
+          <small style="color: red">El campo Celular es obligatorio</small>
+        }
+        @if (
+          !registerDetailsForm.controls['phone'].errors?.['required'] &&
+          formSubmitted
+        ) {
+          @if (
+            registerDetailsForm.controls['phone'].errors?.['ecuPhoneNumber']
+          ) {
+            <small style="color: red"
+              >El número de celular ingresado no es valido</small
+            >
+          }
+        }
+      </div>
+
+      <div class="flex flex-column col-4 mt-4">
+        <button
+          pButton
+          class="text-white font-medium cursor-pointer"
+          style="background-color: #201c75; border: 1px solid #201c75"
+        >
+          {{ registerButtonMessage }}
+        </button>
+      </div>
+    </form>
+  }
+  <!-- @if (currentStep === 3) {
+    <h2 class="font-bold mb-4">¡Registro exitoso!</h2>
+    <p class="mb-2">Tu cuenta ha sido creada correctamente.</p>
+    <button
+      pButton
+      class="text-white font-medium cursor-pointer mt-4"
+      style="background-color: #201c75; border: 1px solid #201c75"
+    >
+      Ir a iniciar sesión
+    </button>
+  } -->
 </div>

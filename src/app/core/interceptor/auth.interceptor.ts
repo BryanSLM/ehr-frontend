@@ -10,7 +10,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
   // No interceptar las peticiones de login
-  if (req.url.includes('/api/auth/login')) {
+  if (
+    req.url.includes('/api/auth/login') ||
+    req.url.includes('/api/auth/register') || // No interceptar las peticiones de registro
+    req.url.includes('/api/catalogos') // No interceptar las peticiones de catálogos
+  ) {
     return next(req);
   }
 
@@ -20,11 +24,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (token) {
     const clonedReq = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${token}`)
+      headers: req.headers.set('Authorization', `Bearer ${token}`),
     });
-    
+
     return next(clonedReq).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error en request:', error);
         if (error.status === 401 || error.status === 403) {
           console.log('Error de autenticación, redirigiendo a login');
@@ -32,7 +36,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           router.navigate(['/login']);
         }
         return throwError(() => error);
-      })
+      }),
     );
   }
 

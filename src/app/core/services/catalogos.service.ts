@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CatalogosService {
-  private apiUrl = `${environment.apiUrl}/catalogos`; // Agregamos '/api' a la ruta
+  private readonly apiUrl = `${environment.apiUrl}/catalogos`; // Agregamos '/api' a la ruta
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Provincias
   getProvincias(): Observable<any> {

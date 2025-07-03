@@ -75,3 +75,15 @@
 :host ::ng-deep .p-password.ng-invalid.ng-dirty .p-inputtext:enabled:focus {
   border-color: #e5e7eb;
 }
+
+:host ::ng-deep .p-inputtext {
+  color: black !important;
+}
+
+:host ::ng-deep .invalid-date .p-datepicker-input {
+  border-color: red !important;
+}
+
+:host ::ng-deep .invalid-date .p-datepicker-input::placeholder {
+  color: red !important;
+}
