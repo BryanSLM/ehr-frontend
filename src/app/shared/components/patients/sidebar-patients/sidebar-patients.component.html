@@ -1,0 +1,68 @@
+<div class="sidebar-container">
+  <div class="sidebar">
+    <div class="sidebar-content">
+      <!-- Header -->
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img
+            src="/assets/logo.png"
+            alt="Logo"
+            class="w-3rem h-3rem object-cover"
+          />
+          <span class="logo-text">Cardiovasc</span>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="sidebar-body">
+        <!-- Favorites Section -->
+        <div class="nav-section" *ngFor="let item of itemsSidebar">
+          <div class="section-header">
+            <span>{{ item.label }}</span>
+          </div>
+          <ul class="nav-list" [class.expanded]="favoritesExpanded">
+            <li
+              *ngFor="let child of item.children"
+              class="nav-item"
+              [routerLink]="child.route"
+              routerLinkActive="active-item"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <div class="nav-link">
+                <i [class]="child.icon"></i>
+                <span class="font-medium">{{ child.label }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="sidebar-footer">
+        <div
+          class="user-profile"
+          (click)="onMenuItemClick('profile')"
+          (keydown.enter)="onMenuItemClick('profile')"
+          tabindex="0"
+          role="button"
+        >
+          <img
+            src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+            alt="Amy Elsner"
+            class="avatar"
+          />
+          <span class="user-name">Amy Elsner</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toggle Button -->
+  <button
+    class="sidebar-toggle"
+    (click)="toggleSidebar()"
+    *ngIf="!sidebarVisible"
+  >
+    <i class="pi pi-arrow-right"></i>
+  </button>
+</div>

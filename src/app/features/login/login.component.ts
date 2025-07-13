@@ -81,7 +81,7 @@ export class LoginComponent {
               this.router.navigate(['/enfermera']);
               break;
             case 'paciente':
-              this.router.navigate(['/home']);
+              this.router.navigate(['/patients']);
               break;
             default:
               this.router.navigate(['/']);

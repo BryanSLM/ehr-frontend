@@ -1,38 +1,3 @@
-<!-- Navbar -->
-<nav class="custom-navbar">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <span class="navbar-brand">
-        <img src="/assets/logo.png" alt="Logo" class="navbar-logo">
-        <div>
-          Sistema de Gestión Médica
-          <p class="navbar-subtitle">Panel Secretaria</p>
-        </div>
-      </span>
-    </div>
-    <div class="navbar-links">
-      <a class="nav-link"
-         [routerLink]="['/secretaria/patients']"
-         routerLinkActive="active"
-         (click)="setActiveTab('patients')">
-         <i class="fas fa-users"></i>
-         Gestión de Pacientes
-      </a>
-      <a class="nav-link"
-         [routerLink]="['/secretaria/citas']"
-         routerLinkActive="active"
-         (click)="setActiveTab('citas')">
-         <i class="fas fa-calendar-alt"></i>
-         Gestión de Citas
-      </a>
-      <button class="btn-cerrar-sesion" (click)="cerrarSesion()">
-        <i class="fas fa-sign-out-alt"></i>
-        Cerrar Sesión
-      </button>
-    </div>
-  </div>
-</nav>
-
 <!-- Formulario de Pacientes -->
 <div class="container mt-4">
   <div class="card">

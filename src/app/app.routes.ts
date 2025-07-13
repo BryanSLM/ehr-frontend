@@ -26,6 +26,12 @@ import { PacientesMedicoComponent } from './features/medico-dashboard/pacientes-
 import { DashboardPacienteComponent } from './features/dashboard-paciente/dashboard-paciente.component';
 import { CitaNewComponent } from './features/citas/cita-new/cita-new.component';
 import { RegisterComponent } from './features/register/register.component';
+import { LayoutPatientsComponent } from './shared/components/patients/layout-patients/layout-patients.component';
+import { ProfilePatientsComponent } from './shared/components/patients/pages/profile-patients/profile-patients.component';
+import { PasswordPatientsComponent } from './shared/components/patients/pages/password-patients/password-patients.component';
+import { TreatmentsPatientsComponent } from './shared/components/patients/pages/treatments-patients/treatments-patients.component';
+import { LabsReportsPatientsComponent } from './shared/components/patients/pages/labs-reports-patients/labs-reports-patients.component';
+import { AppointmentsPatientsComponent } from './shared/components/patients/pages/appoiments-patients/appointments-patients.component';
 
 export const routes: Routes = [
   {
@@ -41,12 +47,12 @@ export const routes: Routes = [
     path: 'register',
     component: RegisterComponent,
   },
-  {
-    path: 'patients',
-    component: PatientsComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['administrador', 'doctor', 'secretaria'] },
-  },
+  // {
+  //   path: 'patients',
+  //   component: PatientsComponent,
+  //   canActivate: [AuthGuard],
+  //   data: { roles: ['administrador', 'doctor', 'secretaria'] },
+  // },
   {
     path: 'patients/new',
     component: PatientFormComponent,
@@ -103,14 +109,23 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['secretaria'] },
     children: [
-      {
-        path: '',
-        redirectTo: 'patients',
-        pathMatch: 'full',
-      },
+      // {
+      //   path: '',
+      //   redirectTo: 'patients',
+      //   pathMatch: 'full',
+      // },
       {
         path: 'patients',
-        component: PatientsComponent,
+        children: [
+          {
+            path: '',
+            component: PatientsComponent,
+          },
+          {
+            path: 'new',
+            component: PatientFormComponent,
+          },
+        ],
       },
       {
         path: 'consultorios',
@@ -199,10 +214,41 @@ export const routes: Routes = [
   },
   // Routes for the patient role
   {
-    path: 'home',
-    component: DashboardPacienteComponent,
+    path: 'patients',
     canActivate: [AuthGuard],
+    component: LayoutPatientsComponent,
     data: { roles: ['paciente'] }, //TODO: Adjust roles as needed
+    children: [
+      {
+        path: '',
+        component: DashboardPacienteComponent,
+      },
+      {
+        path: 'appointments',
+        component: AppointmentsPatientsComponent,
+      },
+      {
+        path: 'labs-reports',
+        component: LabsReportsPatientsComponent,
+      },
+      {
+        path: 'treatments',
+        component: TreatmentsPatientsComponent,
+      },
+      {
+        path: 'settings',
+        children: [
+          {
+            path: 'profile',
+            component: ProfilePatientsComponent,
+          },
+          {
+            path: 'password',
+            component: PasswordPatientsComponent,
+          },
+        ],
+      },
+    ],
   },
   {
     path: '**',

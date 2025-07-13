@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './custom-navbar.component.html',
-  styleUrl: './custom-navbar.component.css',
+  styleUrls: ['./custom-navbar.component.css'],
 })
 export class CustomNavbarComponent {
   constructor(
