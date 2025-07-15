@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CustomNavbarComponent } from '../../custom-navbar/custom-navbar.component';
 import { RouterOutlet } from '@angular/router';
 import { SidebarPatientsComponent } from '../sidebar-patients/sidebar-patients.component';
@@ -9,11 +9,16 @@ import { NavbarPatientsComponent } from '../navbar-patients/navbar-patients.comp
   standalone: true,
   templateUrl: './layout-patients.component.html',
   styleUrl: './layout-patients.component.css',
-  imports: [
-    CustomNavbarComponent,
-    RouterOutlet,
-    SidebarPatientsComponent,
-    NavbarPatientsComponent,
-  ],
+  imports: [RouterOutlet, SidebarPatientsComponent, NavbarPatientsComponent],
 })
-export class LayoutPatientsComponent {}
+export class LayoutPatientsComponent implements OnInit {
+  user: any;
+  ngOnInit(): void {
+    this.user = this.profile;
+  }
+
+  get profile() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user;
+  }
+}

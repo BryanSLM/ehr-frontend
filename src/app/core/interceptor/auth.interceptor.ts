@@ -12,7 +12,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // No interceptar las peticiones de login
   if (
     req.url.includes('/api/auth/login') ||
-    req.url.includes('/api/auth/register') || // No interceptar las peticiones de registro
+    req.url.includes('/api/users/register') || // No interceptar las peticiones de registro
     req.url.includes('/api/catalogos') // No interceptar las peticiones de catálogos
   ) {
     return next(req);
