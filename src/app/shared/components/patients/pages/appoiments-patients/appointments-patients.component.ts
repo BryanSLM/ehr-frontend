@@ -7,6 +7,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { Sidebar } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-appointments-patients',
@@ -21,6 +22,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     StyleClassModule,
     CommonModule,
     OverlayBadgeModule,
+    Tag,
   ],
 })
 export class AppointmentsPatientsComponent {}

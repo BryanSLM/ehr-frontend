@@ -1,3 +1,135 @@
-<div class="layout flex w-full h-full">
- <p class="text-5xl font-bold mb-0 " style="color: #3b82f6;">Citas </p> 
+<div class="w-full h-full">
+  <div class="flex w-full border-2">
+    <div class="flex flex-column h-full" style="width: 80%">
+      <p class="text-5xl font-bold mb-0 border-2" style="color: #3b82f6">
+        Citas Medicas
+      </p>
+      <p class="text-xl font-bold mb-0 text-gray-400">
+        Agenda o revisa tus citas medicas
+      </p>
+    </div>
+    <div
+      class="flex border-2 align-items-center justify-content-center"
+      style="width: 30%"
+    >
+      <p-button
+        label="Agendar cita"
+        [style]="{ width: '150px' }"
+        size="large"
+      />
+    </div>
+  </div>
+  <div class="border-2 border-gray-300 mb-4"></div>
+  <div class="flex flex-column h-full p-4">
+    <p class="text-5xl font-bold text-center mb-6">Tus citas medicas</p>
+    <div
+      class="bg-blue-50 grid p-4 mb-4"
+      style="
+        height: 135px;
+        border-left: 7px solid #3b82f6;
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 0;
+      "
+    >
+      <div
+        class="col flex flex-column justify-content-center align-items-start border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-0 text-gray-500">Fecha</p>
+        <p class="text-2xl font-bold mb-0">12/05/2025 35:25</p>
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-0 text-gray-500">Especialidad</p>
+        <p class="text-2xl font-bold mb-0">Odontología</p>
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-0 text-gray-500">Doctor</p>
+        <p class="text-2xl font-bold mb-0">Pepe don</p>
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-1 text-gray-500">Estado</p>
+        <p-tag
+          severity="info"
+          value="Info"
+          [rounded]="true"
+          [styleClass]="'text-xl'"
+        />
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center gap-2"
+      >
+        <p-button
+          label="Cancelar cita"
+          size="small"
+          variant="outlined"
+          severity="info"
+        />
+        <p-button
+          label="Reagendar cita"
+          size="small"
+        />
+      </div>
+    </div>
+     <div
+      class="bg-blue-50 grid p-4"
+      style="
+        height: 135px;
+        border-left: 7px solid #3b82f6;
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 0;
+      "
+    >
+      <div
+        class="col flex flex-column justify-content-center align-items-start border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-0 text-gray-500">Fecha</p>
+        <p class="text-2xl font-bold mb-0">12/05/2025 35:25</p>
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-0 text-gray-500">Especialidad</p>
+        <p class="text-2xl font-bold mb-0">Odontología</p>
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-0 text-gray-500">Doctor</p>
+        <p class="text-2xl font-bold mb-0">Pepe don</p>
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center border-right-2 border-blue-300"
+      >
+        <p class="text-lg font-semibold mb-1 text-gray-500">Estado</p>
+        <p-tag
+          severity="info"
+          value="Info"
+          [rounded]="true"
+          [styleClass]="'text-xl'"
+        />
+      </div>
+      <div
+        class="col flex flex-column justify-content-center align-items-center gap-2"
+      >
+        <p-button
+          label="Cancelar cita"
+          size="small"
+          variant="outlined"
+          severity="info"
+        />
+        <p-button
+          label="Reagendar cita"
+          size="small"
+        />
+      </div>
+    </div>
+  </div>
+  
 </div>
