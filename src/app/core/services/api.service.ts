@@ -19,4 +19,8 @@ export class ApiService {
   login(credentials: any) {
     return this.http.post(`${this.apiUrl}/users/login`, credentials);
   }
+
+  getProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users/me`);
+  }
 }

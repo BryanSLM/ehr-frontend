@@ -1,10 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
-import { SidebarModule } from 'primeng/sidebar';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Sidebar, SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { StyleClassModule } from 'primeng/styleclass';
-import { Sidebar } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -28,6 +27,7 @@ export class NavbarPatientsComponent {
   applicationExpanded = true;
   reportsExpanded = false;
   revenueExpanded = false;
+  @Input() user: any;
 
   itemsSidebar = [
     {

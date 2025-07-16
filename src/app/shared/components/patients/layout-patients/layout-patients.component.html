@@ -1,7 +1,7 @@
-<div class="layout flex w-full  h-screen">
+<div class="layout flex w-full h-screen">
   <app-sidebar-patients></app-sidebar-patients>
   <div class="flex flex-column w-full p-2 h-full">
-    <app-navbar-patients class="w-full"></app-navbar-patients>
+    <app-navbar-patients class="w-full" [user]="user"></app-navbar-patients>
     <router-outlet></router-outlet>
   </div>
 </div>
