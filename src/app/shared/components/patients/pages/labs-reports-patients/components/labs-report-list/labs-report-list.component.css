@@ -1,0 +1,11 @@
+:host ::ng-deep .p-paginator-page.p-paginator-page-selected {
+  background: #3b82f6;
+  color: #ffff;
+}
+:host ::ng-deep .p-paginator-page,
+:host ::ng-deep .p-paginator-next,
+:host ::ng-deep .p-paginator-last,
+:host ::ng-deep .p-paginator-first,
+:host ::ng-deep .p-paginator-prev {
+  color: black;
+}

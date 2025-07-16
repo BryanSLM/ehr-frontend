@@ -1,12 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { StyleClassModule } from 'primeng/styleclass';
-import { Sidebar } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-labs-reports-patients',
@@ -21,6 +21,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     StyleClassModule,
     CommonModule,
     OverlayBadgeModule,
+    RouterOutlet,
   ],
 })
 export class LabsReportsPatientsComponent {}
