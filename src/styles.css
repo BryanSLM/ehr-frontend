@@ -25,7 +25,8 @@
 .p-panel,
 .p-card,
 .p-toolbar,
-.p-message {
+.p-message,
+.p-paginator {
   font-family: 'Tilt Neon', sans-serif !important;
 }
 
@@ -65,7 +66,8 @@ label, th, td {
 .p-panel,
 .p-card,
 .p-toolbar,
-.p-message {
+.p-message,
+.p-paginator {
   font-family: 'Tilt Neon', sans-serif !important;
 }
 

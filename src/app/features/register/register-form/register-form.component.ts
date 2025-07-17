@@ -9,7 +9,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { passwordMatchValidator } from '../../../core/validators/password-match.validator';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { cedulaValidator } from '../../../core/validators/cedula.validator';
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { RegisterService } from '../service/register.service';
