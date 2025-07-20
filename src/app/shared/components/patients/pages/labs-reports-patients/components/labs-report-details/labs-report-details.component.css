@@ -1,0 +1,13 @@
+.pi {
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+  background-color: #3b82f6;
+  color: white;
+}
+
+:host ::ng-deep .p-datatable-gridlines{
+  border-radius: 0.5rem !important;
+}
