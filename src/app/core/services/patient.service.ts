@@ -63,4 +63,11 @@ export class PatientService {
   getScheduleAvailable(specialty: string, date: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/consultorios/${specialty}/${date}`);
   }
+
+  createAppointment(appointment: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/external/create-appointment`,
+      appointment,
+    );
+  }
 }
