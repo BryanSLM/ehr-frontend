@@ -128,7 +128,7 @@
                   asignarte una cita
                 </p>
               </div>
-              <div class="formgrid grid flex align-items-center">
+              <div class="formgrid grid align-items-center">
                 <div class="grid-cols-2 column-gap-2 w-full">
                   <div class="col-12 flex flex-column">
                     <label
@@ -333,6 +333,7 @@
                   styleClass="w-15rem text-base"
                   label="Continuar"
                   type="submit"
+                  [loading]="loadingForm"
                 />
               </div>
             </div>
@@ -517,7 +518,8 @@
                 <input
                   id="names"
                   pInputText
-                  [value]="this.registerForm.get('names')?.value"
+                  [value]="this.registerForm.get('names')?.value + ' ' +
+                    this.registerForm.get('lastNames')?.value"
                 />
               </div>
             </div>

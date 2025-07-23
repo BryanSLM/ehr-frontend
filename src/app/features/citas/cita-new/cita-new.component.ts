@@ -154,17 +154,19 @@ export class CitaNewComponent implements OnInit {
       });
   }
   crearUsuario() {
+    this.loadingForm = true;
     if (this.registerForm.invalid) {
       console.log('Formulario de identificación inválido');
       this.registerForm.markAllAsTouched();
+      this.loadingForm = false;
       return;
     }
-    this.loadingForm = true;
     this.patientService
       .createPatientExternal(this.registerForm.value)
       .subscribe({
         next: (response) => {
           console.log('Usuario creado:', response);
+          this.registerForm.patchValue(response);
           this.messageService.add({
             severity: 'success',
             summary: 'Registro exitoso',
@@ -236,6 +238,8 @@ export class CitaNewComponent implements OnInit {
       });
   }
   seleccionarHora(hora: string, doctor: string, consultorioId?: string) {
+    console.log('REGISTER FORM:', this.registerForm.value);
+    console.log('APPOINTMENT FORM:', this.appointmentForm.value);
     this.appointmentForm.patchValue({
       time: hora,
       doctorId: doctor,
@@ -280,6 +284,12 @@ export class CitaNewComponent implements OnInit {
     this.loadingForm = true;
     if (this.appointmentForm.invalid) {
       console.log('Formulario de cita inválido');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al crear cita',
+        detail: 'No se pudo crear la cita',
+      });
+      this.loadingForm = false;
       this.appointmentForm.markAllAsTouched();
       return;
     }
@@ -298,10 +308,12 @@ export class CitaNewComponent implements OnInit {
           this.nextStep();
         },
         error: (error) => {
+          const message = error.error?.message || 'Error al crear cita';
+
           this.messageService.add({
             severity: 'error',
             summary: 'Error al crear cita',
-            detail: 'No se pudo crear la cita',
+            detail: message,
           });
           console.error('Error al crear cita:', error);
           this.loadingForm = false;
