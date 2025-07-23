@@ -8,6 +8,7 @@ import { Sidebar } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { RouterModule } from '@angular/router';
+import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'app-sidebar-patients',
@@ -23,6 +24,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     OverlayBadgeModule,
     RouterModule,
+    Menu,
   ],
 })
 export class SidebarPatientsComponent {
@@ -32,7 +34,7 @@ export class SidebarPatientsComponent {
   applicationExpanded = true;
   reportsExpanded = false;
   revenueExpanded = false;
-
+ 
   itemsSidebar = [
     {
       group: 'general',

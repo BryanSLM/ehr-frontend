@@ -5,6 +5,10 @@ import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { StyleClassModule } from 'primeng/styleclass';
 import { CommonModule } from '@angular/common';
+import { MenuItem, PrimeIcons } from 'primeng/api';
+import { Menu } from 'primeng/menu';
+import { AuthService } from '../../../../core/services/auth.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar-patients',
@@ -18,15 +22,33 @@ import { CommonModule } from '@angular/common';
     AvatarModule,
     StyleClassModule,
     CommonModule,
+    Menu,
+    RouterModule,
   ],
 })
 export class NavbarPatientsComponent {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
   sidebarVisible = true;
   favoritesExpanded = true;
   applicationExpanded = true;
   reportsExpanded = false;
   revenueExpanded = false;
+  itemsAvatar: MenuItem[] = [
+    {
+      label: 'Configuración',
+      icon: PrimeIcons.COG,
+      routerLink: '/patients/settings/profile',
+    },
+    {
+      label: 'Cerrar sesión',
+      icon: PrimeIcons.SIGN_OUT,
+      command: () => this.logout(),
+    },
+  ];
   @Input() user: any;
 
   itemsSidebar = [
@@ -82,24 +104,12 @@ export class NavbarPatientsComponent {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  toggleFavorites() {
-    this.favoritesExpanded = !this.favoritesExpanded;
-  }
-
-  toggleApplication() {
-    this.applicationExpanded = !this.applicationExpanded;
-  }
-
-  toggleReports() {
-    this.reportsExpanded = !this.reportsExpanded;
-  }
-
-  toggleRevenue() {
-    this.revenueExpanded = !this.revenueExpanded;
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   onMenuItemClick(item: string) {
     console.log('Menu item clicked:', item);
-    // Aquí puedes agregar la lógica de navegación
   }
 }
