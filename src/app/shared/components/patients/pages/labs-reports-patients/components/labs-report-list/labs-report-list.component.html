@@ -1,6 +1,6 @@
-<div class="h-full flex flex-column">
+<div class="h-full flex flex-column gap-2">
   <div
-    class="gap-4 h-full flex flex-wrap align-items-center justify-content-center"
+    class="gap-4  h-full flex flex-wrap align-items-center justify-content-center"
   >
     @if (loading) {
       <div
@@ -26,7 +26,7 @@
     } @else if (pagedReports.length > 0) {
       @for (report of pagedReports; track report.id) {
         <div
-          class="h-23rem p-4 bg-blue-50 shadow max-w-20rem flex flex-column"
+          class="h-23rem p-4 bg-blue-50 shadow-4 max-w-20rem flex flex-column"
           style="
             height: 135px;
             border-left: 7px solid #3b82f6;

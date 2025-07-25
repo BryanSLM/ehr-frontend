@@ -2,8 +2,8 @@
   <app-sidebar-patients></app-sidebar-patients>
   <div class="flex flex-column w-full p-2 h-full">
     <app-navbar-patients class="w-full" [user]="user"></app-navbar-patients>
-    <div class="overflow-y-auto overflow-x-hidden" style="height: calc(100vh - 64px)">
-      <div class="w-full h-full">
+    <div class="overflow-y-auto overflow-x-hidden py-2" style="height: calc(100vh - 64px)">
+      <div class="w-full h-full" style="height: calc(100vh - 64px)">
         <router-outlet></router-outlet>
       </div>
   </div>
