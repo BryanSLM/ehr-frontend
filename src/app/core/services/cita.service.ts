@@ -85,7 +85,7 @@ interface Doctor {
 })
 export class CitasService {
   private apiUrl = environment.apiUrl;
-  private citasUrl = `${this.apiUrl}/api/citas`;
+  private citasUrl = `${this.apiUrl}/citas`;
 
   constructor(private http: HttpClient) {}
 
@@ -117,7 +117,7 @@ export class CitasService {
   // Actualizar también el método getPacientes si lo usas en otro lugar
   getPacientes(): Observable<Paciente[]> {
     return this.http
-      .get<PacienteResponse>(`${this.apiUrl}/api/patients`)
+      .get<PacienteResponse>(`${this.apiUrl}/patients`)
       .pipe(map((response) => response.patients || []));
   }
 

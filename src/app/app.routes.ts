@@ -34,6 +34,7 @@ import { LabsReportsPatientsComponent } from './shared/components/patients/pages
 import { AppointmentsPatientsComponent } from './shared/components/patients/pages/appoiments-patients/appointments-patients.component';
 import { LabsReportDetailsComponent } from './shared/components/patients/pages/labs-reports-patients/components/labs-report-details/labs-report-details.component';
 import { LabsReportListComponent } from './shared/components/patients/pages/labs-reports-patients/components/labs-report-list/labs-report-list.component';
+import { CreateAppointmentsComponent } from './shared/components/patients/pages/appoiments-patients/create-appoiments/create-appointments.component';
 
 export const routes: Routes = [
   {
@@ -227,15 +228,24 @@ export const routes: Routes = [
       },
       {
         path: 'appointments',
-        component: AppointmentsPatientsComponent,
-      },
-      {
-        path: 'labs-reports',
-        component: LabsReportsPatientsComponent,
         children: [
           {
             path: '',
-            component: LabsReportListComponent,
+            component: AppointmentsPatientsComponent,
+          },
+          {
+            path: 'create',
+            component: CreateAppointmentsComponent,
+          },
+        ],
+      },
+      {
+        path: 'labs-reports',
+        children: [
+          {
+            path: '',
+            component: LabsReportsPatientsComponent,
+            // component: LabsReportListComponent,
           },
           {
             path: 'details/:id',

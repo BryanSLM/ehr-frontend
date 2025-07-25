@@ -7,6 +7,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { CommonModule } from '@angular/common';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { RouterOutlet } from '@angular/router';
+import { LabsReportListComponent } from './components/labs-report-list/labs-report-list.component';
 
 @Component({
   selector: 'app-labs-reports-patients',
@@ -22,6 +23,7 @@ import { RouterOutlet } from '@angular/router';
     CommonModule,
     OverlayBadgeModule,
     RouterOutlet,
+    LabsReportListComponent,
   ],
 })
 export class LabsReportsPatientsComponent {}

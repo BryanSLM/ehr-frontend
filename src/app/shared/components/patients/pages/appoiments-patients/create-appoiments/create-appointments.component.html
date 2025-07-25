@@ -1,0 +1,168 @@
+<div class="w-full h-full">
+  <div class="flex w-full">
+    <div class="flex flex-column h-full" style="width: 70%">
+      <p class="text-5xl font-bold mb-0" style="color: #3b82f6">Crea tu cita</p>
+      <p class="text-xl font-bold mb-0 text-gray-400">
+        Agenda de forma sencilla y con un solo clic
+      </p>
+    </div>
+    <div
+      class="flex align-items-center justify-content-center gap-2"
+      style="width: 30%"
+    >
+      <p-button
+        variant="outlined"
+        label="Cancelar"
+        [routerLink]="['/patients/appointments']"
+        [style]="{ width: '150px' }"
+        size="large"
+      />
+      <p-button
+        label="Agendar cita"
+        [style]="{ width: '150px' }"
+        size="large"
+      />
+    </div>
+  </div>
+  <div class="flex flex-column p-4">
+    <p class="text-5xl font-bold text-center mb-6">Selecciona los campos</p>
+    <form [formGroup]="appointmentForm" class="flex w-full">
+      <div class="flex justify-content-between border-2 w-full h-full p-4">
+        <div class="flex flex-column border-2">
+          <label class="mb-2 font-bold" for="birthdate"
+            >Selecciona la fecha:</label
+          >
+          <p-datepicker
+            formControlName="date"
+            [inline]="true"
+            styleClass=" custom-datepicker"
+          />
+        </div>
+
+        <div class="flex flex-column items-center" style="width: 60%">
+          <div class="flex align-items-center gap-4 w-full">
+            <label class="text-3xl text-blue-500 font-bold" for="identification"
+              >Especialidad:</label
+            >
+            <p-select
+              optionLabel="name"
+              [optionValue]="'id'"
+              [options]="specialties"
+              placeholder="Seleccione una especialidad"
+              class=""
+              formControlName="specialty"
+              (onChange)="consultarHorarioDisponible()"
+            />
+          </div>
+          @if (this.appointmentForm.get('specialty')?.value) {
+            @if (appointmentsAvailable.length > 0) {
+              <div *ngFor="let item of appointmentsAvailable">
+                <div class="">
+                  <p class="text-2xl mb-0">
+                    DR. {{ item.consultorio.doctor.nombres.toUpperCase() }}
+                    {{ item.consultorio.doctor.apellidos.toUpperCase() }}
+                  </p>
+                </div>
+                <div
+                  class="w-full bg-blue-500"
+                  style="height: 1px; background-color: rgb(196, 196, 196)"
+                ></div>
+                <div class="">
+                  <p class="">Horarios de atención</p>
+                  <div class="flex flex-wrap gap-4 ml-4">
+                    <div
+                      *ngFor="let times of item.intervalos"
+                      [ngClass]="{
+                        'bg-blue-500 text-white':
+                          times === appointmentForm.get('time')?.value,
+                        'hover:bg-blue-200':
+                          times !== appointmentForm.get('time')?.value,
+                      }"
+                      class="border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
+                      tabindex="0"
+                      role="button"
+                      (click)="
+                        seleccionarHora(
+                          times,
+                          item.consultorio.doctor.id,
+                          item.consultorio.id
+                        )
+                      "
+                      (keydown.enter)="
+                        seleccionarHora(
+                          times,
+                          item.consultorio.doctor.id,
+                          item.consultorio.id
+                        )
+                      "
+                      (keydown.space)="
+                        seleccionarHora(
+                          times,
+                          item.consultorio.doctor.id,
+                          item.consultorio.id
+                        )
+                      "
+                    >
+                      {{ times }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <div class="w-full flex align-items-center flex-column">
+                <div
+                  class="flex align-items-center justify-content-center"
+                  style="width: 90%"
+                >
+                  <img
+                    src="/assets/no-available.png"
+                    alt="Logo"
+                    class="h-20rem"
+                  />
+                </div>
+
+                <p class="text-4xl text-blue-500 font-bold mb-0">
+                  No hay doctores disponibles
+                </p>
+              </div>
+            }
+          } @else {
+            <div
+              class="w-full flex align-items-center justify-content-center flex-column"
+            >
+              <div class="overflow-hidden w-30rem flex justify-content-center">
+                <div
+                  class="bg-cover bg-center border-primary-500 border-round h-20rem"
+                  style="
+                    background-image: url('/assets/waiting.png');
+                    width: 80%;
+                  "
+                ></div>
+              </div>
+
+              <p class="text-4xl text-center text-blue-500 font-bold mb-0">
+                Seleccione una especialidad
+              </p>
+            </div>
+          }
+          <!-- <div class="flex justify-content-between gap-2 mt-2 px-4">
+              <p-button
+                variant="outlined"
+                styleClass="w-15rem text-base"
+                label="Atrás"
+                (click)="prevStep()"
+              />
+              <p-button
+                styleClass="w-15rem text-base"
+                label="Continuar"
+                (click)="aceptarHorario()"
+              /> -->
+          <!-- </div> -->
+          <!-- <div class="border-2">
+              <p-button label="Continuar" (click)="aceptarHorario()" />
+            </div> -->
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

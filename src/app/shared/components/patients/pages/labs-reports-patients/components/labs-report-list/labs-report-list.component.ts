@@ -5,22 +5,22 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Skeleton } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-labs-report-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, PaginatorModule],
+  imports: [CommonModule, ButtonModule, PaginatorModule, Skeleton],
   templateUrl: './labs-report-list.component.html',
   styleUrl: './labs-report-list.component.css',
 })
 export class LabsReportListComponent implements OnInit {
   labsReports: LabsReportI[] = [];
   labsReportRows: LabsReportI[][] = [];
-
   page = 0;
   rows = 6;
   first = 0;
-
+  loading = true;
   constructor(
     private readonly labsReportsPatientsService: LabsReportsPatientsService,
     private readonly router: Router,
@@ -31,11 +31,14 @@ export class LabsReportListComponent implements OnInit {
   }
 
   getLabsReports(): void {
+    this.loading = true;
     this.labsReportsPatientsService.getLabsReports().subscribe({
       next: (response) => {
         this.labsReports = response;
+        this.loading = false;
       },
       error: (error) => {
+        this.loading = false;
         console.error('Error fetching labs reports:', error);
       },
     });

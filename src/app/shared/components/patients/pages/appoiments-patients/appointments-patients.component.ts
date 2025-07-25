@@ -10,6 +10,7 @@ import { Tag } from 'primeng/tag';
 import { PatientService } from '../../../../../core/services/patient.service';
 import { Skeleton } from 'primeng/skeleton';
 import { MessageService } from 'primeng/api';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-appointments-patients',
   standalone: true,
@@ -25,6 +26,7 @@ import { MessageService } from 'primeng/api';
     OverlayBadgeModule,
     Tag,
     Skeleton,
+    RouterModule,
   ],
   providers: [MessageService],
 })
