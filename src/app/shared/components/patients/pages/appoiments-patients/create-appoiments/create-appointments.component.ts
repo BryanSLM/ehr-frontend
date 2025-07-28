@@ -99,6 +99,7 @@ export class CreateAppointmentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+    this.appointmentForm.patchValue({ date: new Date() });
     if (typeof window !== 'undefined') {
       this.getSpecialties();
     }
@@ -135,7 +136,10 @@ export class CreateAppointmentsComponent implements OnInit {
     });
   }
   consultarHorarioDisponible() {
+    console.log('Debe seleccionar una especialidad--------------->1');
+
     if (!this.appointmentForm.get('specialty')?.value) {
+      console.log('Debe seleccionar una especialidad--------------->');
       console.log('Debe seleccionar una especialidad');
       return;
     }

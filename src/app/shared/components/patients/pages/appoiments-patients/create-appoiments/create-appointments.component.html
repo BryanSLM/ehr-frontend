@@ -36,6 +36,7 @@
             formControlName="date"
             [inline]="true"
             styleClass=" custom-datepicker"
+            (onSelect)="consultarHorarioDisponible()"
           />
         </div>
 
@@ -145,19 +146,18 @@
               </p>
             </div>
           }
-          <!-- <div class="flex justify-content-between gap-2 mt-2 px-4">
+          <div class="flex justify-content-between gap-2 mt-2 px-4">
               <p-button
                 variant="outlined"
                 styleClass="w-15rem text-base"
                 label="Atrás"
-                (click)="prevStep()"
               />
               <p-button
                 styleClass="w-15rem text-base"
                 label="Continuar"
                 (click)="aceptarHorario()"
-              /> -->
-          <!-- </div> -->
+              /> 
+          </div>
           <!-- <div class="border-2">
               <p-button label="Continuar" (click)="aceptarHorario()" />
             </div> -->
