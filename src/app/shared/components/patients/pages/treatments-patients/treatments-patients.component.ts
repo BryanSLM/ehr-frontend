@@ -4,9 +4,9 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { StyleClassModule } from 'primeng/styleclass';
-import { Sidebar } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-treatments-patients',
@@ -21,6 +21,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     StyleClassModule,
     CommonModule,
     OverlayBadgeModule,
+    RouterOutlet,
   ],
 })
 export class TreatmentsPatientsComponent {}

@@ -34,6 +34,8 @@ import { LabsReportsPatientsComponent } from './shared/components/patients/pages
 import { AppointmentsPatientsComponent } from './shared/components/patients/pages/appoiments-patients/appointments-patients.component';
 import { LabsReportDetailsComponent } from './shared/components/patients/pages/labs-reports-patients/components/labs-report-details/labs-report-details.component';
 import { LabsReportListComponent } from './shared/components/patients/pages/labs-reports-patients/components/labs-report-list/labs-report-list.component';
+import { TreatmentsListComponent } from './shared/components/patients/pages/treatments-patients/treatments-list/treatments-list.component';
+import { TreatmentsDetailsComponent } from './shared/components/patients/pages/treatments-patients/treatments-details/treatments-details.component';
 
 export const routes: Routes = [
   {
@@ -251,6 +253,21 @@ export const routes: Routes = [
       {
         path: 'treatments',
         component: TreatmentsPatientsComponent,
+        children: [
+          {
+            path: '',
+            component: TreatmentsListComponent,
+          },
+          {
+            path: 'details/:id',
+            component: TreatmentsDetailsComponent,
+          },
+          {
+            path: '**',
+            redirectTo: '',
+            pathMatch: 'full',
+          },
+        ],
       },
       {
         path: 'settings',

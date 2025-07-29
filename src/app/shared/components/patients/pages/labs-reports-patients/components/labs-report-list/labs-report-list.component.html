@@ -1,38 +1,43 @@
-<div class="grid gap-1 h-screen">
-  @for (report of pagedReports; track report.id) {
-    <div
-      class="border border-gray-200 border-round-lg p-4 bg-gray-50 shadow col-3 max-w-18rem flex flex-column"
-    >
-      <div class="w-full h-5rem max-h-5rem">
-        <h2 class="text-blue-500 mb-2 overflow-hidden text-overflow-ellipsis">
-          {{ report.nombre_examen }}
-        </h2>
-      </div>
-      <p>
-        <strong>Fecha agendado:</strong>
-        {{ formatDate(report.fecha_agendamiento) }}
-      </p>
-      <p><strong>Medico solicitante:</strong> {{ report.medico.username }}</p>
-      <p><strong>Estado:</strong> {{ report.estado }}</p>
-      @if (report.fecha_reporte) {
+<div class="flex flex-column">
+  <div class="grid gap-1 flex-1">
+    @for (report of pagedReports; track report.id) {
+      <div
+        class="border border-gray-200 border-round-lg p-4 bg-gray-50 shadow col-3 max-w-18rem flex flex-column"
+      >
+        <div class="w-full h-5rem max-h-5rem">
+          <h2 class="text-blue-500 mb-2 overflow-hidden text-overflow-ellipsis">
+            {{ report.nombre_examen }}
+          </h2>
+        </div>
         <p>
-          <strong>Fecha de reporte:</strong>
-          {{ formatDate(report.fecha_reporte) }}
+          <strong>Fecha agendado:</strong>
+          {{ formatDate(report.fecha_agendamiento) }}
         </p>
-      }
-      <div class="mt-auto">
-        <button pButton class="w-full" (click)="goToDetails(report.id)">
-          Ver detalles <i class="pi pi-eye"></i>
-        </button>
+        <p>
+          <strong>Medico solicitante:</strong> {{ report.medico.nombres }}
+          {{ report.medico.apellidos }}
+        </p>
+        <p><strong>Estado:</strong> {{ report.estado }}</p>
+        @if (report.fecha_reporte) {
+          <p>
+            <strong>Fecha de reporte:</strong>
+            {{ formatDate(report.fecha_reporte) }}
+          </p>
+        }
+        <div class="mt-auto">
+          <button pButton class="w-full" (click)="goToDetails(report.id)">
+            Ver detalles <i class="pi pi-eye"></i>
+          </button>
+        </div>
       </div>
-    </div>
-  }
-</div>
-<div class="p-4">
-  <p-paginator
-    [rows]="rows"
-    [totalRecords]="labsReports.length"
-    [first]="first"
-    (onPageChange)="onPageChange($event)"
-  ></p-paginator>
+    }
+  </div>
+  <div class="p-4">
+    <p-paginator
+      [rows]="rows"
+      [totalRecords]="labsReports.length"
+      [first]="first"
+      (onPageChange)="onPageChange($event)"
+    ></p-paginator>
+  </div>
 </div>
