@@ -21,6 +21,8 @@ import {
 } from '@angular/forms';
 import dayjs from 'dayjs';
 import { RouterModule } from '@angular/router';
+import { formatearFecha } from '../../../../../utils/date.utils';
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-create-appointments',
   standalone: true,
@@ -40,10 +42,13 @@ import { RouterModule } from '@angular/router';
     SelectModule,
     ReactiveFormsModule,
     RouterModule,
+    InputTextModule,
   ],
   providers: [MessageService],
 })
 export class CreateAppointmentsComponent implements OnInit {
+  formattedDate = formatearFecha;
+  user: any;
   appointments: {
     doctor: {
       nombres: string;
@@ -97,12 +102,16 @@ export class CreateAppointmentsComponent implements OnInit {
 
   specialties: { id: string; name: string }[] = [];
 
+  currentStep = 0;
+  loadingForm = false;
+
   ngOnInit(): void {
     this.loading = true;
     this.appointmentForm.patchValue({ date: new Date() });
     if (typeof window !== 'undefined') {
       this.getSpecialties();
     }
+    this.user = this.profile;
     this.patientsService.getAppointmentByIdentification().subscribe({
       next: (data) => {
         this.appointments = data.data;
@@ -123,7 +132,10 @@ export class CreateAppointmentsComponent implements OnInit {
       },
     });
   }
-
+  get profile() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user;
+  }
   getSpecialties() {
     this.catalogosService.getEspecialidades().subscribe({
       next: (specialty) => {
@@ -136,18 +148,10 @@ export class CreateAppointmentsComponent implements OnInit {
     });
   }
   consultarHorarioDisponible() {
-    console.log('Debe seleccionar una especialidad--------------->1');
-
     if (!this.appointmentForm.get('specialty')?.value) {
-      console.log('Debe seleccionar una especialidad--------------->');
       console.log('Debe seleccionar una especialidad');
       return;
     }
-    console.log(
-      'entro aqui------------->',
-      this.appointmentForm.get('date')?.value,
-    );
-
     this.patientsService
       .getScheduleAvailable(
         this.appointmentForm.get('specialty')?.value,
@@ -161,13 +165,27 @@ export class CreateAppointmentsComponent implements OnInit {
       });
   }
   seleccionarCita() {
-    // this.loadingForm = true;
     console.log(
       'Seleccionando cita con los siguientes datos:',
       this.appointmentForm,
     );
-    // this.loadingForm = false;
     // this.nextStep();
+  }
+  get specialtyName(): string | undefined {
+    const specialtyId = this.appointmentForm.get('specialty')?.value;
+    const nameSpecialty = this.specialties.find(
+      (item) => item.id === specialtyId,
+    )?.name;
+    return nameSpecialty;
+  }
+  get nameDoctor(): string | undefined {
+    const doctor = this.appointmentsAvailable.find(
+      (item) =>
+        item.consultorio.doctor.id ===
+        this.appointmentForm.get('doctorId')?.value,
+    )?.consultorio.doctor;
+    const names = doctor ? `${doctor.nombres} ${doctor.apellidos}` : '';
+    return names;
   }
   seleccionarHora(hora: string, doctor: string, consultorioId?: string) {
     // console.log('REGISTER FORM:', this.registerForm.value);
@@ -193,5 +211,58 @@ export class CreateAppointmentsComponent implements OnInit {
     console.log(
       `Cita confirmada para el doctor ${selectedDoctor} el ${selectedDate} a las ${selectedTime} en la especialidad ${selectedSpecialty}`,
     );
+    this.nextStep();
+  }
+  submitAppointment() {
+    this.loadingForm = true;
+    if (this.appointmentForm.invalid) {
+      console.log('Formulario de cita inválido');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al crear cita',
+        detail: 'No se pudo crear la cita',
+      });
+      this.loadingForm = false;
+      this.appointmentForm.markAllAsTouched();
+      return;
+    }
+
+    this.patientsService
+      .createAppointment(this.appointmentForm.value)
+      .subscribe({
+        next: (response) => {
+          console.log('Cita creada:', response);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Registro exitoso',
+            detail: 'La cita ha sido creada correctamente',
+          });
+          this.loadingForm = false;
+          this.nextStep();
+        },
+        error: (error) => {
+          const message = error.error?.message || 'Error al crear cita';
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error al crear cita',
+            detail: message,
+          });
+          console.error('Error al crear cita:', error);
+          this.loadingForm = false;
+        },
+      });
+  }
+  nextStep() {
+    // if (this.currentStep == 0) {
+    //   return;
+    // }
+    this.currentStep++;
+  }
+  prevStep() {
+    if (this.currentStep == 0) {
+      return;
+    }
+    this.currentStep--;
   }
 }
