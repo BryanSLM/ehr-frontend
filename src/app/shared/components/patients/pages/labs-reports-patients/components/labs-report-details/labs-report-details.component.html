@@ -114,7 +114,7 @@
         Volver a la lista
       </button>
       @if (labsReport.estado === 'Completado') {
-        <button pButton class="">Generar reporte</button>
+        <button pButton class="" (click)="generateLabReportPdf()">Generar reporte</button>
       }
     </div>
   </div>
