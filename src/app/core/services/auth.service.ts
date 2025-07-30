@@ -11,6 +11,7 @@ interface User {
   username: string;
   role: string;
   active: boolean;
+  patients: any
 }
 
 interface LoginResponse {
@@ -32,7 +33,6 @@ export class AuthService {
   ) {}
 
   login(username: string, password: string): Observable<LoginResponse> {
-    console.log('Iniciando login para:', username);
 
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/auth/login`, {
@@ -41,7 +41,6 @@ export class AuthService {
       })
       .pipe(
         tap((response) => {
-          console.log('Respuesta del login:', response);
           if (response.token) {
             this.setSession(response);
           }
