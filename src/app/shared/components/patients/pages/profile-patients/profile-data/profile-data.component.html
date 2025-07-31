@@ -1,0 +1,146 @@
+<div class="grid gap-3">
+  <div
+    class="col-12 grid border border-gray-200 border-round-lg p-4 bg-gray-50 shadow w-30 gap-1"
+  >
+    <div
+      class="col-12 align-items-center text-blue-500 text-xl font-semibold flex"
+    >
+      <i class="pi pi-id-card"></i>
+      <span class="ml-2">Información general</span>
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Nombre</div>
+      {{ buildName() }}
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Género</div>
+      {{ getGender() }}
+    </div>
+    <div
+      class="col-2 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Identificación</div>
+      {{ profile?.identification }}
+    </div>
+    <div
+      class="col-3 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Fecha de nacimiento</div>
+      {{ formatDate(profile?.paciente?.fecha_nacimiento) }}
+    </div>
+    <div
+      class="col-3 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Nacionalidad</div>
+      {{
+        profile?.paciente?.nacionalidad
+          ? profile?.paciente?.nacionalidad
+          : 'No registrada'
+      }}
+    </div>
+    <div
+      class="col-3 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Grupo cultural</div>
+      {{
+        profile?.paciente?.grupo_cultural
+          ? profile?.paciente?.grupo_cultural
+          : 'No registrado'
+      }}
+    </div>
+  </div>
+  <div
+    class="col-6 grid border border-gray-200 border-round-lg p-4 bg-gray-50 shadow w-30 gap-1"
+  >
+    <div
+      class="col-12 align-items-center text-blue-500 text-xl font-semibold flex"
+    >
+      <i class="pi pi-address-book"></i>
+      <span class="ml-2">Información de contacto</span>
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Teléfono</div>
+      {{
+        profile?.paciente?.telefono
+          ? profile?.paciente?.telefono
+          : 'No registrado'
+      }}
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Provincia</div>
+      {{
+        profile?.paciente?.provincia_id
+          ? profile?.paciente?.provincia_info?.nombre
+          : 'No registrado'
+      }}
+    </div>
+    <div
+      class="col-12 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Dirección</div>
+      {{
+        profile?.paciente?.direccion
+          ? profile?.paciente?.direccion
+          : 'No registrada'
+      }}
+    </div>
+  </div>
+  <div
+    class="col-6 grid border border-gray-200 border-round-lg p-4 bg-gray-50 shadow w-30 gap-1 ml-1"
+  >
+    <div
+      class="col-12 align-items-center text-blue-500 text-xl font-semibold flex"
+    >
+      <i class="pi pi-info-circle"></i>
+      <span class="ml-2">Información adicional</span>
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Estado civil</div>
+      {{
+        profile?.paciente?.estado_civil
+          ? getCivilStatus(profile?.paciente?.estado_civil)
+          : 'No registrado'
+      }}
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Instrucción</div>
+      {{
+        profile?.paciente?.instruccion
+          ? profile?.paciente?.instruccion
+          : 'No registrado'
+      }}
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Ocupación</div>
+      {{
+        profile?.paciente?.ocupacion
+          ? profile?.paciente?.ocupacion
+          : 'No registrado'
+      }}
+    </div>
+    <div
+      class="col-5 flex flex-column font-normal text-xl overflow-hidden text-overflow-ellipsis"
+    >
+      <div class="font-bold text-lg">Tipo de seguro</div>
+      {{
+        profile?.paciente?.tipo_seguro
+          ? profile?.paciente?.tipo_seguro
+          : 'No registrado'
+      }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+export interface ProfileI {
+  id: number;
+  username: string;
+  role: string;
+  active: boolean;
+  empresa: string;
+  identification: string;
+  names: string;
+  paciente: {
+    id: number;
+    apellido_paterno: string;
+    primer_nombre: string;
+    fecha_nacimiento: string;
+    lugar_nacimiento: string | null;
+    nacionalidad: string;
+    genero: string;
+    apellido_materno: string | null;
+    segundo_nombre: string | null;
+    telefono: string;
+    grupo_cultural: string | null;
+    direccion: string | null;
+    barrio: string | null;
+    provincia_id: number | null;
+    canton_id: number | null;
+    parroquia_id: number | null;
+    estado_civil: string | null;
+    instruccion: string | null;
+    ocupacion: string | null;
+    empresa_trabajo: string | null;
+    tipo_seguro: string | null;
+    contacto_emergencia: string | null;
+    parentesco_emergencia: string | null;
+    direccion_emergencia: string | null;
+    telefono_emergencia: string | null;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+    provincia_info: any | null;
+    canton_info: any | null;
+    parroquia_info: any | null;
+  };
+}

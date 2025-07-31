@@ -59,7 +59,7 @@ export class PdfGeneratorService {
     );
     textY += 10;
     doc.text(
-      `Paciente: ${user.paciente[0].primer_nombre || ''} ${user.paciente[0].apellido_paterno || ''}`,
+      `Paciente: ${user.paciente.primer_nombre || ''} ${user.paciente.apellido_paterno || ''}`,
       boxX + 2,
       textY,
     );

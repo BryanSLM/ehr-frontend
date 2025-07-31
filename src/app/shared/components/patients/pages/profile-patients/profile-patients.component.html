@@ -1,3 +1,15 @@
-<div class="layout flex w-full h-full">
- <p class="text-5xl font-bold mb-0 " style="color: #3b82f6;">Perfil </p> 
+<div class="flex w-full h-full flex-column ">
+  <div class="flex w-full">
+    <div class="flex flex-column h-full" style="width: 80%">
+      <p class="text-5xl font-bold mb-0" style="color: #3b82f6">
+        Perfil
+      </p>
+      <p class="text-xl font-bold mb-0 text-gray-400">
+        Aquí puedes ver tus datos registrados en el sistema
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-column mt-4 px-3">
+    <app-profile-data class="h-full"></app-profile-data>
+  </div>
 </div>
