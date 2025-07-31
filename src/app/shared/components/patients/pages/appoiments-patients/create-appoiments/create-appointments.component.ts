@@ -215,6 +215,11 @@ export class CreateAppointmentsComponent implements OnInit {
   }
   submitAppointment() {
     this.loadingForm = true;
+    console.log('PERFIl DE USUARIO:', this.user.paciente);
+    this.appointmentForm.patchValue({
+      patientId: this.user.paciente[0].id,
+      identification: this.user.identification,
+    });
     if (this.appointmentForm.invalid) {
       console.log('Formulario de cita inválido');
       this.messageService.add({
@@ -224,6 +229,12 @@ export class CreateAppointmentsComponent implements OnInit {
       });
       this.loadingForm = false;
       this.appointmentForm.markAllAsTouched();
+      Object.keys(this.appointmentForm.controls).forEach((key) => {
+        const control = this.appointmentForm.get(key);
+        if (control?.invalid) {
+          console.warn(`Campo inválido: ${key}`, control.errors);
+        }
+      });
       return;
     }
 
