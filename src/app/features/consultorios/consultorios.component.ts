@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ConsultorioService, Consultorio, Doctor, Horario } from '../../core/services/consultorio.service';
+import {
+  ConsultorioService,
+  Consultorio,
+  Doctor,
+  Horario,
+} from '../../core/services/consultorio.service';
 import { ConsultorioHorarioComponent } from './consultorio-horario/consultorio-horario.component';
 
 interface DiaHorario {
@@ -12,17 +17,12 @@ interface DiaHorario {
   seleccionado: boolean;
 }
 
-
 @Component({
   selector: 'app-consultorios',
   standalone: true,
-  imports: [
-    CommonModule, 
-    FormsModule,
-    ConsultorioHorarioComponent
-  ],
+  imports: [CommonModule, FormsModule, ConsultorioHorarioComponent],
   templateUrl: './consultorios.component.html',
-  styleUrls: ['./consultorios.component.scss']
+  styleUrls: ['./consultorios.component.scss'],
 })
 export class ConsultoriosComponent implements OnInit {
   consultorios: Consultorio[] = [];
@@ -40,7 +40,7 @@ export class ConsultoriosComponent implements OnInit {
     numero: '',
     descripcion: '',
     doctorId: 0,
-    horarios: []
+    horarios: [],
   };
 
   readonly DIAS_SEMANA = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
@@ -62,7 +62,7 @@ export class ConsultoriosComponent implements OnInit {
       error: (error) => {
         this.showMessage('Error al cargar consultorios', true);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -73,7 +73,7 @@ export class ConsultoriosComponent implements OnInit {
       },
       error: (error) => {
         this.showMessage('Error al cargar doctores', true);
-      }
+      },
     });
   }
 
@@ -87,11 +87,14 @@ export class ConsultoriosComponent implements OnInit {
           this.resetForm();
         },
         error: (error) => {
-          this.showMessage(error.error?.message || 'Error al crear consultorio', true);
+          this.showMessage(
+            error.error?.message || 'Error al crear consultorio',
+            true,
+          );
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
     }
   }
@@ -101,48 +104,48 @@ export class ConsultoriosComponent implements OnInit {
       this.showMessage('Por favor, complete todos los campos requeridos', true);
       return;
     }
-  
+
     this.isLoading = true;
-  
+
     const consultorioActualizado = {
       numero: this.newConsultorio.numero,
       descripcion: this.newConsultorio.descripcion,
       doctorId: this.newConsultorio.doctorId,
-      horarios: this.newConsultorio.horarios.map(h => ({
+      horarios: this.newConsultorio.horarios.map((h) => ({
         dia: h.dia,
         fecha: h.fecha,
         horaInicio: h.horaInicio,
-        horaFin: h.horaFin
-      }))
+        horaFin: h.horaFin,
+      })),
     };
-  
+
     console.log('Datos a enviar:', consultorioActualizado); // Debug
-  
-    this.consultorioService.updateConsultorio(
-      this.selectedConsultorioId,
-      consultorioActualizado
-    ).subscribe({
-      next: (response) => {
-        console.log('Respuesta del servidor:', response);
-        this.showMessage('Consultorio actualizado exitosamente');
-        this.loadConsultorios();
-        this.resetForm();
-      },
-      error: (error) => {
-        console.error('Error al actualizar:', error);
-        this.showMessage('Error al actualizar el consultorio', true);
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
+
+    this.consultorioService
+      .updateConsultorio(this.selectedConsultorioId, consultorioActualizado)
+      .subscribe({
+        next: (response) => {
+          console.log('Respuesta del servidor:', response);
+          this.showMessage('Consultorio actualizado exitosamente');
+          this.loadConsultorios();
+          this.resetForm();
+        },
+        error: (error) => {
+          console.error('Error al actualizar:', error);
+          this.showMessage('Error al actualizar el consultorio', true);
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   onDiaSelect(dia: string): void {
     // Actualizar la selección de días
-    this.diasSeleccionados = this.diasSeleccionados.map(d => ({
+    this.diasSeleccionados = this.diasSeleccionados.map((d) => ({
       ...d,
-      seleccionado: d.dia === dia
+      seleccionado: d.dia === dia,
     }));
     console.log('Día seleccionado:', dia);
   }
@@ -152,11 +155,11 @@ export class ConsultoriosComponent implements OnInit {
       this.showMessage('ID de consultorio inválido', true);
       return;
     }
-  
+
     if (confirm('¿Está seguro que desea eliminar este consultorio?')) {
       this.isLoading = true;
       console.log('Intentando eliminar consultorio:', id);
-  
+
       this.consultorioService.deleteConsultorio(id).subscribe({
         next: (response) => {
           console.log('Respuesta exitosa:', response);
@@ -164,19 +167,23 @@ export class ConsultoriosComponent implements OnInit {
             this.showMessage('Consultorio eliminado exitosamente');
             this.loadConsultorios();
           } else {
-            this.showMessage(response.message || 'Error al eliminar consultorio', true);
+            this.showMessage(
+              response.message || 'Error al eliminar consultorio',
+              true,
+            );
           }
         },
         error: (error) => {
           console.error('Error al eliminar:', error);
           this.showMessage(
-            error.message || 'Error al eliminar el consultorio. Por favor, intente nuevamente.',
-            true
+            error.message ||
+              'Error al eliminar el consultorio. Por favor, intente nuevamente.',
+            true,
           );
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
     }
   }
@@ -187,32 +194,29 @@ export class ConsultoriosComponent implements OnInit {
     this.selectedConsultorioId = consultorio.id ?? null;
     this.consultorioSeleccionado = { ...consultorio };
     this.showForm = true;
-  
+
     this.newConsultorio = {
       numero: consultorio.numero,
       descripcion: consultorio.descripcion,
       doctorId: consultorio.doctorId,
-      horarios: consultorio.horarios.map(h => ({
+      horarios: consultorio.horarios.map((h) => ({
         dia: h.dia,
         fecha: h.fecha, // Mantener la fecha original
         horaInicio: h.horaInicio,
-        horaFin: h.horaFin
-      }))
+        horaFin: h.horaFin,
+      })),
     };
-  
+
     console.log('Horarios después de mapeo:', this.newConsultorio.horarios); // Para debugging
-  
-  
-    this.diasSeleccionados = this.newConsultorio.horarios.map(h => ({
+
+    this.diasSeleccionados = this.newConsultorio.horarios.map((h) => ({
       fecha: new Date(h.fecha), // Usar la fecha del horario
       dia: h.dia,
       horaInicio: h.horaInicio,
       horaFin: h.horaFin,
-      seleccionado: true
+      seleccionado: true,
     }));
   }
-
-  
 
   // Mejorar el método validateForm
   validateForm(): boolean {
@@ -220,17 +224,20 @@ export class ConsultoriosComponent implements OnInit {
       this.showMessage('El número de consultorio es requerido', true);
       return false;
     }
-  
+
     if (!this.newConsultorio.doctorId || this.newConsultorio.doctorId === 0) {
       this.showMessage('Debe seleccionar un doctor', true);
       return false;
     }
-  
-    if (!this.newConsultorio.horarios || this.newConsultorio.horarios.length === 0) {
+
+    if (
+      !this.newConsultorio.horarios ||
+      this.newConsultorio.horarios.length === 0
+    ) {
       this.showMessage('Debe agregar al menos un horario', true);
       return false;
     }
-  
+
     return true;
   }
 
@@ -239,7 +246,7 @@ export class ConsultoriosComponent implements OnInit {
       numero: '',
       descripcion: '',
       doctorId: 0,
-      horarios: []
+      horarios: [],
     };
     this.diasSeleccionados = [];
     this.errorMessage = '';
@@ -250,11 +257,11 @@ export class ConsultoriosComponent implements OnInit {
   }
 
   onHorariosChange(horarios: Horario[]) {
-    this.newConsultorio.horarios = horarios.map(h => ({
+    this.newConsultorio.horarios = horarios.map((h) => ({
       dia: h.dia,
       fecha: h.fecha,
       horaInicio: h.horaInicio,
-      horaFin: h.horaFin
+      horaFin: h.horaFin,
     }));
   }
 
@@ -274,13 +281,15 @@ export class ConsultoriosComponent implements OnInit {
   }
 
   getDoctorName(doctorId: number): string {
-    const doctor = this.doctores.find(d => d.id === doctorId);
-    return doctor ? `${doctor.username} - ${doctor.especialidad}` : 'No asignado';
+    const doctor = this.doctores.find((d) => d.id === doctorId);
+    return doctor
+      ? `${doctor.username} - ${doctor.especialidades?.name}`
+      : 'No asignado';
   }
 
   formatHorarios(horarios: Horario[]): string {
-    return horarios.map(h => 
-      `${h.dia}: ${h.horaInicio} - ${h.horaFin}`
-    ).join('\n');
+    return horarios
+      .map((h) => `${h.dia}: ${h.horaInicio} - ${h.horaFin}`)
+      .join('\n');
   }
 }

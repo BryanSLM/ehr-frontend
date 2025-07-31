@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -10,6 +10,14 @@ export class PatientService {
   private apiUrl = `${environment.apiUrl}/patients`;
 
   constructor(private http: HttpClient) {}
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage?.getItem('token');
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+  }
 
   getPatients(params: any): Observable<any> {
     return this.http.get(this.apiUrl, { params });
@@ -62,5 +70,23 @@ export class PatientService {
 
   getScheduleAvailable(specialty: string, date: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/consultorios/${specialty}/${date}`);
+  }
+
+  createAppointment(appointment: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/external/create-appointment`,
+      appointment,
+    );
+  }
+
+  getAppointmentByIdentification(): Observable<any> {
+    const user = JSON.parse(localStorage?.getItem('user') || '{}');
+    console.log('User from localStorage:', user);
+    if (!user) {
+      throw new Error('User not found in localStorage');
+    }
+    return this.http.get(`${this.apiUrl}/appointments/${user.identification}`, {
+      headers: this.getHeaders(),
+    });
   }
 }

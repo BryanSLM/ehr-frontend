@@ -1,0 +1,302 @@
+<div class="w-full h-full">
+  <div class="flex w-full">
+    <div class="flex flex-column h-full" style="width: 80%">
+      <p class="text-5xl font-bold mb-0" style="color: #3b82f6">Crea tu cita</p>
+      <p class="text-xl font-bold mb-0 text-gray-400">
+        Agenda de forma sencilla y con un solo clic
+      </p>
+    </div>
+    <div
+      class="flex align-items-center justify-content-center gap-2"
+      style="width: 20%"
+    >
+      <p-button
+        variant="outlined"
+        label="Cancelar"
+        [routerLink]="['/patients/appointments']"
+        [style]="{ width: '150px' }"
+        size="large"
+      />
+    </div>
+  </div>
+  <div class="flex flex-column p-4">
+    <!-- <p class="text-5xl font-bold text-center mb-6">Selecciona los campos</p> -->
+    @if (currentStep === 0) {
+      <form [formGroup]="appointmentForm" class="flex w-full">
+        <div class="flex justify-content-between w-full h-full p-4">
+          <div class="flex flex-column">
+            <label class="mb-2 font-bold" for="birthdate"
+              >Selecciona la fecha:</label
+            >
+            <p-datepicker
+              formControlName="date"
+              [inline]="true"
+              styleClass=" custom-datepicker"
+              (onSelect)="consultarHorarioDisponible()"
+            />
+          </div>
+
+          <div class="flex flex-column items-center" style="width: 60%">
+            <div class="flex align-items-center gap-4 w-full">
+              <label
+                class="text-3xl text-blue-500 font-bold"
+                for="identification"
+                >Especialidad:</label
+              >
+              <p-select
+                optionLabel="name"
+                [optionValue]="'id'"
+                [options]="specialties"
+                placeholder="Seleccione una especialidad"
+                class=""
+                formControlName="specialty"
+                (onChange)="consultarHorarioDisponible()"
+              />
+            </div>
+            @if (this.appointmentForm.get('specialty')?.value) {
+              @if (appointmentsAvailable.length > 0) {
+                <div *ngFor="let item of appointmentsAvailable">
+                  <div class="">
+                    <p class="text-2xl mb-0">
+                      DR. {{ item.consultorio.doctor.nombres.toUpperCase() }}
+                      {{ item.consultorio.doctor.apellidos.toUpperCase() }}
+                    </p>
+                  </div>
+                  <div
+                    class="w-full bg-blue-500"
+                    style="height: 1px; background-color: rgb(196, 196, 196)"
+                  ></div>
+                  <div class="">
+                    <p class="">Horarios de atención</p>
+                    <div class="flex flex-wrap gap-4 ml-4">
+                      <div
+                        *ngFor="let times of item.intervalos"
+                        [ngClass]="{
+                          'bg-blue-500 text-white':
+                            times === appointmentForm.get('time')?.value,
+                          'hover:bg-blue-200':
+                            times !== appointmentForm.get('time')?.value,
+                        }"
+                        class="border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
+                        tabindex="0"
+                        role="button"
+                        (click)="
+                          seleccionarHora(
+                            times,
+                            item.consultorio.doctor.id,
+                            item.consultorio.id
+                          )
+                        "
+                        (keydown.enter)="
+                          seleccionarHora(
+                            times,
+                            item.consultorio.doctor.id,
+                            item.consultorio.id
+                          )
+                        "
+                        (keydown.space)="
+                          seleccionarHora(
+                            times,
+                            item.consultorio.doctor.id,
+                            item.consultorio.id
+                          )
+                        "
+                      >
+                        {{ times }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              } @else {
+                <div class="w-full flex align-items-center flex-column">
+                  <div
+                    class="flex align-items-center justify-content-center"
+                    style="width: 90%"
+                  >
+                    <img
+                      src="/assets/no-available.png"
+                      alt="Logo"
+                      class="h-20rem"
+                    />
+                  </div>
+
+                  <p class="text-4xl text-blue-500 font-bold mb-0">
+                    No hay doctores disponibles
+                  </p>
+                </div>
+              }
+            } @else {
+              <div
+                class="w-full flex align-items-center justify-content-center flex-column"
+              >
+                <div
+                  class="overflow-hidden w-30rem flex justify-content-center"
+                >
+                  <div
+                    class="bg-cover bg-center border-primary-500 border-round h-20rem"
+                    style="
+                      background-image: url('/assets/waiting.png');
+                      width: 80%;
+                    "
+                  ></div>
+                </div>
+
+                <p class="text-4xl text-center text-blue-500 font-bold mb-0">
+                  Seleccione una especialidad
+                </p>
+              </div>
+            }
+            <div class="flex justify-content-between gap-2 mt-2 px-4">
+              <p-button
+                variant="outlined"
+                styleClass="w-15rem text-base"
+                label="Atrás"
+              />
+              <p-button
+                styleClass="w-15rem text-base"
+                label="Continuar"
+                (click)="aceptarHorario()"
+              />
+            </div>
+            <!-- <div class="border-2">
+                <p-button label="Continuar" (click)="aceptarHorario()" />
+              </div> -->
+          </div>
+        </div>
+      </form>
+    } @else if (currentStep === 1) {
+      <div class="flex justify-content-around align-items-center w-full gap-4">
+        <div style="width: 40%">
+          <img src="/assets/details.png" alt="Logo" class="w-full" />
+        </div>
+        <div class="p-4 border-blue-500 border-round-lg mt-0">
+          <div
+            class="flex flex-column justify-content-center items-center gap-4 p-4"
+          >
+            <div class="">
+              <p class="text-5xl text-center font-bold mb-0 text-blue-500">
+                Resumen de la cita
+              </p>
+              <p class="text-sm text-center font-bold text-gray-400">
+                Revisa los datos de tu cita antes de confirmar
+              </p>
+            </div>
+            <div class="flex gap-4 align-items-center justify-content-center">
+              <div class="w-15rem">
+                <label
+                  class="mb-2 font-bold text-blue-500"
+                  for="identification"
+                >
+                  Identificación:</label
+                >
+                <input
+                  id="identification"
+                  pInputText
+                  [value]="this.user.identification"
+                />
+              </div>
+              <div class="flex flex-column w-15rem">
+                <label class="mb-2 text-blue-500 font-bold" for="names">
+                  Nombres:</label
+                >
+                <input id="names" pInputText [value]="this.user.names" />
+              </div>
+            </div>
+            <div class="flex gap-4 align-items-center justify-content-center">
+              <div class="w-15rem">
+                <label class="mb-2 font-bold text-blue-500" for="specialty">
+                  Especialidad:</label
+                >
+                <input
+                  id="specialty"
+                  pInputText
+                  readonly
+                  [value]="specialtyName"
+                />
+              </div>
+              <div class="flex flex-column w-15rem">
+                <label class="mb-2 text-blue-500 font-bold" for="doctor">
+                  Doctor:</label
+                >
+                <input id="doctor" pInputText [value]="nameDoctor" />
+              </div>
+            </div>
+            <div class="flex gap-4 align-items-center justify-content-center">
+              <div class="w-15rem">
+                <label class="mb-2 font-bold text-blue-500" for="date">
+                  Fecha:</label
+                >
+                <input
+                  id="date"
+                  pInputText
+                  readonly
+                  [value]="
+                    formattedDate(this.appointmentForm.get('date')?.value)
+                  "
+                />
+              </div>
+              <div class="flex flex-column w-15rem">
+                <label class="mb-2 text-blue-500 font-bold" for="time">
+                  Hora:</label
+                >
+                <input
+                  id="time"
+                  pInputText
+                  [value]="this.appointmentForm.get('time')?.value"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-content-between m-auto gap-2 p-4">
+            <p-button
+              variant="outlined"
+              styleClass="w-13rem text-base"
+              label="Atrás"
+              (click)="prevStep()"
+            />
+            <p-button
+              styleClass="w-15rem text-base"
+              label="Confirmar Cita"
+              (click)="submitAppointment()"
+              [loading]="loadingForm"
+            />
+          </div>
+        </div>
+      </div>
+    } @else if (currentStep === 2) {
+      <div
+        class="flex flex-column justify-content-center items-center gap-4 p-4"
+      >
+        <div
+          class="flex align-items-center justify-content-center"
+          style="width: 100%"
+        >
+          <img src="/assets/check.png" alt="Logo" class="h-20rem" />
+        </div>
+        <div class="">
+          <p class="text-5xl text-center font-bold mb-0 text-blue-500">
+            Cita Confirmada
+          </p>
+          <p class="text-sm text-center font-bold text-gray-400">
+            Tu cita ha sido confirmada exitosamente
+          </p>
+        </div>
+        <div
+          class="flex gap-4 justify-content-center items-center w-auto m-auto"
+        >
+          <p-button
+            variant="outlined"
+            [routerLink]="['/patients/appointments']"
+            styleClass="w-15rem text-base"
+            label="Ver citas"
+          />
+          <p-button
+            [routerLink]="['/login']"
+            styleClass="w-15rem text-base"
+            label="Agendar otra cita"
+          />
+        </div>
+      </div>
+    }
+  </div>
+</div>

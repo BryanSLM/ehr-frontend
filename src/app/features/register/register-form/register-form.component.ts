@@ -17,7 +17,9 @@ import { CatalogosService } from '../../../core/services/catalogos.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ecuPhoneNumberValidator } from '../../../core/validators/ecu-phone-number.validator';
 import { birthDateValidator } from '../../../core/validators/birth-date.validator';
-
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register-form',
   standalone: true,
@@ -29,7 +31,9 @@ import { birthDateValidator } from '../../../core/validators/birth-date.validato
     PasswordModule,
     SelectModule,
     DatePickerModule,
+    Toast,
   ],
+  providers: [MessageService],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css',
 })
@@ -68,6 +72,8 @@ export class RegisterFormComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly registerService: RegisterService,
     private readonly catalogService: CatalogosService,
+    private messageService: MessageService,
+    private router: Router,
   ) {
     this.registerForm = this.formBuilder.group(
       {
@@ -165,10 +171,22 @@ export class RegisterFormComponent implements OnInit {
   registerUser() {
     this.registerService.register(this.registerData).subscribe({
       next: (response) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Registro exitoso',
+          detail: 'El usuario ha sido registrado correctamente',
+        });
         console.log(response);
+        this.router.navigate(['/login']);
         this.registerForm.reset();
       },
       error: (err) => {
+        const message = err.error?.message || 'Error al registrar usuario';
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Ha ocurrido un error',
+          detail: message,
+        });
         console.error(err);
         this.registerError = true;
       },

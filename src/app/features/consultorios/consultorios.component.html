@@ -39,7 +39,7 @@
             required>
             <option [ngValue]="0">Seleccione un doctor</option>
             <option *ngFor="let doctor of doctores" [value]="doctor.id">
-              {{ doctor.username }} - {{ doctor.especialidad }}
+              {{ doctor.username }} - {{ doctor.especialidades?.name }}
             </option>
           </select>
         </div>

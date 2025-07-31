@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Observable, catchError, map, switchMap, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -25,14 +29,14 @@ export interface Consultorio {
 export interface Doctor {
   id: number;
   username: string;
-  especialidad: string;
+  especialidades: { id: string; name: string } | null;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConsultorioService {
-  private apiUrl = `${environment.apiUrl}/api/consultorios`;
+  private apiUrl = `${environment.apiUrl}/consultorios`;
 
   constructor(private http: HttpClient) {}
 
@@ -47,62 +51,63 @@ export class ConsultorioService {
   }
 
   getConsultorios(): Observable<Consultorio[]> {
-    return this.http.get<Consultorio[]>(this.apiUrl, { 
-      headers: this.getHeaders() 
-    }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<Consultorio[]>(this.apiUrl, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
   }
 
   getDoctores(): Observable<Doctor[]> {
-    return this.http.get<Doctor[]>(`${this.apiUrl}/doctors`, { 
-      headers: this.getHeaders() 
-    }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<Doctor[]>(`${this.apiUrl}/doctors`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
   }
 
-  createConsultorio(consultorio: Omit<Consultorio, 'id'>): Observable<Consultorio> {
-    return this.http.post<Consultorio>(this.apiUrl, consultorio, { 
-      headers: this.getHeaders() 
-    }).pipe(
-      catchError(this.handleError)
-    );
+  createConsultorio(
+    consultorio: Omit<Consultorio, 'id'>,
+  ): Observable<Consultorio> {
+    return this.http
+      .post<Consultorio>(this.apiUrl, consultorio, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
   }
 
-
-
-  updateConsultorio(id: number, consultorio: Partial<Consultorio>): Observable<Consultorio> {
+  updateConsultorio(
+    id: number,
+    consultorio: Partial<Consultorio>,
+  ): Observable<Consultorio> {
     if (!id) {
       return throwError(() => new Error('ID de consultorio inválido'));
     }
-  
+
     const url = `${this.apiUrl}/${id}`;
-    
+
     console.log('Datos enviados al servidor:', consultorio); // Debug
-  
-    return this.http.put<Consultorio>(
-      url,
-      consultorio,
-      { headers: this.getHeaders() }
-    ).pipe(
-      tap(response => console.log('Respuesta del servidor:', response)),
-      catchError(this.handleError)
-    );
+
+    return this.http
+      .put<Consultorio>(url, consultorio, { headers: this.getHeaders() })
+      .pipe(
+        tap((response) => console.log('Respuesta del servidor:', response)),
+        catchError(this.handleError),
+      );
   }
 
   private handleError(error: HttpErrorResponse) {
     console.error('Error completo:', error);
     let errorMessage = 'Ocurrió un error en la operación';
-    
+
     if (error.status === 404) {
       errorMessage = 'No se encontró el consultorio';
     }
-    
+
     return throwError(() => ({
       message: errorMessage,
       statusCode: error.status,
-      error: error
+      error: error,
     }));
   }
 
@@ -110,21 +115,22 @@ export class ConsultorioService {
     if (!id) {
       return throwError(() => new Error('ID de consultorio inválido'));
     }
-  
-    return this.http.delete(`${this.apiUrl}/${id}`, {
-      headers: this.getHeaders()
-    }).pipe(
-      tap(response => console.log('Respuesta del servidor:', response)),
-      catchError(error => {
-        console.error('Error al eliminar:', error);
-        const errorMessage = error.error?.message || 'Error al eliminar el consultorio';
-        return throwError(() => ({
-          success: false,
-          message: errorMessage
-        }));
+
+    return this.http
+      .delete(`${this.apiUrl}/${id}`, {
+        headers: this.getHeaders(),
       })
-    );
+      .pipe(
+        tap((response) => console.log('Respuesta del servidor:', response)),
+        catchError((error) => {
+          console.error('Error al eliminar:', error);
+          const errorMessage =
+            error.error?.message || 'Error al eliminar el consultorio';
+          return throwError(() => ({
+            success: false,
+            message: errorMessage,
+          }));
+        }),
+      );
   }
-  }
-
-
+}
