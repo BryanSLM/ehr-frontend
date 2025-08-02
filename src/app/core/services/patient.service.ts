@@ -89,4 +89,18 @@ export class PatientService {
       headers: this.getHeaders(),
     });
   }
+
+  changePassword(body: { currentPassword: string; newPassword: string }) {
+    const user = JSON.parse(localStorage?.getItem('user') || '{}');
+    if (!user) {
+      throw new Error('User not found in localStorage');
+    }
+    return this.http.put(
+      `${this.apiUrl}/change-password/${user.identification}`,
+      body,
+      {
+        headers: this.getHeaders(),
+      },
+    );
+  }
 }

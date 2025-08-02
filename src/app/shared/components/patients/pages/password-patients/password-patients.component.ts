@@ -17,6 +17,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { PatientService } from '../../../../../core/services/patient.service';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-password-patients',
@@ -35,6 +37,7 @@ import { MessageService } from 'primeng/api';
     ProgressBar,
     PasswordModule,
     ReactiveFormsModule,
+    Toast,
   ],
   providers: [MessageService],
 })
@@ -43,6 +46,7 @@ export class PasswordPatientsComponent implements OnInit {
   passwordStrength = { strength: 0, message: 'Muy débil' };
 
   constructor(
+    private patientsService: PatientService,
     private messageService: MessageService,
     private formBuilder: FormBuilder,
   ) {
@@ -55,6 +59,8 @@ export class PasswordPatientsComponent implements OnInit {
       { validators: this.passwordMatchValidator },
     );
   }
+
+  loadingForm = false;
 
   ngOnInit() {
     this.passwordForm.get('newPassword')?.valueChanges.subscribe((value) => {
@@ -93,7 +99,6 @@ export class PasswordPatientsComponent implements OnInit {
     if (s > 20) return '#fb923c';
     return '#f87171';
   }
-
   passwordMatchValidator: ValidatorFn = (
     form: AbstractControl,
   ): ValidationErrors | null => {
@@ -101,11 +106,43 @@ export class PasswordPatientsComponent implements OnInit {
     const confirmPassword = form.get('confirmPassword')?.value;
     return newPassword === confirmPassword ? null : { passwordMismatch: true };
   };
-
   submitForm() {
+    this.loadingForm = true;
+
     if (this.passwordForm.invalid) {
       this.passwordForm.markAllAsTouched();
+      this.loadingForm = false;
       return;
     }
+    this.patientsService
+      .changePassword({
+        currentPassword: this.passwordForm.value.currentPassword,
+        newPassword: this.passwordForm.value.newPassword,
+      })
+      .subscribe({
+        next: (response) => {
+          console.log('Contraseña cambiada:', response);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Registro exitoso',
+            detail: 'La contraseña ha sido cambiada correctamente',
+          });
+          this.loadingForm = false;
+          this.passwordForm.reset();
+          this.passwordStrength = { strength: 0, message: 'Muy débil' };
+        },
+        error: (error) => {
+          const message =
+            error.error?.message || 'Error al cambiar la contraseña';
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error al cambiar la contraseña',
+            detail: message,
+          });
+          console.error('Error al cambiar la contraseña:', error);
+          this.loadingForm = false;
+        },
+      });
   }
 }
