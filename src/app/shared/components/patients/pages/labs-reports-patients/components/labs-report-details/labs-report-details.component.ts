@@ -7,6 +7,7 @@ import {
 } from '../../../../../../../interfaces/labs-report.interface';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { PdfGeneratorService } from '../../../../../../../core/services/pdf-generator.service';
 
 @Component({
   selector: 'app-labs-report-details',
@@ -54,6 +55,7 @@ export class LabsReportDetailsComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly labsReportsPatientsService: LabsReportsPatientsService,
     private readonly router: Router,
+    private readonly pdfGeneratorService: PdfGeneratorService,
   ) {
     this.route.paramMap.subscribe((params) => {
       this.reportDetailsId = params.get('id');
@@ -83,6 +85,18 @@ export class LabsReportDetailsComponent implements OnInit {
     const mes = String(d.getMonth() + 1).padStart(2, '0');
     const anio = d.getFullYear();
     return `${dia}/${mes}/${anio}`;
+  }
+
+  generateLabReportPdf(): void {
+    this.pdfGeneratorService
+      .generateLabReportPdf(
+        this.labsReportDetails,
+        this.medico,
+        this.labsReport,
+      )
+      .then(() => {
+        // Handle successful PDF generation
+      });
   }
 
   goBack(): void {
