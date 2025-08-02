@@ -101,4 +101,11 @@ export class PasswordPatientsComponent implements OnInit {
     const confirmPassword = form.get('confirmPassword')?.value;
     return newPassword === confirmPassword ? null : { passwordMismatch: true };
   };
+
+  submitForm() {
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+  }
 }
