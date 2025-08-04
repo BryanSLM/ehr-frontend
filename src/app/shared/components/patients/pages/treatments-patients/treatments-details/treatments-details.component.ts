@@ -4,11 +4,13 @@ import { TreatmentsPatientsService } from '../treatments-patients.service';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TreatmentWithDetailsI } from '../../../../../../interfaces/treatments.interfaces';
+import { Skeleton } from 'primeng/skeleton';
+import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-treatments-details',
   standalone: true,
-  imports: [TableModule, ButtonModule],
+  imports: [TableModule, ButtonModule, Skeleton, Tag],
   templateUrl: './treatments-details.component.html',
   styleUrl: './treatments-details.component.css',
 })
@@ -24,6 +26,7 @@ export class TreatmentsDetailsComponent implements OnInit {
     medico: {},
     detallesTratamiento: [],
   };
+  loading = true;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -32,15 +35,18 @@ export class TreatmentsDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.treatmentsPatientsService.getTreatmentWithDetails(id).subscribe({
         next: (data) => {
           console.log('Detalles del tratamiento:', data);
           this.treatment = data;
+          this.loading = false;
         },
         error: (err) => {
           console.error('Error al cargar detalles del tratamiento', err);
+          this.loading = false;
         },
       });
     }

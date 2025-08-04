@@ -247,7 +247,6 @@ export const routes: Routes = [
           {
             path: '',
             component: LabsReportsPatientsComponent,
-            // component: LabsReportListComponent,
           },
           {
             path: 'details/:id',
