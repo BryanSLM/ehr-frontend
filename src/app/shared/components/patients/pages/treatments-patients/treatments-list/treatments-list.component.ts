@@ -6,11 +6,12 @@ import { PaginatorModule } from 'primeng/paginator';
 
 import { TreatmentsPatientsService } from '../treatments-patients.service';
 import { TreatmentI } from '../../../../../../interfaces/treatments.interfaces';
+import { Skeleton } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-treatments-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, PaginatorModule],
+  imports: [CommonModule, ButtonModule, PaginatorModule, Skeleton],
   templateUrl: './treatments-list.component.html',
   styleUrl: './treatments-list.component.css',
 })
@@ -19,6 +20,7 @@ export class TreatmentsListComponent implements OnInit {
   page = 0;
   rows = 6;
   first = 0;
+  loading = true;
 
   constructor(
     private readonly treatmentsPatientsService: TreatmentsPatientsService,
@@ -31,12 +33,15 @@ export class TreatmentsListComponent implements OnInit {
   }
 
   getTreatments(): void {
+    this.loading = true;
     this.treatmentsPatientsService.getTreatments().subscribe({
       next: (response) => {
         this.treatments = response;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching treatments:', error);
+        this.loading = false;
       },
     });
   }

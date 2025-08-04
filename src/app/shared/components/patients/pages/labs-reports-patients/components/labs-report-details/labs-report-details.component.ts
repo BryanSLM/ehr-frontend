@@ -8,11 +8,13 @@ import {
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { PdfGeneratorService } from '../../../../../../../core/services/pdf-generator.service';
+import { Skeleton } from 'primeng/skeleton';
+import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-labs-report-details',
   standalone: true,
-  imports: [TableModule, ButtonModule],
+  imports: [TableModule, ButtonModule, Skeleton, Tag],
   templateUrl: './labs-report-details.component.html',
   styleUrl: './labs-report-details.component.css',
 })
@@ -50,6 +52,7 @@ export class LabsReportDetailsComponent implements OnInit {
   };
   medico: any = {};
   reportDetailsId: string | null = null;
+  loading = true;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -66,14 +69,17 @@ export class LabsReportDetailsComponent implements OnInit {
   }
 
   getLabsReportDetails(id: string): void {
+    this.loading = true;
     this.labsReportsPatientsService.getLabsReportsWithDetails(id).subscribe({
       next: (response) => {
         this.labsReportDetails = response;
         this.labsReport = response.labsReport;
         this.medico = response.labsReport.medico;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching labs report details:', error);
+        this.loading = false;
       },
     });
   }

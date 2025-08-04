@@ -262,11 +262,10 @@ export const routes: Routes = [
       },
       {
         path: 'treatments',
-        component: TreatmentsPatientsComponent,
         children: [
           {
             path: '',
-            component: TreatmentsListComponent,
+            component: TreatmentsPatientsComponent,
           },
           {
             path: 'details/:id',
