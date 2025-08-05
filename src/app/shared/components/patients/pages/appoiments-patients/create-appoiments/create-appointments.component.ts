@@ -217,7 +217,7 @@ export class CreateAppointmentsComponent implements OnInit {
     this.loadingForm = true;
     console.log('PERFIl DE USUARIO:', this.user.paciente);
     this.appointmentForm.patchValue({
-      patientId: this.user.paciente[0].id,
+      patientId: this.user.paciente.id,
       identification: this.user.identification,
     });
     if (this.appointmentForm.invalid) {

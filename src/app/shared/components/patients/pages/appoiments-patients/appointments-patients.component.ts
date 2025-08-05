@@ -11,6 +11,8 @@ import { PatientService } from '../../../../../core/services/patient.service';
 import { Skeleton } from 'primeng/skeleton';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
+import { CitasService } from '../../../../../core/services/cita.service';
+import { Toast } from 'primeng/toast';
 @Component({
   selector: 'app-appointments-patients',
   standalone: true,
@@ -27,6 +29,7 @@ import { RouterModule } from '@angular/router';
     Tag,
     Skeleton,
     RouterModule,
+    Toast,
   ],
   providers: [MessageService],
 })
@@ -42,13 +45,19 @@ export class AppointmentsPatientsComponent implements OnInit {
     fecha: string;
     hora: string;
     estado: string;
+    id: number;
   }[] = [];
   loading = true;
+  loadingButton = false;
   constructor(
     private patientsService: PatientService,
     private messageService: MessageService,
+    private appointmentsService: CitasService,
   ) {}
   ngOnInit(): void {
+    this.getAppointments();
+  }
+  getAppointments() {
     this.loading = true;
     this.patientsService.getAppointmentByIdentification().subscribe({
       next: (data) => {
@@ -67,6 +76,31 @@ export class AppointmentsPatientsComponent implements OnInit {
           summary: 'Hubo un problema al cargar las citas',
           detail: message,
         });
+      },
+    });
+  }
+
+  updateStateAppointment(id: number) {
+    this.loadingButton = true;
+    this.appointmentsService.updateEstadoCita(id, 'cancelado').subscribe({
+      next: (data) => {
+        console.log('Estado de citas actualizado:', data);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Citas actualizadas',
+          detail: 'El estado de las citas ha sido actualizado correctamente.',
+        });
+        this.getAppointments();
+        this.loadingButton = false;
+      },
+      error: (error) => {
+        console.error('Error updating appointment state:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al actualizar citas',
+          detail: 'Hubo un problema al actualizar el estado de las citas.',
+        });
+        this.loadingButton = false;
       },
     });
   }
