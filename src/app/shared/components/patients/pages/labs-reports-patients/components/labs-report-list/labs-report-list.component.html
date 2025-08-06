@@ -49,7 +49,7 @@
             {{ formatDate(report.fecha_agendamiento) }}
           </p>
           <p>
-            <strong>Medico solicitante:</strong> {{ report.medico.username }}
+            <strong>Medico solicitante:</strong> {{ report.medico.nombres }} {{ report.medico.apellidos }}
           </p>
           <p><strong>Estado:</strong> {{ report.estado }}</p>
           @if (report.fecha_reporte) {
