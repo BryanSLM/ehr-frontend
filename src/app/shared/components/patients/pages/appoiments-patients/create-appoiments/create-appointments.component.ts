@@ -23,6 +23,7 @@ import dayjs from 'dayjs';
 import { RouterModule } from '@angular/router';
 import { formatearFecha } from '../../../../../utils/date.utils';
 import { InputTextModule } from 'primeng/inputtext';
+import { Dialog } from 'primeng/dialog';
 @Component({
   selector: 'app-create-appointments',
   standalone: true,
@@ -43,6 +44,7 @@ import { InputTextModule } from 'primeng/inputtext';
     ReactiveFormsModule,
     RouterModule,
     InputTextModule,
+    Dialog,
   ],
   providers: [MessageService],
 })
@@ -64,6 +66,7 @@ export class CreateAppointmentsComponent implements OnInit {
   loading = true;
   registerForm: FormGroup = new FormGroup({});
   appointmentForm: FormGroup = new FormGroup({});
+  visible = false;
 
   constructor(
     private patientsService: PatientService,
@@ -264,6 +267,7 @@ export class CreateAppointmentsComponent implements OnInit {
         },
       });
   }
+
   nextStep() {
     // if (this.currentStep == 0) {
     //   return;
