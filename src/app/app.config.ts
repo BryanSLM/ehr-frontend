@@ -11,6 +11,7 @@ import { authInterceptor } from './core/interceptor/auth.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { definePreset } from '@primeng/themes';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -46,6 +47,6 @@ export const appConfig: ApplicationConfig = {
           lightModeSelector: 'html[data-theme="light"]',
         },
       },
-    }),
+    }), provideCharts(withDefaultRegisterables()),
   ],
 };

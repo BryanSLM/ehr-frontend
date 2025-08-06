@@ -421,4 +421,10 @@ export class CitasService {
         }),
       );
   }
+
+  getAppointmentsByMonth() {
+    return this.http.get<ApiResponse<any[]>>(
+      `${this.apiUrl}/citas/citas-por-mes`,
+    );
+  }
 }

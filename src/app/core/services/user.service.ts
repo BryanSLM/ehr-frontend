@@ -185,4 +185,8 @@ export class UserService {
     }
     return null;
   }
+
+  getDashboardData(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/users/dashboard-data`);
+  }
 }
