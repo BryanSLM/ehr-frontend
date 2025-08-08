@@ -1,18 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SidebarModule } from 'primeng/sidebar';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { AvatarModule } from 'primeng/avatar';
-import { StyleClassModule } from 'primeng/styleclass';
-import { CommonModule } from '@angular/common';
-import { OverlayBadgeModule } from 'primeng/overlaybadge';
-import { Tag } from 'primeng/tag';
-import { PatientService } from '../../../../../../core/services/patient.service';
-import { Skeleton } from 'primeng/skeleton';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Dialog } from 'primeng/dialog';
+import { PatientService } from '../../../core/services/patient.service';
+import { CatalogosService } from '../../../core/services/catalogos.service';
 import { MessageService } from 'primeng/api';
-import { DatePickerModule } from 'primeng/datepicker';
-import { SelectModule } from 'primeng/select';
-import { CatalogosService } from '../../../../../../core/services/catalogos.service';
 import {
   FormBuilder,
   FormGroup,
@@ -20,36 +10,45 @@ import {
   Validators,
 } from '@angular/forms';
 import dayjs from 'dayjs';
-import { RouterModule } from '@angular/router';
-import { formatearFecha } from '../../../../../utils/date.utils';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { StyleClassModule } from 'primeng/styleclass';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { Skeleton } from 'primeng/skeleton';
+import { DatePickerModule } from 'primeng/datepicker';
+import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
-import { Dialog } from 'primeng/dialog';
+import { CitasService } from '../../../core/services/cita.service';
+
 @Component({
-  selector: 'app-create-appointments',
+  selector: 'app-reschedule-appointment',
   standalone: true,
-  templateUrl: './create-appointments.component.html',
-  styleUrl: './create-appointments.component.css',
   imports: [
-    SidebarModule,
+    Dialog,
+    CommonModule,
     ButtonModule,
     RippleModule,
-    AvatarModule,
     StyleClassModule,
     CommonModule,
     OverlayBadgeModule,
-    Tag,
+    // Tag,
     Skeleton,
     DatePickerModule,
     SelectModule,
     ReactiveFormsModule,
-    RouterModule,
+    // RouterModule,
     InputTextModule,
     Dialog,
   ],
-  providers: [MessageService],
+  templateUrl: './reschedule-appointment.component.html',
+  // styleUrls: ['./reschedule-appointment.component.css'],
 })
-export class CreateAppointmentsComponent implements OnInit {
-  formattedDate = formatearFecha;
+export class RescheduleAppointmentComponent implements OnInit {
+  @Input() visible = false;
+  @Input() idAppointment = undefined;
+  @Output() visibleChange = new EventEmitter<boolean>();
+
   user: any;
   appointments: {
     doctor: {
@@ -65,14 +64,12 @@ export class CreateAppointmentsComponent implements OnInit {
   }[] = [];
   appointmentForm: FormGroup = new FormGroup({});
   loading = true;
-  registerForm: FormGroup = new FormGroup({});
-  visible = false;
-
   constructor(
     private patientsService: PatientService,
     private catalogosService: CatalogosService,
     private messageService: MessageService,
     private formBuilder: FormBuilder,
+    private appointmentsService: CitasService,
   ) {
     this.appointmentForm = this.formBuilder.group({
       date: ['', [Validators.required]],
@@ -84,7 +81,13 @@ export class CreateAppointmentsComponent implements OnInit {
       identification: ['', [Validators.required]],
     });
   }
-
+  ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.getSpecialties();
+    }
+    this.getAppointmentById();
+    console.log('ID de la cita:', this.idAppointment);
+  }
   appointmentsAvailable: {
     id: string;
     consultorioId: string;
@@ -108,36 +111,41 @@ export class CreateAppointmentsComponent implements OnInit {
   currentStep = 0;
   loadingForm = false;
 
-  ngOnInit(): void {
-    this.loading = true;
-    this.appointmentForm.patchValue({ date: new Date() });
-    if (typeof window !== 'undefined') {
-      this.getSpecialties();
-    }
-    this.user = this.profile;
-    this.patientsService.getAppointmentByIdentification().subscribe({
-      next: (data) => {
-        this.appointments = data.data;
-        console.log('Citas:', this.appointments);
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching appointments:', error);
-        this.loading = false;
-
-        const message = error.error?.message || 'Error al registrar usuario';
-
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Hubo un problema al cargar las citas',
-          detail: message,
-        });
-      },
-    });
-  }
   get profile() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user;
+  }
+  getAppointmentById() {
+    this.loadingForm = true;
+    if (!this.idAppointment) {
+      console.error('No se proporcionó un ID de cita');
+      return;
+    }
+    this.appointmentsService.getCitaById(this.idAppointment).subscribe({
+      next: (data: any) => {
+        console.log('Cita:', data);
+        // this.appointments = data;
+        this.appointmentForm.patchValue({
+          date: dayjs(data.fecha, 'YYYY-MM-DD').toDate(),
+          time: data.hora.slice(0, 5),
+          doctorId: data.doctor.id,
+          specialty: data.doctor.especialidades?.id,
+          consultorio: data.consultorioId,
+        });
+        this.consultarHorarioDisponible();
+        this.loadingForm = false;
+      },
+      error: (error) => {
+        console.error('Error fetching appointment:', error);
+        const message = error.error?.message || 'Error al cargar la cita';
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Hubo un problema al cargar la cita',
+          detail: message,
+        });
+        this.loadingForm = false;
+      },
+    });
   }
   getSpecialties() {
     this.catalogosService.getEspecialidades().subscribe({

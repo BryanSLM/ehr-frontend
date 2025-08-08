@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { CitasService } from '../../../../../core/services/cita.service';
 import { Toast } from 'primeng/toast';
 import { Dialog } from 'primeng/dialog';
+import { RescheduleAppointmentComponent } from '../../../reschedule-appointment/reschedule-appointment.component';
 @Component({
   selector: 'app-appointments-patients',
   standalone: true,
@@ -32,6 +33,7 @@ import { Dialog } from 'primeng/dialog';
     RouterModule,
     Toast,
     Dialog,
+    RescheduleAppointmentComponent,
   ],
   providers: [MessageService],
 })
@@ -52,7 +54,8 @@ export class AppointmentsPatientsComponent implements OnInit {
   loading = true;
   loadingButton = false;
   loadingForm = false;
-  visible = false;
+  visible = true;
+  idAppointment: undefined | number = undefined;
 
   constructor(
     private patientsService: PatientService,
@@ -109,9 +112,11 @@ export class AppointmentsPatientsComponent implements OnInit {
       },
     });
   }
-  rescheduleAppointment() {
-    this.loadingButton = true;
+  rescheduleAppointment(idAppointment: number) {
+    // this.idSpecialty =
+    // this.loadingButton = true;
     this.visible = true;
+    this.idAppointment = idAppointment;
     // this.appointmentForm.patchValue({
     //   patientId: this.user.paciente.id,
     //   identification: this.user.identification,

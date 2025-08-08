@@ -1,0 +1,179 @@
+<p-dialog
+  header="Reagendar Cita"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '70rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [maximizable]="true"
+  (onHide)="visibleChange.emit(false)"
+>
+  <div class="w-full border-2">
+    @if (loadingForm) {
+      <div class="flex justify-content-between align-items-center my-4">
+        <p-skeleton width="30rem" height="2rem" class="" />
+        <div class="flex gap-4">
+          <p-skeleton width="5rem" height="2rem" class="" />
+          <p-skeleton width="5rem" height="2rem" class="" />
+        </div>
+      </div>
+      <div class="bg-gray-500" style="height: 0.5px"></div>
+      <div
+        class="mt-4 flex flex-column justify-content-center align-items-center"
+        style="height: 75%"
+      >
+        <svg
+          class="spin h-4rem w-4rem text-blue-500"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 640 640"
+          fill="currentColor"
+        >
+          <path
+            d="M286.7 96.1C291.7 113 282.1 130.9 265.2 135.9C185.9 159.5 128.1 233 128.1 320C128.1 426 214.1 512 320.1 512C426.1 512 512.1 426 512.1 320C512.1 233.1 454.3 159.6 375 135.9C358.1 130.9 348.4 113 353.5 96.1C358.6 79.2 376.4 69.5 393.3 74.6C498.9 106.1 576 204 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320C64 204 141.1 106.1 246.9 74.6C263.8 69.6 281.7 79.2 286.7 96.1z"
+          />
+        </svg>
+        <p class="text-blue-500">Cargando...</p>
+      </div>
+    } @else {
+      <form [formGroup]="appointmentForm" class="flex w-full">
+        <div class="flex justify-content-between w-full h-full p-4">
+          <div class="flex flex-column">
+            <label class="mb-2 font-bold" for="birthdate"
+              >Selecciona la fecha:</label
+            >
+            <p-datepicker
+              formControlName="date"
+              [inline]="true"
+              styleClass=" custom-datepicker"
+              (onSelect)="consultarHorarioDisponible()"
+            />
+          </div>
+
+          <div class="flex flex-column items-center" style="width: 60%">
+            <div class="flex align-items-center gap-4 w-full">
+              <label
+                class="text-3xl text-blue-500 font-bold"
+                for="identification"
+                >Especialidad:</label
+              >
+              <p-select
+                optionLabel="name"
+                [optionValue]="'id'"
+                [options]="specialties"
+                placeholder="Seleccione una especialidad"
+                class=""
+                formControlName="specialty"
+                disabled="true"
+              />
+            </div>
+            @if (this.appointmentForm.get('specialty')?.value) {
+              @if (appointmentsAvailable.length > 0) {
+                <div *ngFor="let item of appointmentsAvailable">
+                  <div class="">
+                    <p class="text-2xl mb-0">
+                      DR. {{ item.consultorio.doctor.nombres.toUpperCase() }}
+                      {{ item.consultorio.doctor.apellidos.toUpperCase() }}
+                    </p>
+                  </div>
+                  <div
+                    class="w-full bg-blue-500"
+                    style="height: 1px; background-color: rgb(196, 196, 196)"
+                  ></div>
+                  <div class="">
+                    <p class="">Horarios de atención</p>
+                    {{ appointmentForm.get('time')?.value }}
+                    <div class="flex flex-wrap gap-4 ml-4">
+                      <div
+                        *ngFor="let times of item.intervalos"
+                        [ngClass]="{
+                          'bg-blue-500 text-white':
+                            times === appointmentForm.get('time')?.value,
+                          'hover:bg-blue-200':
+                            times !== appointmentForm.get('time')?.value,
+                        }"
+                        class="border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
+                        tabindex="0"
+                        role="button"
+                        (click)="
+                          seleccionarHora(
+                            times,
+                            item.consultorio.doctor.id,
+                            item.consultorio.id
+                          )
+                        "
+                        (keydown.enter)="
+                          seleccionarHora(
+                            times,
+                            item.consultorio.doctor.id,
+                            item.consultorio.id
+                          )
+                        "
+                        (keydown.space)="
+                          seleccionarHora(
+                            times,
+                            item.consultorio.doctor.id,
+                            item.consultorio.id
+                          )
+                        "
+                      >
+                        {{ times }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              } @else {
+                <div class="w-full flex align-items-center flex-column">
+                  <div
+                    class="flex align-items-center justify-content-center"
+                    style="width: 90%"
+                  >
+                    <img
+                      src="/assets/no-available.png"
+                      alt="Logo"
+                      class="h-20rem"
+                    />
+                  </div>
+
+                  <p class="text-4xl text-blue-500 font-bold mb-0">
+                    No hay doctores disponibles
+                  </p>
+                </div>
+              }
+            } @else {
+              <div
+                class="w-full flex align-items-center justify-content-center flex-column"
+              >
+                <div
+                  class="overflow-hidden w-30rem flex justify-content-center"
+                >
+                  <div
+                    class="bg-cover bg-center border-primary-500 border-round h-20rem"
+                    style="
+                      background-image: url('/assets/waiting.png');
+                      width: 80%;
+                    "
+                  ></div>
+                </div>
+
+                <p class="text-4xl text-center text-blue-500 font-bold mb-0">
+                  Seleccione una especialidad
+                </p>
+              </div>
+            }
+            <div class="flex justify-content-end gap-2 mt-4 px-4">
+              <p-button
+                *ngIf="currentStep > 0"
+                variant="outlined"
+                styleClass="w-15rem text-base"
+                label="Atrás"
+              />
+              <p-button styleClass="w-15rem text-base" label="Continuar" />
+            </div>
+            <!-- <div class="border-2">
+                  <p-button label="Continuar" (click)="aceptarHorario()" />
+                </div> -->
+          </div>
+        </div>
+      </form>
+    }
+  </div>
+</p-dialog>
