@@ -40,14 +40,20 @@
             <label class="mb-2 font-bold" for="birthdate"
               >Selecciona la fecha:</label
             >
+            <input
+              id="fecha"
+              pInputText
+              class="mb-2"
+              readonly
+              [value]="formatearFecha(appointmentForm.get('date')?.value)"
+            />
             <p-datepicker
               formControlName="date"
               [inline]="true"
-              styleClass=" custom-datepicker"
+              styleClass="custom-datepicker"
               (onSelect)="consultarHorarioDisponible()"
             />
           </div>
-
           <div class="flex flex-column items-center" style="width: 60%">
             <div class="flex align-items-center gap-4 w-full">
               <label
@@ -79,7 +85,6 @@
                   ></div>
                   <div class="">
                     <p class="">Horarios de atención</p>
-                    {{ appointmentForm.get('time')?.value }}
                     <div class="flex flex-wrap gap-4 ml-4">
                       <div
                         *ngFor="let times of item.intervalos"

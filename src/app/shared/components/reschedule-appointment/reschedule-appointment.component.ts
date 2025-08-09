@@ -20,6 +20,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { CitasService } from '../../../core/services/cita.service';
+import { formatearFecha } from '../../utils/date.utils';
 
 @Component({
   selector: 'app-reschedule-appointment',
@@ -46,9 +47,10 @@ import { CitasService } from '../../../core/services/cita.service';
 })
 export class RescheduleAppointmentComponent implements OnInit {
   @Input() visible = false;
-  @Input() idAppointment = undefined;
+  @Input() idAppointment: undefined | number = undefined;
   @Output() visibleChange = new EventEmitter<boolean>();
-
+  formatearFecha = formatearFecha;
+  today: Date = new Date();
   user: any;
   appointments: {
     doctor: {
@@ -133,6 +135,7 @@ export class RescheduleAppointmentComponent implements OnInit {
           consultorio: data.consultorioId,
         });
         this.consultarHorarioDisponible();
+        this.appointmentForm.get('specialty')?.disable();
         this.loadingForm = false;
       },
       error: (error) => {
@@ -159,6 +162,18 @@ export class RescheduleAppointmentComponent implements OnInit {
     });
   }
   consultarHorarioDisponible() {
+    if (
+      dayjs(this.appointmentForm.get('date')?.value).isBefore(this.today, 'day')
+    ) {
+      this.appointmentForm.get('date')?.setErrors({ invalid: true });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al seleccionar fecha',
+        detail: 'La fecha seleccionada debe ser mayor a la fecha actual',
+      });
+      console.log('La fecha seleccionada debe ser futura');
+      return;
+    }
     if (!this.appointmentForm.get('specialty')?.value) {
       console.log('Debe seleccionar una especialidad');
       return;

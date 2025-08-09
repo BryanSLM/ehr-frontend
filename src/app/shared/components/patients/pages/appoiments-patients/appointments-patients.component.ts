@@ -54,7 +54,7 @@ export class AppointmentsPatientsComponent implements OnInit {
   loading = true;
   loadingButton = false;
   loadingForm = false;
-  visible = true;
+  visible = false;
   idAppointment: undefined | number = undefined;
 
   constructor(
