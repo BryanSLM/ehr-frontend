@@ -32,29 +32,30 @@ interface Cita {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './citas-list.component.html',
-  styleUrls: ['./citas-list.component.css']
+  styleUrls: ['./citas-list.component.css'],
 })
 export class CitasListComponent implements OnInit {
   citas: Cita[] = [];
   citasSinFiltrar: Cita[] = [];
   loading = false;
   error = '';
-  filtroFecha: string = '';
-  filtroEstado: string = '';
-  filtroBusqueda: string = '';
+  filtroFecha = '';
+  filtroEstado = '';
+  filtroBusqueda = '';
 
   constructor(
     private citaService: CitasService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
-    this.cargarCitas();
+    if (typeof window !== 'undefined') {
+      this.cargarCitas();
+    }
   }
 
   cargarCitas() {
     this.loading = true;
-
 
     this.citaService.getAllCitas().subscribe({
       next: (citas: Cita[]) => {
@@ -67,7 +68,7 @@ export class CitasListComponent implements OnInit {
         console.error('Error al cargar citas:', error);
         this.error = error.message || 'Error al cargar las citas';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -97,7 +98,7 @@ export class CitasListComponent implements OnInit {
           console.error('Error:', error);
           // Opcional: mostrar mensaje de error al usuario
           alert('Error al cancelar la cita: ' + error.message);
-        }
+        },
       });
     }
   }
@@ -107,8 +108,10 @@ export class CitasListComponent implements OnInit {
     // Filtro por búsqueda (nombre o cédula)
     if (this.filtroBusqueda.trim()) {
       const busqueda = this.filtroBusqueda.toLowerCase().trim();
-      citasFiltradas = citasFiltradas.filter(cita => {
-        const nombreCompleto = this.getNombreCompletoPaciente(cita.paciente).toLowerCase();
+      citasFiltradas = citasFiltradas.filter((cita) => {
+        const nombreCompleto = this.getNombreCompletoPaciente(
+          cita.paciente,
+        ).toLowerCase();
         const cedula = cita.paciente?.cedula?.toLowerCase() || '';
         return nombreCompleto.includes(busqueda) || cedula.includes(busqueda);
       });
@@ -116,7 +119,7 @@ export class CitasListComponent implements OnInit {
 
     // Filtro por fecha
     if (this.filtroFecha) {
-      citasFiltradas = citasFiltradas.filter(cita => {
+      citasFiltradas = citasFiltradas.filter((cita) => {
         const fechaCita = new Date(cita.fecha).toISOString().split('T')[0];
         return fechaCita === this.filtroFecha;
       });
@@ -124,8 +127,8 @@ export class CitasListComponent implements OnInit {
 
     // Filtro por estado
     if (this.filtroEstado) {
-      citasFiltradas = citasFiltradas.filter(cita => 
-        cita.estado === this.filtroEstado
+      citasFiltradas = citasFiltradas.filter(
+        (cita) => cita.estado === this.filtroEstado,
       );
     }
 
