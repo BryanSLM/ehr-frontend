@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Deploy ehr-frontend to VPS
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,10 +19,10 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_KEY }}
-          source: .
-          target: ~/ehr-frontend
+          source: "."
+          target: "~/ehr-frontend"
 
-      - name: SSH and run Docker
+      - name: SSH and run Docker commands
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -32,9 +33,9 @@ jobs:
             docker stop ehr-frontend || true
             docker rm ehr-frontend || true
             docker build -t ehr-frontend .
+            docker network create ehr-net || true
             docker run -d \
               --name ehr-frontend \
               --network ehr-net \
               -p 80:80 \
               ehr-frontend
-
