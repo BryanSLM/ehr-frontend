@@ -105,7 +105,9 @@ export class RegisterFormComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.getIdentificationTypes();
+    if (typeof window !== 'undefined') {
+      this.getIdentificationTypes();
+    }
   }
 
   getIdentificationTypes() {

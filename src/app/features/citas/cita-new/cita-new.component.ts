@@ -108,10 +108,12 @@ export class CitaNewComponent implements OnInit {
 
   ngOnInit() {
     this.appointmentForm.patchValue({ date: new Date() });
+
+    // Solo ejecuta en navegador
     if (typeof window !== 'undefined') {
       this.getSpecialties();
+      this.getIdentificationTypes();
     }
-    this.getIdentificationTypes();
   }
 
   nextStep() {
