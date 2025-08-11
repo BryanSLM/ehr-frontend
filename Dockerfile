@@ -7,9 +7,9 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 COPY . .
-RUN npm run build -- --prod
+RUN npm run build --prod
 
-# Etapa 2: Servir con Nginx
+# Etapa 2: Servir com Nginx
 FROM nginx:alpine
 
 COPY --from=build /app/dist/ehr-frontend /usr/share/nginx/html
