@@ -12,7 +12,7 @@ RUN npm run build --prod
 # Etapa 2: Servir con Nginx
 FROM nginx:alpine
 
-COPY --from=build /usr/src/app/dist/ehr-frontend /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/ehr-frontend/browser /usr/share/nginx/html
 
 # Copiar el archivo de configuración de NGINX
 COPY nginx.conf /etc/nginx/conf.d/default.conf

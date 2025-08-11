@@ -37,5 +37,5 @@ jobs:
             docker run -d \
               --name ehr-frontend \
               --network ehr-net \
-              -p 8080:80 \
+              -p 80:80 \
               ehr-frontend
