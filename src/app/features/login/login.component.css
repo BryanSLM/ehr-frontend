@@ -2,7 +2,6 @@
   display: flex;
   min-height: 100vh;
   background: white;
-
 }
 
 .left-panel {
@@ -18,7 +17,6 @@
   /* Ajuste del tamaño del panel */
   clip-path: ellipse(95% 80% at 5% 50%);
   z-index: 1; /* Asegúrate de que el panel izquierdo esté por encima */
-
 }
 
 .left-panel-content {
@@ -48,7 +46,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(32, 28, 117);
+  background: #3b82f6;
   margin-top: 3em;
   margin-bottom: 3em;
   right: 6em;
@@ -91,7 +89,7 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   font-size: 0.9em;
   color: #333;
 }
@@ -101,15 +99,17 @@
   padding: 0.7rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 0.880rem;
+  font-size: 0.88rem;
   color: #686e73;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease; /* Transición suave */
 }
 
 .form-control:focus {
   border-color: #007bff; /* Cambia el color del borde cuando está enfocado */
   outline: none; /* Elimina el borde azul predeterminado del navegador */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);   /*Añade un efecto de sombra opcional  */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /*Añade un efecto de sombra opcional  */
 }
 
 .form-control:hover {
@@ -139,7 +139,12 @@
 .btn-primary:hover {
   background-color: rgb(153, 11, 26);
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Aumenta sutilmente la sombra */
-  border-color: rgba(255, 255, 255, 0.2); /* Un toque de borde visible en hover */
+  border-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Un toque de borde visible en hover */
   transform: translateY(-2px); /* Sutil efecto de elevación */
 }
 
@@ -149,10 +154,9 @@
 }
 
 .forgot-password-link {
-  color: #047CDB;
+  color: #047cdb;
   text-decoration: none;
   font-size: 0.9rem;
-  
 }
 
 .forgot-password-link:hover {
@@ -172,7 +176,7 @@ h2 {
   font-weight: 700;
   font-size: 1.6em;
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   padding-top: 0.2em;
   padding-bottom: 0.6em;
 }
@@ -187,10 +191,9 @@ h2 {
   font-size: 1.4em; /* Aumenta el tamaño del texto */
   color: rgb(193, 14, 33);
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   font-weight: bold;
   text-transform: uppercase;
-
 }
 
 .input-group {
@@ -215,7 +218,4 @@ h2 {
 .eye-icon {
   width: 15px; /* Ajusta el tamaño según tu preferencia */
   height: auto;
-  
 }
-
-

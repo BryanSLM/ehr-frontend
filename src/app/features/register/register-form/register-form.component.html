@@ -190,11 +190,7 @@
       </div>
 
       <div class="flex flex-column col-4 mt-4">
-        <button
-          pButton
-          class="text-white font-medium cursor-pointer"
-          style="background-color: #201c75; border: 1px solid #201c75"
-        >
+        <button pButton class="text-white font-medium cursor-pointer">
           {{ registerButtonNextStep }}
         </button>
       </div>
@@ -350,12 +346,30 @@
           }
         }
       </div>
-
+      <div class="flex flex-column col-12 mt-2">
+        <label class="flex align-items-center">
+          <input
+            type="checkbox"
+            formControlName="conditionsAccepted"
+            name="conditionsAccepted"
+          />
+          <span class="ml-2">Acepto los términos y condiciones</span>
+        </label>
+        @if (
+          registerDetailsForm.controls['conditionsAccepted'].errors?.[
+            'requiredTrue'
+          ] && formSubmitted
+        ) {
+          <small style="color: red"
+            >Debes aceptar los términos y condiciones</small
+          >
+        }
+      </div>
       <div class="flex flex-column col-4 mt-4">
         <button
           pButton
           class="text-white font-medium cursor-pointer"
-          style="background-color: #201c75; border: 1px solid #201c75"
+          [disabled]="!registerDetailsForm.controls['conditionsAccepted'].value"
         >
           {{ registerButtonMessage }}
         </button>

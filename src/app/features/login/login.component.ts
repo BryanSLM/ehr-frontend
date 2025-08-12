@@ -4,17 +4,18 @@ import { AuthService } from '../../core/services/auth.service';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonModule],
 })
 export class LoginComponent {
   formData = {
-    username: '',
+    identification: '',
     password: '',
     selectedRole: '',
   };
@@ -41,7 +42,7 @@ export class LoginComponent {
   }
   login() {
     // Validación de campos
-    if (!this.formData.username || !this.formData.password) {
+    if (!this.formData.identification || !this.formData.password) {
       this.errorMessage = 'Por favor complete todos los campos';
       return;
     }
@@ -50,7 +51,7 @@ export class LoginComponent {
     this.errorMessage = '';
 
     this.authService
-      .login(this.formData.username, this.formData.password)
+      .login(this.formData.identification, this.formData.password)
       .subscribe({
         next: (response) => {
           if (!response.user.active) {

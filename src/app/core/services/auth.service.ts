@@ -12,6 +12,7 @@ interface User {
   role: string;
   active: boolean;
   patients: any;
+  identification: any;
 }
 
 interface LoginResponse {
@@ -32,10 +33,10 @@ export class AuthService {
     private router: Router,
   ) {}
 
-  login(username: string, password: string): Observable<LoginResponse> {
+  login(identification: string, password: string): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/auth/login`, {
-        username,
+        identification,
         password,
       })
       .pipe(
