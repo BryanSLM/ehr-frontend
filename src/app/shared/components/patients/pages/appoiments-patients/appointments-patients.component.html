@@ -1,6 +1,11 @@
 <div class="w-full h-full">
   <p-toast />
-  <app-reschedule-appointment *ngIf="visible" [(visible)]="visible" [idAppointment]="idAppointment"  (appointmentUpdated)="getAppointments()"></app-reschedule-appointment>
+  <app-reschedule-appointment
+    *ngIf="visible"
+    [(visible)]="visible"
+    [idAppointment]="idAppointment"
+    (appointmentUpdated)="getAppointments()"
+  ></app-reschedule-appointment>
   <div class="flex w-full">
     <div class="flex flex-column h-full" style="width: 80%">
       <p class="text-5xl font-bold mb-0" style="color: #3b82f6">
@@ -77,7 +82,7 @@
           border-right: 0;
           border-bottom: 0;
         "
-        *ngFor="let appointment of appointments"
+        *ngFor="let appointment of  pagedAppointments"
       >
         <div
           class="col flex flex-column justify-content-center align-items-start border-right-2 border-blue-300"
@@ -135,9 +140,21 @@
             [loading]="loadingButton"
             (click)="updateStateAppointment(appointment.id)"
           />
-          <p-button label="Reagendar cita" size="small" [loading]="loadingButton" (click)="rescheduleAppointment(appointment.id)" />
+          <p-button
+            label="Reagendar cita"
+            size="small"
+            [loading]="loadingButton"
+            (click)="rescheduleAppointment(appointment.id)"
+          />
         </div>
       </div>
+
+      <p-paginator
+        [rows]="rows"
+        [totalRecords]="appointments?.length"
+        [first]="first"
+        (onPageChange)="onPageChange($event)"
+      ></p-paginator>
     } @else {
       <div class="flex flex-column align-items-center">
         <img src="/assets/not-documents.png" alt="Logo" class="w-30rem" />

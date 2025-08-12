@@ -15,6 +15,7 @@ import { CitasService } from '../../../../../core/services/cita.service';
 import { Toast } from 'primeng/toast';
 import { Dialog } from 'primeng/dialog';
 import { RescheduleAppointmentComponent } from '../../../reschedule-appointment/reschedule-appointment.component';
+import { PaginatorModule } from 'primeng/paginator';
 @Component({
   selector: 'app-appointments-patients',
   standalone: true,
@@ -34,6 +35,7 @@ import { RescheduleAppointmentComponent } from '../../../reschedule-appointment/
     Toast,
     Dialog,
     RescheduleAppointmentComponent,
+    PaginatorModule,
   ],
   providers: [MessageService],
 })
@@ -56,7 +58,9 @@ export class AppointmentsPatientsComponent implements OnInit {
   loadingForm = false;
   visible = false;
   idAppointment: undefined | number = undefined;
-
+  page = 0;
+  rows = 4;
+  first = 0;
   constructor(
     private patientsService: PatientService,
     private messageService: MessageService,
@@ -112,14 +116,19 @@ export class AppointmentsPatientsComponent implements OnInit {
       },
     });
   }
+  get pagedAppointments() {
+    const start = this.page * this.rows;
+    return this.appointments.slice(start, start + this.rows);
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.rows = event.rows;
+    this.first = this.page * this.rows;
+  }
+
   rescheduleAppointment(idAppointment: number) {
-    // this.idSpecialty =
-    // this.loadingButton = true;
     this.visible = true;
     this.idAppointment = idAppointment;
-    // this.appointmentForm.patchValue({
-    //   patientId: this.user.paciente.id,
-    //   identification: this.user.identification,
-    // });
   }
 }

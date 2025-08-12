@@ -268,6 +268,11 @@ export class CreateAppointmentsComponent implements OnInit {
       });
   }
 
+  resetForm() {
+    this.appointmentForm.reset();
+    this.currentStep = 0;
+  }
+
   nextStep() {
     // if (this.currentStep == 0) {
     //   return;
