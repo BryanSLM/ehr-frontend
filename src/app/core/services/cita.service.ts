@@ -423,8 +423,8 @@ export class CitasService {
   }
 
   rescheduleAppointment(idAppointment: number, body: any): Observable<any> {
-    return this.http.post(
-      `${this.apiUrl}/reschedule-appointment/${idAppointment}`,
+    return this.http.put(
+      `${this.citasUrl}/reschedule-appointment/${idAppointment}`,
       body,
     );
   }

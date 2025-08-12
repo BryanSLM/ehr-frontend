@@ -1,6 +1,6 @@
 <div class="w-full h-full">
   <p-toast />
-  <app-reschedule-appointment *ngIf="visible" [(visible)]="visible" [idAppointment]="idAppointment"></app-reschedule-appointment>
+  <app-reschedule-appointment *ngIf="visible" [(visible)]="visible" [idAppointment]="idAppointment"  (appointmentUpdated)="getAppointments()"></app-reschedule-appointment>
   <div class="flex w-full">
     <div class="flex flex-column h-full" style="width: 80%">
       <p class="text-5xl font-bold mb-0" style="color: #3b82f6">

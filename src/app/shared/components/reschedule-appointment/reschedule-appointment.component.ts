@@ -48,7 +48,9 @@ import { formatearFecha } from '../../utils/date.utils';
 export class RescheduleAppointmentComponent implements OnInit {
   @Input() visible = false;
   @Input() idAppointment: undefined | number = undefined;
+  // @Input() getAppointments!: () => void;
   @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() appointmentUpdated = new EventEmitter<void>();
   formatearFecha = formatearFecha;
   today: Date = new Date();
   user: any;
@@ -65,7 +67,7 @@ export class RescheduleAppointmentComponent implements OnInit {
     estado: string;
   }[] = [];
   appointmentForm: FormGroup = new FormGroup({});
-  loading = true;
+  loading = false;
   constructor(
     private patientsService: PatientService,
     private catalogosService: CatalogosService,
@@ -81,9 +83,11 @@ export class RescheduleAppointmentComponent implements OnInit {
       consultorio: ['', [Validators.required]],
       patientId: ['', [Validators.required]],
       identification: ['', [Validators.required]],
+      id: ['', [Validators.required]],
     });
   }
   ngOnInit(): void {
+    this.user = this.profile;
     if (typeof window !== 'undefined') {
       this.getSpecialties();
     }
@@ -129,10 +133,10 @@ export class RescheduleAppointmentComponent implements OnInit {
         // this.appointments = data;
         this.appointmentForm.patchValue({
           date: dayjs(data.fecha, 'YYYY-MM-DD').toDate(),
-          time: data.hora.slice(0, 5),
           doctorId: data.doctor.id,
           specialty: data.doctor.especialidades?.id,
           consultorio: data.consultorioId,
+          id: data.id,
         });
         this.consultarHorarioDisponible();
         this.appointmentForm.get('specialty')?.disable();
@@ -240,8 +244,15 @@ export class RescheduleAppointmentComponent implements OnInit {
     this.nextStep();
   }
   submitAppointment() {
-    this.loadingForm = true;
-    console.log('PERFIl DE USUARIO:', this.user.paciente);
+    if (!this.appointmentForm.get('time')?.value) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al crear cita',
+        detail: 'Selecciones una fecha y hora correcta',
+      });
+      return;
+    }
+    this.loading = true;
     this.appointmentForm.patchValue({
       patientId: this.user.paciente.id,
       identification: this.user.identification,
@@ -253,7 +264,7 @@ export class RescheduleAppointmentComponent implements OnInit {
         summary: 'Error al crear cita',
         detail: 'No se pudo crear la cita',
       });
-      this.loadingForm = false;
+      this.loading = false;
       this.appointmentForm.markAllAsTouched();
       Object.keys(this.appointmentForm.controls).forEach((key) => {
         const control = this.appointmentForm.get(key);
@@ -278,7 +289,9 @@ export class RescheduleAppointmentComponent implements OnInit {
             summary: 'Cita reprogramada exitosamente',
             detail: 'La cita ha sido reprogramada correctamente',
           });
-          this.loadingForm = false;
+          this.loading = false;
+          this.appointmentUpdated.emit();
+          this.visibleChange.emit(false);
           this.nextStep();
         },
         error: (error) => {
@@ -290,7 +303,7 @@ export class RescheduleAppointmentComponent implements OnInit {
             detail: message,
           });
           console.error('Error al reprogramar cita:', error);
-          this.loadingForm = false;
+          this.loading = false;
         },
       });
   }
