@@ -102,7 +102,7 @@ export class CitaNewComponent implements OnInit {
         apellidos: string;
       };
     };
-    intervalos: string[];
+    intervalos: { hora: string; disponible: boolean }[];
   }[] = [];
   loadingForm = false;
 

@@ -73,36 +73,38 @@
                         *ngFor="let times of item.intervalos"
                         [ngClass]="{
                           'bg-blue-500 text-white':
-                            times === appointmentForm.get('time')?.value,
+                            times.hora === appointmentForm.get('time')?.value,
                           'hover:bg-blue-200':
-                            times !== appointmentForm.get('time')?.value,
+                            times.hora !== appointmentForm.get('time')?.value &&
+                            times.disponible,
+                          'opacity-50 pointer-events-none': !times.disponible,
                         }"
                         class="border-2 border-blue-500 border-round-md block px-5 py-2 hover:bg-blue-200 transition-duration-500"
                         tabindex="0"
                         role="button"
                         (click)="
                           seleccionarHora(
-                            times,
+                            times.hora,
                             item.consultorio.doctor.id,
                             item.consultorio.id
                           )
                         "
                         (keydown.enter)="
                           seleccionarHora(
-                            times,
+                            times.hora,
                             item.consultorio.doctor.id,
                             item.consultorio.id
                           )
                         "
                         (keydown.space)="
                           seleccionarHora(
-                            times,
+                            times.hora,
                             item.consultorio.doctor.id,
                             item.consultorio.id
                           )
                         "
                       >
-                        {{ times }}
+                        {{ times.hora }}
                       </div>
                     </div>
                   </div>

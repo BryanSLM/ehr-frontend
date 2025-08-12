@@ -109,7 +109,7 @@ export class RescheduleAppointmentComponent implements OnInit {
         apellidos: string;
       };
     };
-    intervalos: string[];
+    intervalos: { hora: string; disponible: boolean }[];
   }[] = [];
 
   specialties: { id: string; name: string }[] = [];

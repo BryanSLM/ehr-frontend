@@ -141,6 +141,7 @@
             (click)="updateStateAppointment(appointment.id)"
           />
           <p-button
+            *ngIf="appointment?.estado === 'pendiente'"
             label="Reagendar cita"
             size="small"
             [loading]="loadingButton"
@@ -151,7 +152,7 @@
 
       <p-paginator
         [rows]="rows"
-        [totalRecords]="appointments?.length"
+        [totalRecords]="appointments.length"
         [first]="first"
         (onPageChange)="onPageChange($event)"
       ></p-paginator>

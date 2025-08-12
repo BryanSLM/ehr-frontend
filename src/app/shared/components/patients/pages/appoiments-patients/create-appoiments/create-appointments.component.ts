@@ -100,7 +100,7 @@ export class CreateAppointmentsComponent implements OnInit {
         apellidos: string;
       };
     };
-    intervalos: string[];
+    intervalos: { hora: string; disponible: boolean }[];
   }[] = [];
 
   specialties: { id: string; name: string }[] = [];
@@ -191,7 +191,6 @@ export class CreateAppointmentsComponent implements OnInit {
     return names;
   }
   seleccionarHora(hora: string, doctor: string, consultorioId?: string) {
-    // console.log('REGISTER FORM:', this.registerForm.value);
     console.log('APPOINTMENT FORM:', this.appointmentForm.value);
     this.appointmentForm.patchValue({
       time: hora,
@@ -270,13 +269,12 @@ export class CreateAppointmentsComponent implements OnInit {
 
   resetForm() {
     this.appointmentForm.reset();
+    this.appointmentForm.patchValue({ date: new Date() });
+    this.consultarHorarioDisponible();
     this.currentStep = 0;
   }
 
   nextStep() {
-    // if (this.currentStep == 0) {
-    //   return;
-    // }
     this.currentStep++;
   }
   prevStep() {
