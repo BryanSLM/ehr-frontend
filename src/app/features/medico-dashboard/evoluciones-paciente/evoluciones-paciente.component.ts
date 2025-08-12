@@ -1,4 +1,9 @@
-import { Component, HostListener, OnInit, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ViewContainerRef,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -8,14 +13,12 @@ import { PdfService } from '../../../core/services/pdf.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CertificadoMedicoModalComponent } from '../certificado-medico-modal/certificado-medico-modal.component';
 
-
-
 @Component({
   selector: 'app-evoluciones-paciente',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './evoluciones-paciente.component.html',
-  styleUrls: ['./evoluciones-paciente.component.css']
+  styleUrls: ['./evoluciones-paciente.component.css'],
 })
 export class EvolucionesPacienteComponent implements OnInit {
   showDropdown = false;
@@ -23,7 +26,7 @@ export class EvolucionesPacienteComponent implements OnInit {
   evoluciones: any[] = [];
   loading = true;
   error = '';
-  esMedicoTratante: boolean = false;
+  esMedicoTratante = false;
 
   constructor(
     private medicoService: MedicoService,
@@ -31,12 +34,11 @@ export class EvolucionesPacienteComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private pdfService: PdfService,
-    private viewContainerRef: ViewContainerRef
-
+    private viewContainerRef: ViewContainerRef,
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       if (params['id']) {
         this.cargarEvolucionesPaciente(params['id']);
       } else {
@@ -50,36 +52,38 @@ export class EvolucionesPacienteComponent implements OnInit {
     this.loading = true;
     this.error = '';
     this.evoluciones = [];
-  
+
     // Obtener el ID del médico actual
     const medicoActualId = this.medicoService.obtenerMedicoActualId();
-  
+
     this.medicoService.getEvolucionesPaciente(pacienteId).subscribe({
       next: (response) => {
         if (response.success) {
           this.paciente = response.data.paciente;
           this.evoluciones = response.data.evoluciones || [];
-          
+
           // Verificar si el médico actual es el médico tratante
           this.esMedicoTratante = this.paciente.medicoId === medicoActualId;
-          
+
           // Procesar cada evolución para determinar permisos y formatear datos
-          this.evoluciones = this.evoluciones.map(evolucion => {
-            const diagnosticosFormateados = evolucion.diagnosticos?.map((diagnostico: any) => ({
-              ...diagnostico,
-              cie: {
-                CODIGO: diagnostico.cie?.CODIGO || diagnostico.cie?.codigo,
-                NOMBRE: diagnostico.cie?.NOMBRE || diagnostico.cie?.nombre
-              }
-            }));
-  
+          this.evoluciones = this.evoluciones.map((evolucion) => {
+            const diagnosticosFormateados = evolucion.diagnosticos?.map(
+              (diagnostico: any) => ({
+                ...diagnostico,
+                cie: {
+                  CODIGO: diagnostico.cie?.CODIGO || diagnostico.cie?.codigo,
+                  NOMBRE: diagnostico.cie?.NOMBRE || diagnostico.cie?.nombre,
+                },
+              }),
+            );
+
             return {
               ...evolucion,
               diagnosticos: diagnosticosFormateados,
-              puedeEditar: evolucion.medicoId === medicoActualId
+              puedeEditar: evolucion.medicoId === medicoActualId,
             };
           });
-  
+
           console.log('Evoluciones procesadas:', this.evoluciones);
         } else {
           this.error = 'Error al cargar los datos del paciente';
@@ -91,7 +95,7 @@ export class EvolucionesPacienteComponent implements OnInit {
       },
       complete: () => {
         this.loading = false;
-      }
+      },
     });
   }
   toggleDropdown(event: Event) {
@@ -107,18 +111,24 @@ export class EvolucionesPacienteComponent implements OnInit {
   abrirModalCertificado(evolucion: any) {
     const modalElement = document.createElement('div');
     document.body.appendChild(modalElement);
-    
-    const componentRef = this.viewContainerRef.createComponent(CertificadoMedicoModalComponent);
+
+    const componentRef = this.viewContainerRef.createComponent(
+      CertificadoMedicoModalComponent,
+    );
     componentRef.instance.evolucion = evolucion;
     componentRef.instance.paciente = this.paciente;
     componentRef.instance.modalRef = {
       close: (result?: any) => {
         if (result) {
-          this.pdfService.generarCertificadoMedico(evolucion, this.paciente, result);
+          this.pdfService.generarCertificadoMedico(
+            evolucion,
+            this.paciente,
+            result,
+          );
         }
         componentRef.destroy();
         modalElement.remove();
-      }
+      },
     };
   }
 
@@ -130,49 +140,49 @@ export class EvolucionesPacienteComponent implements OnInit {
 
   crearNuevaEvolucion() {
     this.router.navigate(['/doctor/evolucion/new'], {
-      queryParams: { pacienteId: this.paciente.id }
+      queryParams: { pacienteId: this.paciente.id },
     });
   }
 
   editarEvolucion(evolucionId: number) {
-    const evolucion = this.evoluciones.find(e => e.id === evolucionId);
-    
-    if (!evolucion?.puedeEditar) {
-        this.error = 'No tienes permisos para editar esta evolución';
-        return;
-    }
-    
-    this.router.navigate(['/doctor/evolucion', evolucionId], {
-        state: { mode: 'edit' }
-    });
-}
+    const evolucion = this.evoluciones.find((e) => e.id === evolucionId);
 
-eliminarEvolucion(evolucionId: number) {
-  const evolucion = this.evoluciones.find(e => e.id === evolucionId);
-  
-  if (!evolucion?.puedeEditar) {
+    if (!evolucion?.puedeEditar) {
+      this.error = 'No tienes permisos para editar esta evolución';
+      return;
+    }
+
+    this.router.navigate(['/doctor/evolucion', evolucionId], {
+      state: { mode: 'edit' },
+    });
+  }
+
+  eliminarEvolucion(evolucionId: number) {
+    const evolucion = this.evoluciones.find((e) => e.id === evolucionId);
+
+    if (!evolucion?.puedeEditar) {
       this.error = 'No tienes permisos para eliminar esta evolución';
       return;
-  }
+    }
 
-  if (confirm('¿Está seguro de eliminar esta evolución?')) {
+    if (confirm('¿Está seguro de eliminar esta evolución?')) {
       this.medicoService.eliminarEvolucion(evolucionId).subscribe({
-          next: () => {
-              this.cargarEvolucionesPaciente(this.paciente.id);
-          },
-          error: (error) => {
-              this.error = 'Error al eliminar la evolución';
-              console.error('Error:', error);
-          }
+        next: () => {
+          this.cargarEvolucionesPaciente(this.paciente.id);
+        },
+        error: (error) => {
+          this.error = 'Error al eliminar la evolución';
+          console.error('Error:', error);
+        },
       });
+    }
   }
-}
 
-verMasDetalles(evolucionId: number) {
-  this.router.navigate(['/doctor/evolucion', evolucionId], {
-    state: { mode: 'view' }
-  });
-}
+  verMasDetalles(evolucionId: number) {
+    this.router.navigate(['/doctor/evolucion', evolucionId], {
+      state: { mode: 'view' },
+    });
+  }
 
   verEvolucion(evolucionId: number) {
     this.router.navigate(['/doctor/evolucion', evolucionId]);

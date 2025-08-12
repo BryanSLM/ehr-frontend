@@ -40,18 +40,18 @@ export class PatientService {
   }
 
   getProvincias(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/api/ubicacion/provincias`);
+    return this.http.get(`${environment.apiUrl}/ubicacion/provincias`);
   }
 
   getCantones(provinciaId: number): Observable<any> {
     return this.http.get(
-      `${environment.apiUrl}/api/ubicacion/cantones/${provinciaId}`,
+      `${environment.apiUrl}/ubicacion/cantones/${provinciaId}`,
     );
   }
 
   getParroquias(cantonId: number): Observable<any> {
     return this.http.get(
-      `${environment.apiUrl}/api/ubicacion/parroquias/${cantonId}`,
+      `${environment.apiUrl}/ubicacion/parroquias/${cantonId}`,
     );
   }
 
