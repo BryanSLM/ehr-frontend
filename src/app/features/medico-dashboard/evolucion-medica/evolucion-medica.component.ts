@@ -561,7 +561,7 @@ export class EvolucionMedicaComponent implements OnInit {
       });
     } else {
       this.medicamentosSugeridos = [];
-      this.mostrarSugerenciasMedicamentos = false;
+      this.mostrarSugerenciasMedicamentos = true;
     }
   }
 
@@ -574,6 +574,6 @@ export class EvolucionMedicaComponent implements OnInit {
       forma_farmaceutica: medicamento.forma_farmaceutica,
       via_administracion: medicamento.via_administracion,
     });
-    this.mostrarSugerenciasMedicamentos = false;
+    this.mostrarSugerenciasMedicamentos = true;
   }
 }

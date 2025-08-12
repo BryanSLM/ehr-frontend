@@ -37,6 +37,7 @@ export class TreatmentsListComponent implements OnInit {
     this.treatmentsPatientsService.getTreatments().subscribe({
       next: (response) => {
         this.treatments = response;
+        console.log('Treatments:', this.treatments);
         this.loading = false;
       },
       error: (error) => {

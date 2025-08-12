@@ -6,8 +6,8 @@
       <div class="patient-details">
         <h3 class="patient-name">{{ pacienteNombre }}</h3>
         <div class="patient-id">
-          <span class="id-label">Cédula:</span>
-          <span class="id-number">{{ pacienteCedula }}</span>
+          <!-- <span class="id-label">Cédula:</span>
+          <span class="id-number">{{ pacienteCedula }}</span> -->
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@
     <i class="fas fa-spinner fa-spin me-2"></i>
     Guardando información...
   </div>
-  
+
   <div *ngIf="error" class="alert alert-danger">
     <i class="fas fa-exclamation-circle me-2"></i>
     {{ error }}
@@ -121,9 +121,9 @@
         <!-- Motivo de consulta -->
         <div class="form-group mb-4">
           <label for="motivo_consulta" class="form-label required">Motivo de Consulta</label>
-          <textarea 
-            class="form-control" 
-            id="motivo_consulta" 
+          <textarea
+            class="form-control"
+            id="motivo_consulta"
             formControlName="motivo_consulta"
             rows="3"
             [readonly]="!canEdit">
@@ -133,9 +133,9 @@
         <!-- Enfermedad actual -->
         <div class="form-group mb-4">
           <label for="enfermedad_actual" class="form-label required">Enfermedad o Problema Actual</label>
-          <textarea 
-            class="form-control" 
-            id="enfermedad_actual" 
+          <textarea
+            class="form-control"
+            id="enfermedad_actual"
             formControlName="enfermedad_actual"
             rows="3"
             [readonly]="!canEdit">
@@ -145,9 +145,9 @@
         <!-- Antecedentes personales -->
         <div class="form-group mb-4">
           <label for="antecedentes_personales" class="form-label required">Antecedentes Personales</label>
-          <textarea 
-            class="form-control" 
-            id="antecedentes_personales" 
+          <textarea
+            class="form-control"
+            id="antecedentes_personales"
             formControlName="antecedentes_personales"
             rows="3"
             [readonly]="!canEdit">
@@ -219,14 +219,14 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Campo para describir otro antecedente -->
           <div class="form-group mt-3" *ngIf="evolucionForm.get('antecedentes_familiares.otro_antecedente')?.value">
             <label for="descripcion_otro" class="form-label">Especifique otro antecedente</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              id="descripcion_otro" 
+            <input
+              type="text"
+              class="form-control"
+              id="descripcion_otro"
               formControlName="descripcion_otro"
               [readonly]="!canEdit">
           </div>
@@ -241,7 +241,7 @@
     <div class="diagnosticos-legend">
       PRE = PRESUNTIVO    DEF = DEFINITIVO
     </div>
-    
+
     <form [formGroup]="diagnosticoForm">
       <div formArrayName="diagnosticos">
         <table class="table table-bordered">
@@ -259,17 +259,17 @@
             <tr *ngFor="let diagnostico of diagnosticos.controls; let i=index" [formGroupName]="i">
               <td>{{i + 1}}</td>
               <td class="position-relative">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   formControlName="nombre"
                   class="form-control"
                   (input)="buscarCIE($event, i)"
                   [readonly]="!canEdit"
                   placeholder="Buscar diagnóstico...">
-                
-                <div *ngIf="cieSuggestions.length > 0 && selectedDiagnosticoIndex === i" 
+
+                <div *ngIf="cieSuggestions.length > 0 && selectedDiagnosticoIndex === i"
                      class="cie-suggestions">
-                  <div *ngFor="let cie of cieSuggestions" 
+                  <div *ngFor="let cie of cieSuggestions"
                        (click)="seleccionarCIE(cie, i)"
                        class="cie-suggestion-item">
                     <strong>{{cie.CODIGO}}</strong> - {{cie.NOMBRE}}
@@ -277,28 +277,28 @@
                 </div>
               </td>
               <td>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   formControlName="codigo"
                   class="form-control"
                   readonly>
               </td>
               <td class="text-center">
-                <input 
-                  type="radio" 
+                <input
+                  type="radio"
                   [value]="'PRE'"
                   formControlName="tipo"
                   [disabled]="!canEdit">
               </td>
               <td class="text-center">
-                <input 
-                  type="radio" 
+                <input
+                  type="radio"
                   [value]="'DEF'"
                   formControlName="tipo"
                   [disabled]="!canEdit">
               </td>
               <td *ngIf="canEdit" class="text-center">
-                <button type="button" 
+                <button type="button"
                         class="btn btn-danger btn-sm"
                         (click)="eliminarDiagnostico(i)">
                   <i class="fas fa-trash"></i>
@@ -309,8 +309,8 @@
         </table>
       </div>
 
-      <button *ngIf="canEdit" 
-              type="button" 
+      <button *ngIf="canEdit"
+              type="button"
               class="btn btn-primary"
               (click)="agregarDiagnostico()">
         <i class="fas fa-plus-circle me-2"></i>
@@ -326,20 +326,20 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Buscar Diagnóstico CIE</h5>
-          <button type="button" 
-                  class="btn-close" 
+          <button type="button"
+                  class="btn-close"
                   (click)="modalVisible = false">
           </button>
         </div>
         <div class="modal-body">
-          <input type="text" 
-                 class="form-control mb-3" 
+          <input type="text"
+                 class="form-control mb-3"
                  placeholder="Buscar diagnóstico..."
                  [ngModel]="searchTerm"
                  (ngModelChange)="buscarCIE($event, selectedDiagnosticoIndex)">
-          
+
           <div class="list-group" *ngIf="cieSuggestions.length > 0">
-            <button type="button" 
+            <button type="button"
                     class="list-group-item list-group-item-action"
                     *ngFor="let cie of cieSuggestions"
                     (click)="seleccionarCIE(cie, selectedDiagnosticoIndex)">
@@ -356,10 +356,10 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h4>Prescripción de Fármacos</h4>
-        <button 
-          type="button" 
-          class="btn btn-primary" 
-          (click)="agregarMedicamento()" 
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="agregarMedicamento()"
           *ngIf="canEdit">
           <i class="fas fa-plus-circle me-2"></i>
           Agregar Medicamento
@@ -367,15 +367,15 @@
       </div>
       <div class="card-body">
         <div formArrayName="medicamentos">
-          <div *ngFor="let medicamento of medicamentos.controls; let i=index" 
+          <div *ngFor="let medicamento of medicamentos.controls; let i=index"
                [formGroupName]="i"
                class="medicamento-card mb-4">
             <div class="medicamento-header d-flex justify-content-between align-items-center mb-3">
               <h5 class="mb-0">Medicamento #{{i + 1}}</h5>
-              <button 
+              <button
                 *ngIf="canEdit"
-                type="button" 
-                class="btn btn-danger btn-sm" 
+                type="button"
+                class="btn btn-danger btn-sm"
                 (click)="eliminarMedicamento(i)">
                 <i class="fas fa-trash"></i>
               </button>
@@ -384,8 +384,8 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <label class="form-label required">Fecha de Emisión</label>
-                <input type="date" 
-                       class="form-control" 
+                <input type="date"
+                       class="form-control"
                        formControlName="fecha_emision"
                        [readonly]="!canEdit">
               </div>
@@ -395,15 +395,15 @@
               <div class="col-md-4 mb-3">
                 <label class="form-label required">Nombre Genérico</label>
                 <div class="position-relative">
-                  <input type="text" 
-                         class="form-control" 
+                  <input type="text"
+                         class="form-control"
                          formControlName="nombre_generico"
-                         (input)="buscarMedicamento($event, i)" 
+                         (input)="buscarMedicamento($event, i)"
                          [readonly]="!canEdit">
-                  
+
                   <div *ngIf="mostrarSugerenciasMedicamentos && medicamentosSugeridos.length > 0"
                        class="medicamentos-suggestions">
-                    <div *ngFor="let med of medicamentosSugeridos" 
+                    <div *ngFor="let med of medicamentosSugeridos"
                          (click)="seleccionarMedicamento(med, i)"
                          class="medicamento-suggestion-item">
                       <strong>{{med.nombre_generico}}</strong>
@@ -416,17 +416,17 @@
 
               <div class="col-md-4 mb-3">
                 <label class="form-label required">Concentración</label>
-                <input type="text" 
-                       class="form-control" 
-                       formControlName="concentracion" 
+                <input type="text"
+                       class="form-control"
+                       formControlName="concentracion"
                        readonly>
               </div>
 
               <div class="col-md-4 mb-3">
                 <label class="form-label required">Forma Farmacéutica</label>
-                <input type="text" 
-                       class="form-control" 
-                       formControlName="forma_farmaceutica" 
+                <input type="text"
+                       class="form-control"
+                       formControlName="forma_farmaceutica"
                        readonly>
               </div>
             </div>
@@ -434,8 +434,8 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label class="form-label required">Dosis</label>
-                <input type="text" 
-                       class="form-control" 
+                <input type="text"
+                       class="form-control"
                        formControlName="dosis"
                        [readonly]="!canEdit"
                        placeholder="Ej: 1 tableta">
@@ -443,7 +443,7 @@
 
               <div class="col-md-4 mb-3">
                 <label class="form-label required">Frecuencia</label>
-                <select class="form-control" 
+                <select class="form-control"
                         formControlName="frecuencia"
                         [disabled]="!canEdit">
                   <option value="">Seleccione una opción</option>
@@ -460,8 +460,8 @@
 
               <div class="col-md-4 mb-3">
                 <label class="form-label required">Duración del Tratamiento</label>
-                <input type="text" 
-                       class="form-control" 
+                <input type="text"
+                       class="form-control"
                        formControlName="duracion_tratamiento"
                        [readonly]="!canEdit"
                        placeholder="Ej: 7 días">
@@ -471,16 +471,16 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label required">Vía de Administración</label>
-                <input type="text" 
-                       class="form-control" 
-                       formControlName="via_administracion" 
+                <input type="text"
+                       class="form-control"
+                       formControlName="via_administracion"
                        readonly>
               </div>
 
               <div class="col-md-6 mb-3">
                 <label class="form-label">Indicaciones Adicionales</label>
-                <input type="text" 
-                       class="form-control" 
+                <input type="text"
+                       class="form-control"
                        formControlName="indicaciones_adicionales"
                        [readonly]="!canEdit"
                        placeholder="Ej: Tomar con alimentos">
@@ -494,16 +494,16 @@
 
   <!-- Botones de acción -->
   <div class="d-flex justify-content-between mt-4 mb-4">
-    <button type="button" 
-            class="btn btn-secondary" 
+    <button type="button"
+            class="btn btn-secondary"
             routerLink="/doctor">
       <i class="fas fa-arrow-left me-2"></i>
       Volver
     </button>
-    
+
     <button *ngIf="canEdit"
-            type="button" 
-            class="btn btn-primary" 
+            type="button"
+            class="btn btn-primary"
             [disabled]="!evolucionForm.valid || !diagnosticoForm.valid || !prescripcionForm.valid || loading"
             (click)="onSubmit()">
       <i class="fas fa-save me-2"></i>

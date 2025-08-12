@@ -24,7 +24,10 @@ export class TreatmentsDetailsComponent implements OnInit {
     fecha_fin: '',
     observaciones: '',
     medico: {},
+    motivo_consulta: '',
     detallesTratamiento: [],
+    fecha: '',
+    prescripciones: {},
   };
   loading = true;
 

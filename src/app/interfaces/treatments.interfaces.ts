@@ -30,6 +30,9 @@ export interface TreatmentI {
   fecha_fin: string;
   observaciones: string;
   medico: any;
+  motivo_consulta: string;
+  fecha: string;
+  prescripciones: any;
 }
 
 export interface TreatmentWithDetailsI extends TreatmentI {

@@ -37,17 +37,13 @@
             text-overflow: ellipsis;
           "
         >
-          {{ treatment.name }}
+          Tratamiento para {{ treatment.motivo_consulta }}
         </p>
       </div>
       <div class="flex items-start self-end gap-4">
         <div class="flex items-center gap-2">
-          <p class="mb-0 text-lg font-semibold">Fecha inicio:</p>
-          <p-tag [value]="formatDate(treatment.fecha_inicio)" />
-        </div>
-        <div class="flex items-center gap-2">
-          <p class="mb-0 text-lg font-semibold">Fecha fin:</p>
-          <p-tag [value]="formatDate(treatment.fecha_fin)" />
+          <p class="mb-0 text-lg font-semibold">Fecha recetado:</p>
+          <p-tag [value]="formatDate(treatment.fecha)" />
         </div>
       </div>
     </div>
@@ -62,7 +58,7 @@
         </div>
         <div class="col-12">
           <p-table
-            [value]="treatment.detallesTratamiento || []"
+            [value]="treatment.prescripciones || []"
             [tableStyle]="{ 'min-width': '50rem' }"
             size="large"
           >
@@ -78,15 +74,12 @@
             <ng-template pTemplate="body" let-detail>
               <tr class="font-normal text-xl text-black">
                 <td>
-                  {{
-                    detail.medicamento.nombre_comercial ||
-                      detail.medicamento.nombre_generico
-                  }}
+                  {{ detail.nombre_comercial || detail.nombre_generico }}
                 </td>
                 <td>{{ detail.dosis }}</td>
                 <td>{{ detail.frecuencia }}</td>
-                <td>{{ detail.duracion }}</td>
-                <td>{{ detail.medicamento.forma_farmaceutica }}</td>
+                <td>{{ detail.duracion_tratamiento }}</td>
+                <td>{{ detail.forma_farmaceutica }}</td>
               </tr>
             </ng-template>
 
