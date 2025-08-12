@@ -353,7 +353,16 @@
             formControlName="conditionsAccepted"
             name="conditionsAccepted"
           />
-          <span class="ml-2">Acepto los términos y condiciones</span>
+          <button
+            type="button"
+            class="ml-2 bg-transparent border-0 p-0"
+            style="cursor: pointer; color: #3b82f6; text-decoration: underline"
+            (click)="onTermsClick()"
+            (keyup.enter)="onTermsClick()"
+            tabindex="0"
+          >
+            Acepto los términos y condiciones
+          </button>
         </label>
         @if (
           registerDetailsForm.controls['conditionsAccepted'].errors?.[
@@ -376,4 +385,23 @@
       </div>
     </form>
   }
+  <div class="w-full flex justify-content-center mt-4">
+    <span>¿Ya tienes una cuenta?</span>
+    <button
+      type="button"
+      class="login-link bg-transparent border-0 p-0"
+      style="
+        margin-left: 5px;
+        color: #3b82f6;
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+      "
+      (click)="goToLogin()"
+      (keyup.enter)="goToLogin()"
+      tabindex="0"
+    >
+      Inicia sesión
+    </button>
+  </div>
 </div>

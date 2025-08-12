@@ -6,11 +6,11 @@
   </div>
   <div class="col-12 md:col-7 bg-white border-round p-0">
     <app-register-form
-      (registerSuccess)="toggleDialog($event)"
+      (showConditions)="toggleDialog($event)"
     ></app-register-form>
   </div>
-  <app-activate-account-dialog
+  <app-show-conditions-dialog
     [isDialogOpen]="isDialogOpen"
-    (emitDialogToogleStatus)="toggleDialog($event)"
-  ></app-activate-account-dialog>
+    (emitDialogToggleStatus)="toggleDialog($event)"
+  ></app-show-conditions-dialog>
 </div>

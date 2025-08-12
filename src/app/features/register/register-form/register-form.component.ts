@@ -68,8 +68,7 @@ export class RegisterFormComponent implements OnInit {
   registerError = false;
   registerErrorMessage = '';
   conditionsAccepted = false;
-  @Output() registerSuccess: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
+  @Output() showConditions: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly registerService: RegisterService,
@@ -204,5 +203,13 @@ export class RegisterFormComponent implements OnInit {
 
   prevStep() {
     this.currentStep--;
+  }
+
+  onTermsClick() {
+    this.showConditions.emit(true);
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 }
