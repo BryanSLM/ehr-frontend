@@ -27,8 +27,8 @@ export class LoginComponent {
   showPassword = false; // Estado inicial del campo de contraseña
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
+    private readonly authService: AuthService,
+    private readonly router: Router,
   ) {}
 
   // Si hay texto en el input, muestra el ojo
@@ -95,5 +95,9 @@ export class LoginComponent {
           this.isLoading = false;
         },
       });
+  }
+
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 }
