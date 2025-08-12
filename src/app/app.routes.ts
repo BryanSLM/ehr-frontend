@@ -52,12 +52,6 @@ export const routes: Routes = [
     path: 'register',
     component: RegisterComponent,
   },
-  // {
-  //   path: 'patients',
-  //   component: PatientsComponent,
-  //   canActivate: [AuthGuard],
-  //   data: { roles: ['administrador', 'doctor', 'secretaria'] },
-  // },
   {
     path: 'patients/new',
     component: PatientFormComponent,

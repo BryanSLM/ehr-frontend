@@ -4,6 +4,7 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { passwordMatchValidator } from '../../../core/validators/password-match.validator';
@@ -32,6 +33,7 @@ import { Router } from '@angular/router';
     SelectModule,
     DatePickerModule,
     Toast,
+    FormsModule,
   ],
   providers: [MessageService],
   templateUrl: './register-form.component.html',
@@ -65,15 +67,14 @@ export class RegisterFormComponent implements OnInit {
   };
   registerError = false;
   registerErrorMessage = '';
-  @Output() registerSuccess: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
-
+  conditionsAccepted = false;
+  @Output() showConditions: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly registerService: RegisterService,
     private readonly catalogService: CatalogosService,
-    private messageService: MessageService,
-    private router: Router,
+    private readonly messageService: MessageService,
+    private readonly router: Router,
   ) {
     this.registerForm = this.formBuilder.group(
       {
@@ -102,10 +103,13 @@ export class RegisterFormComponent implements OnInit {
       birthDate: ['', [Validators.required, birthDateValidator()]],
       gender: ['', [Validators.required]],
       phone: ['', [Validators.required, ecuPhoneNumberValidator()]],
+      conditionsAccepted: [false, [Validators.requiredTrue]],
     });
   }
   ngOnInit(): void {
-    this.getIdentificationTypes();
+    if (typeof window !== 'undefined') {
+      this.getIdentificationTypes();
+    }
   }
 
   getIdentificationTypes() {
@@ -199,5 +203,13 @@ export class RegisterFormComponent implements OnInit {
 
   prevStep() {
     this.currentStep--;
+  }
+
+  onTermsClick() {
+    this.showConditions.emit(true);
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 }

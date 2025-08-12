@@ -24,9 +24,9 @@
         <label for="username">Usuario</label>
         <input
           type="text"
-          id="username"
-          name="username"
-          [(ngModel)]="formData.username"
+          id="identification"
+          name="identification"
+          [(ngModel)]="formData.identification"
           required
           class="form-control"
         />
@@ -64,7 +64,8 @@
       <button
         type="submit"
         [disabled]="isLoading || !loginForm.form.valid"
-        class="btn btn-primary"
+        pButton
+        class="w-full"
       >
         {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
       </button>
@@ -73,6 +74,25 @@
         <a routerLink="/forgot-password" class="forgot-password-link">
           ¿Olvidaste tu contraseña?
         </a>
+      </div>
+      <div class="text-center mt-3">
+        <span>¿No tienes una cuenta?</span>
+        <button
+          type="button"
+          class="register-link bg-transparent border-0 p-0"
+          style="
+            margin-left: 5px;
+            color: white;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+          "
+          (click)="goToRegister()"
+          (keyup.enter)="goToRegister()"
+          tabindex="0"
+        >
+          Regístrate
+        </button>
       </div>
     </form>
   </div>

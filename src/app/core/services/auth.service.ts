@@ -11,7 +11,8 @@ interface User {
   username: string;
   role: string;
   active: boolean;
-  patients: any
+  patients: any;
+  identification: any;
 }
 
 interface LoginResponse {
@@ -32,11 +33,10 @@ export class AuthService {
     private router: Router,
   ) {}
 
-  login(username: string, password: string): Observable<LoginResponse> {
-
+  login(identification: string, password: string): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/auth/login`, {
-        username,
+        identification,
         password,
       })
       .pipe(
@@ -93,6 +93,11 @@ export class AuthService {
 
   getUserRole(): string {
     try {
+      if (typeof window === 'undefined' || !window.localStorage) {
+        // Estamos en entorno server, no usar localStorage
+        return '';
+      }
+
       const userStr = localStorage.getItem('user');
       if (!userStr) return '';
 

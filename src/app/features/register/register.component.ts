@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RegisterSideImageComponent } from './register-side-image/register-side-image.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
-import { ActivateAccountDialogComponent } from './activate-account-dialog/activate-account-dialog.component';
+import { ShowConditionsDialogComponent } from './show-conditions-dialog/show-conditions-dialog.component';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +9,7 @@ import { ActivateAccountDialogComponent } from './activate-account-dialog/activa
   imports: [
     RegisterSideImageComponent,
     RegisterFormComponent,
-    ActivateAccountDialogComponent,
+    ShowConditionsDialogComponent,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
