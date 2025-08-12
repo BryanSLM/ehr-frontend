@@ -85,7 +85,7 @@ export class CitaNewComponent implements OnInit {
   ];
   existUser = false;
   modeRegister = false;
-  currentStep = 0;
+  currentStep = 1;
   especialidades: { id: string; name: string }[] = [];
   appointmentsAvailable: {
     id: 294;

@@ -79,6 +79,8 @@ export class PatientService {
     );
   }
 
+  
+
   getAppointmentByIdentification(): Observable<any> {
     const user = JSON.parse(localStorage?.getItem('user') || '{}');
     console.log('User from localStorage:', user);

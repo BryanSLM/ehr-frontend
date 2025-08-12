@@ -264,28 +264,32 @@ export class RescheduleAppointmentComponent implements OnInit {
       return;
     }
 
-    this.patientsService
-      .createAppointment(this.appointmentForm.value)
+    this.appointmentsService
+      .rescheduleAppointment(this.appointmentForm.get('id')?.value, {
+        date: this.appointmentForm.get('date')?.value,
+        time: this.appointmentForm.get('time')?.value,
+        doctorId: this.appointmentForm.get('doctorId')?.value,
+      })
       .subscribe({
         next: (response) => {
           console.log('Cita creada:', response);
           this.messageService.add({
             severity: 'success',
-            summary: 'Registro exitoso',
-            detail: 'La cita ha sido creada correctamente',
+            summary: 'Cita reprogramada exitosamente',
+            detail: 'La cita ha sido reprogramada correctamente',
           });
           this.loadingForm = false;
           this.nextStep();
         },
         error: (error) => {
-          const message = error.error?.message || 'Error al crear cita';
+          const message = error.error?.message || 'Error al reprogramar cita';
 
           this.messageService.add({
             severity: 'error',
-            summary: 'Error al crear cita',
+            summary: 'Error al reprogramar cita',
             detail: message,
           });
-          console.error('Error al crear cita:', error);
+          console.error('Error al reprogramar cita:', error);
           this.loadingForm = false;
         },
       });

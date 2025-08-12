@@ -118,7 +118,7 @@ export class AuthService {
     console.log('Enviando solicitud de recuperación para:', { email });
 
     return this.http
-      .post(`${this.apiUrl}/api/auth/forgot-password`, {
+      .post(`${this.apiUrl}/auth/forgot-password`, {
         email,
       })
       .pipe(
