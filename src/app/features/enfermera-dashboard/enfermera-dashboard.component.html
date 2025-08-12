@@ -38,7 +38,7 @@
               <th>Fecha</th>
               <th>Hora</th>
               <th>Paciente</th>
-              <th>Cédula</th>
+              <th>Identificación</th>
               <th>Consultorio</th>
               <th>Acciones</th>
             </tr>
@@ -48,7 +48,7 @@
               <td>{{ cita.fecha | date:'dd/MM/yyyy' }}</td>
               <td>{{ cita.hora }}</td>
               <td>{{ cita.paciente?.primer_nombre }} {{ cita.paciente?.apellido_paterno }}</td>
-              <td>{{ cita.paciente?.cedula }}</td>
+              <td>{{ cita.paciente?.user?.identificacion }}</td>
               <td>{{ cita.consultorio?.numero }}</td>
               <td>
                 <a [routerLink]="['/enfermera/vital-signs/new']"
