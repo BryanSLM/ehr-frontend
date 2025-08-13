@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { TreatmentWithDetailsI } from '../../../../../../interfaces/treatments.interfaces';
 import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
+import { PdfService } from '../../../../../../core/services/pdf.service';
 
 @Component({
   selector: 'app-treatments-details',
@@ -35,6 +36,7 @@ export class TreatmentsDetailsComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly treatmentsPatientsService: TreatmentsPatientsService,
+    private readonly pdfService: PdfService,
   ) {}
 
   ngOnInit(): void {
@@ -43,12 +45,10 @@ export class TreatmentsDetailsComponent implements OnInit {
     if (id) {
       this.treatmentsPatientsService.getTreatmentWithDetails(id).subscribe({
         next: (data) => {
-          console.log('Detalles del tratamiento:', data);
           this.treatment = data;
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error al cargar detalles del tratamiento', err);
           this.loading = false;
         },
       });
@@ -66,5 +66,11 @@ export class TreatmentsDetailsComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  generateTreatmentPdf(): void {
+    const paciente = localStorage.getItem('user');
+    const pacienteJson = JSON.parse(paciente || '{}');
+    this.pdfService.generarRecetaMedica(this.treatment, pacienteJson.paciente);
   }
 }

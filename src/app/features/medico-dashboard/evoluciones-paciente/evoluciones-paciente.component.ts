@@ -133,6 +133,8 @@ export class EvolucionesPacienteComponent implements OnInit {
   }
 
   generarRecetaPDF(evolucion: any) {
+    console.log('Generando receta PDF para evolución:', evolucion);
+    console.log('Paciente:', this.paciente);
     if (evolucion && this.paciente) {
       this.pdfService.generarRecetaMedica(evolucion, this.paciente);
     }
