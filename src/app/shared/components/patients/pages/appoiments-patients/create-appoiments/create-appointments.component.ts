@@ -51,6 +51,7 @@ import { Dialog } from 'primeng/dialog';
   providers: [MessageService],
 })
 export class CreateAppointmentsComponent implements OnInit {
+  today = new Date();
   formattedDate = formatearFecha;
   user: any;
   appointments: {

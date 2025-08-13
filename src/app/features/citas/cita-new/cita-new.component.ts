@@ -42,6 +42,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './cita-new.component.css',
 })
 export class CitaNewComponent implements OnInit {
+  today = new Date();
   identificationForm: FormGroup = new FormGroup({});
   registerForm: FormGroup = new FormGroup({});
   appointmentForm: FormGroup = new FormGroup({});

@@ -531,6 +531,7 @@
             <p-datepicker
               formControlName="date"
               [inline]="true"
+              [minDate]="today"
               styleClass="hidden md:block custom-datepicker"
               (onSelect)="consultarHorarioDisponible()"
             />

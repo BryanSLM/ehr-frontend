@@ -32,6 +32,7 @@
               formControlName="date"
               [inline]="true"
               styleClass=" custom-datepicker"
+              [minDate]="today"
               (onSelect)="consultarHorarioDisponible()"
             />
           </div>
