@@ -741,6 +741,7 @@
                 >
                 <input
                   id="identification"
+                  readonly
                   pInputText
                   [value]="this.identificationForm.get('identification')?.value"
                 />
@@ -752,6 +753,7 @@
                 <input
                   id="names"
                   pInputText
+                  readonly
                   [value]="
                     this.registerForm.get('names')?.value +
                     ' ' +
@@ -778,7 +780,7 @@
                 <label class="mb-2 text-blue-500 font-bold" for="doctor">
                   Doctor:</label
                 >
-                <input id="doctor" pInputText [value]="nameDoctor" />
+                <input id="doctor" pInputText [value]="nameDoctor"  readonly/>
               </div>
             </div>
             <div
@@ -802,6 +804,7 @@
                 <input
                   id="time"
                   pInputText
+                  readonly
                   [value]="this.appointmentForm.get('time')?.value"
                 />
               </div>

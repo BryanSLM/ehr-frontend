@@ -219,6 +219,7 @@
                 <input
                   id="identification"
                   pInputText
+                  readonly
                   [value]="this.user.identification"
                 />
               </div>
@@ -226,7 +227,7 @@
                 <label class="mb-2 text-blue-500 font-bold" for="names">
                   Nombres:</label
                 >
-                <input id="names" pInputText [value]="this.user.names" />
+                <input id="names" pInputText [value]="this.user.names" readonly />
               </div>
             </div>
             <div class="flex gap-4 align-items-center justify-content-center">
@@ -245,7 +246,7 @@
                 <label class="mb-2 text-blue-500 font-bold" for="doctor">
                   Doctor:</label
                 >
-                <input id="doctor" pInputText [value]="nameDoctor" />
+                <input id="doctor" pInputText [value]="nameDoctor" readonly />
               </div>
             </div>
             <div class="flex gap-4 align-items-center justify-content-center">
@@ -268,6 +269,7 @@
                 >
                 <input
                   id="time"
+                  readonly
                   pInputText
                   [value]="this.appointmentForm.get('time')?.value"
                 />
