@@ -45,7 +45,7 @@
           <form
             [formGroup]="identificationForm"
             (ngSubmit)="consultarUsuario()"
-            class="border-2 border-blue-500 border-round-lg md:mt-6 shadow-2xl md:h-20rem mb-8"
+            class="border-2 border-blue-500 border-round-lg md:mt-6 shadow-2xl md:h-min mb-8"
           >
             <div
               class="flex flex-column justify-content-center items-center gap-4 p-4"
@@ -63,9 +63,9 @@
                 </p>
               </div>
               <div
-                class="flex md:flex-row flex-column gap-4 align-items-center"
+                class="flex md:flex-row flex-column gap-4 align-items-center justify-items-center"
               >
-                <div class="w-15rem">
+                <div class="w-15rem md:h-7rem">
                   <label
                     class="mb-2 font-bold"
                     for="identification"
@@ -96,7 +96,7 @@
                     }"
                   />
                 </div>
-                <div class="flex flex-column w-15rem">
+                <div class="flex flex-column w-15rem md:h-7rem">
                   <label
                     class="mb-2 text-blue-500 font-bold"
                     for="identification"
@@ -118,6 +118,26 @@
                         identificationForm.get('identification')?.touched,
                     }"
                   />
+                  <small
+                    class="text-red-500 text-xs"
+                    *ngIf="
+                      identificationForm.get('identification')?.errors?.[
+                        'pattern'
+                      ]
+                    "
+                  >
+                    Debe contener 10 dígitos numéricos.
+                  </small>
+                  <small
+                    class="text-red-500 text-xs"
+                    *ngIf="
+                      identificationForm.get('identification')?.errors?.[
+                        'required'
+                      ]
+                    "
+                  >
+                    Este campo es requerido.
+                  </small>
                 </div>
               </div>
               <div class="flex justify-content-end w-full">
@@ -153,7 +173,7 @@
                 </p>
               </div>
               <div class="grid align-items-center mt-4">
-                <div class="flex flex-column md:column-gap-2 w-full">
+                <div class="flex flex-column gap-y-4 md:column-gap-2 w-full">
                   <div class="flex md:flex-row flex-column gap-2">
                     <div class="flex md:w-6 w-full flex-column">
                       <label
@@ -179,6 +199,16 @@
                             registerForm.get('typeIdentity')?.touched,
                         }"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['typeIdentity'].errors?.[
+                            'required'
+                          ] && formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
                     </div>
                     <div class="flex md:w-6 w-full flex-column">
                       <label
@@ -195,13 +225,33 @@
                         id="identification"
                         pInputText
                         formControlName="identification"
-                        placeholder="Ingrese su pasaporte"
+                        placeholder="Ingrese su identificación"
                         [ngClass]="{
                           'ng-invalid ng-dirty':
                             registerForm.get('identification')?.invalid &&
                             registerForm.get('identification')?.touched,
                         }"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['identification'].errors?.[
+                            'required'
+                          ] && formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.get('identification')?.errors?.[
+                            'pattern'
+                          ]
+                        "
+                      >
+                        Debe contener 10 dígitos numéricos.
+                      </small>
                     </div>
                   </div>
                   <div class="flex md:flex-row flex-column gap-2">
@@ -227,29 +277,62 @@
                             registerForm.get('names')?.touched,
                         }"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="registerForm.get('names')?.errors?.['pattern']"
+                      >
+                        Debe contener solo letras.
+                      </small>
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['names'].errors?.['required'] &&
+                          formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
                     </div>
                     <div class="flex md:w-6 w-full flex-column">
                       <label
                         class="mb-2 font-bold"
-                        for="lastNames"
+                        for="lastnames"
                         [ngClass]="{
                           'text-red-500':
-                            registerForm.get('lastNames')?.invalid &&
-                            registerForm.get('lastNames')?.touched,
+                            registerForm.get('lastnames')?.invalid &&
+                            registerForm.get('lastnames')?.touched,
                         }"
                         >Apellidos:</label
                       >
                       <input
                         id="lastNames"
                         pInputText
-                        formControlName="lastNames"
+                        formControlName="lastnames"
                         placeholder="Ingrese su apellido"
                         [ngClass]="{
                           'ng-invalid ng-dirty':
-                            registerForm.get('lastNames')?.invalid &&
-                            registerForm.get('lastNames')?.touched,
+                            registerForm.get('lastnames')?.invalid &&
+                            registerForm.get('lastnames')?.touched,
                         }"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['lastnames'].errors?.[
+                            'required'
+                          ] && formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.get('lastnames')?.errors?.['pattern']
+                        "
+                      >
+                        Debe contener solo letras.
+                      </small>
                     </div>
                   </div>
                   <div class="flex md:flex-row flex-column gap-2">
@@ -277,6 +360,16 @@
                         }"
                         styleClass="w-full"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['birthdate'].errors?.[
+                            'required'
+                          ] && formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
                     </div>
                     <div class="flex md:w-6 w-full flex-column">
                       <label
@@ -302,6 +395,16 @@
                             registerForm.get('gender')?.touched,
                         }"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['gender'].errors?.[
+                            'required'
+                          ] && formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
                     </div>
                   </div>
                   <div class="flex md:flex-row flex-column gap-2">
@@ -327,6 +430,25 @@
                             registerForm.get('email')?.touched,
                         }"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['email'].errors?.[
+                            'email'
+                          ]
+                        "
+                      >
+                        Ingrese un correo valido.
+                      </small>
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['email'].errors?.['required'] &&
+                          formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
                     </div>
                     <div class="flex md:w-6 w-full flex-column">
                       <label
@@ -350,6 +472,21 @@
                             registerForm.get('phone')?.touched,
                         }"
                       />
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="
+                          registerForm.controls['email'].errors?.['required'] &&
+                          formSubmitted
+                        "
+                      >
+                        Este campo es requerido.
+                      </small>
+                      <small
+                        class="text-red-500 text-xs"
+                        *ngIf="registerForm.get('phone')?.errors?.['pattern']"
+                      >
+                        Debe ser un celular válido.
+                      </small>
                     </div>
                   </div>
                 </div>
@@ -380,7 +517,9 @@
           (ngSubmit)="crearUsuario()"
         >
           <div class="md:hidden">
-            <p class="text-5xl text-blue-500 font-bold mb-0 text-center md:text-left">
+            <p
+              class="text-5xl text-blue-500 font-bold mb-0 text-center md:text-left"
+            >
               Selección de horario
             </p>
             <p
@@ -592,7 +731,7 @@
                   [value]="
                     this.registerForm.get('names')?.value +
                     ' ' +
-                    this.registerForm.get('lastNames')?.value
+                    this.registerForm.get('lastnames')?.value
                   "
                 />
               </div>

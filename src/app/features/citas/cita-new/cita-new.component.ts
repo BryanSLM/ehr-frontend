@@ -46,6 +46,7 @@ export class CitaNewComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
   appointmentForm: FormGroup = new FormGroup({});
   specialties: { id: string; name: string }[] = [];
+  formSubmitted = false;
   constructor(
     private patientService: PatientService,
     private formBuilder: FormBuilder,
@@ -54,15 +55,33 @@ export class CitaNewComponent implements OnInit {
   ) {
     this.identificationForm = this.formBuilder.group({
       typeIdentity: [this.typesIdentity[0]?.value, [Validators.required]],
-      identification: ['', [Validators.required]],
+      identification: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{9,10}$/)],
+      ],
     });
     this.registerForm = this.formBuilder.group({
       typeIdentity: [this.typesIdentity[0]?.value, [Validators.required]],
-      identification: ['', [Validators.required]],
-      names: ['', [Validators.required]],
-      lastNames: ['', [Validators.required]],
+      identification: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{9,10}$/)],
+      ],
+      names: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/),
+        ],
+      ],
+      lastnames: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/),
+        ],
+      ],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern(/^09\d{8}$/)]],
       birthdate: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       id: [''],
@@ -85,7 +104,7 @@ export class CitaNewComponent implements OnInit {
   ];
   existUser = false;
   modeRegister = false;
-  currentStep = 1;
+  currentStep = 0;
   especialidades: { id: string; name: string }[] = [];
   appointmentsAvailable: {
     id: 294;
@@ -124,6 +143,7 @@ export class CitaNewComponent implements OnInit {
     this.currentStep++;
   }
   consultarUsuario() {
+    this.formSubmitted = true;
     if (this.identificationForm.invalid) {
       console.log('Formulario de identificación inválido');
       this.identificationForm.markAllAsTouched();
@@ -154,11 +174,19 @@ export class CitaNewComponent implements OnInit {
           this.loadingForm = false;
         },
       });
+    this.formSubmitted = false;
   }
   crearUsuario() {
+    this.formSubmitted = true;
+
     this.loadingForm = true;
     if (this.registerForm.invalid) {
       console.log('Formulario de identificación inválido');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al crear usuario',
+        detail: 'Por favor llene todos los campos correctamente',
+      });
       this.registerForm.markAllAsTouched();
       this.loadingForm = false;
       return;
@@ -166,8 +194,11 @@ export class CitaNewComponent implements OnInit {
     this.patientService
       .createPatientExternal(this.registerForm.value)
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           console.log('Usuario creado:', response);
+          this.identificationForm.patchValue({
+            identification: response.identification,
+          });
           this.registerForm.patchValue(response);
           this.messageService.add({
             severity: 'success',
@@ -190,6 +221,7 @@ export class CitaNewComponent implements OnInit {
           this.loadingForm = false;
         },
       });
+    this.formSubmitted = false;
   }
   seleccionarCita() {
     this.loadingForm = true;
