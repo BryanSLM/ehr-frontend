@@ -100,4 +100,7 @@ export class LoginComponent {
   goToRegister() {
     this.router.navigate(['/register']);
   }
+  goToAppointment() {
+    this.router.navigate(['/citas/nueva']);
+  }
 }
