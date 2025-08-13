@@ -16,6 +16,7 @@ import { CatalogosService } from '../../../../../../core/services/catalogos.serv
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -45,6 +46,7 @@ import { Dialog } from 'primeng/dialog';
     RouterModule,
     InputTextModule,
     Dialog,
+    FormsModule,
   ],
   providers: [MessageService],
 })
@@ -103,10 +105,13 @@ export class CreateAppointmentsComponent implements OnInit {
     intervalos: { hora: string; disponible: boolean }[];
   }[] = [];
 
+  doctorSelected: any = {};
+
   specialties: { id: string; name: string }[] = [];
 
   currentStep = 0;
   loadingForm = false;
+  citasDoctor: any = {};
 
   ngOnInit(): void {
     this.loading = true;
@@ -163,9 +168,31 @@ export class CreateAppointmentsComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.appointmentsAvailable = response;
+          const primerDoctor =
+            this.appointmentsAvailable[0]?.consultorio?.doctor;
+          if (primerDoctor) {
+            this.appointmentForm.patchValue({ doctorId: primerDoctor.id });
+            this.doctorSelected = this.appointmentsAvailable[0];
+          }
           console.log('Horario disponible:', response);
         },
       });
+  }
+  seleccionarDoctor(event: any) {
+    const idSeleccionado = event.value; // este es el id que devuelve el p-select
+    this.doctorSelected =
+      this.appointmentsAvailable.find(
+        (a) => a.consultorio.doctor.id === idSeleccionado,
+      ) || null;
+  }
+  consultorios() {
+    return this.appointmentsAvailable
+      .map((a) => a.consultorio?.doctor)
+      .filter((d): d is NonNullable<typeof d> => !!d)
+      .map((d) => ({
+        id: d.id,
+        name: `${d.nombres} ${d.apellidos}`,
+      }));
   }
   seleccionarCita() {
     console.log(

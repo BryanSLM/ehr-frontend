@@ -124,6 +124,7 @@ export class CitaNewComponent implements OnInit {
     intervalos: { hora: string; disponible: boolean }[];
   }[] = [];
   loadingForm = false;
+  doctorSelected: any = {};
 
   ngOnInit() {
     this.appointmentForm.patchValue({ date: new Date() });
@@ -142,6 +143,7 @@ export class CitaNewComponent implements OnInit {
     }
     this.currentStep++;
   }
+
   consultarUsuario() {
     this.formSubmitted = true;
     if (this.identificationForm.invalid) {
@@ -248,6 +250,22 @@ export class CitaNewComponent implements OnInit {
     const names = doctor ? `${doctor.nombres} ${doctor.apellidos}` : '';
     return names;
   }
+  seleccionarDoctor(event: any) {
+    const idSeleccionado = event.value; // este es el id que devuelve el p-select
+    this.doctorSelected =
+      this.appointmentsAvailable.find(
+        (a) => a.consultorio.doctor.id === idSeleccionado,
+      ) || null;
+  }
+  consultorios() {
+    return this.appointmentsAvailable
+      .map((a) => a.consultorio?.doctor)
+      .filter((d): d is NonNullable<typeof d> => !!d)
+      .map((d) => ({
+        id: d.id,
+        name: `${d.nombres} ${d.apellidos}`,
+      }));
+  }
   consultarHorarioDisponible() {
     // if (this.appointmentForm.invalid) {
     //   console.log('Formulario de cita inválido');
@@ -267,6 +285,15 @@ export class CitaNewComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.appointmentsAvailable = response;
+
+          console.log('Horario disponible:', response);
+
+          const primerDoctor =
+            this.appointmentsAvailable[0]?.consultorio?.doctor;
+          if (primerDoctor) {
+            this.appointmentForm.patchValue({ doctorId: primerDoctor.id });
+            this.doctorSelected = this.appointmentsAvailable[0];
+          }
           console.log('Horario disponible:', response);
         },
       });

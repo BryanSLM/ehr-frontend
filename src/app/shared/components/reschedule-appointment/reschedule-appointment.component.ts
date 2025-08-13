@@ -117,6 +117,8 @@ export class RescheduleAppointmentComponent implements OnInit {
   currentStep = 0;
   loadingForm = false;
 
+  doctorSelected: any = {};
+
   get profile() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user;
@@ -190,9 +192,31 @@ export class RescheduleAppointmentComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.appointmentsAvailable = response;
+          const primerDoctor =
+            this.appointmentsAvailable[0]?.consultorio?.doctor;
+          if (primerDoctor) {
+            this.appointmentForm.patchValue({ doctorId: primerDoctor.id });
+            this.doctorSelected = this.appointmentsAvailable[0];
+          }
           console.log('Horario disponible:', response);
         },
       });
+  }
+  seleccionarDoctor(event: any) {
+    const idSeleccionado = event.value; // este es el id que devuelve el p-select
+    this.doctorSelected =
+      this.appointmentsAvailable.find(
+        (a) => a.consultorio.doctor.id === idSeleccionado,
+      ) || null;
+  }
+  consultorios() {
+    return this.appointmentsAvailable
+      .map((a) => a.consultorio?.doctor)
+      .filter((d): d is NonNullable<typeof d> => !!d)
+      .map((d) => ({
+        id: d.id,
+        name: `${d.nombres} ${d.apellidos}`,
+      }));
   }
   seleccionarCita() {
     console.log(
