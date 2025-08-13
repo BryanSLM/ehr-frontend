@@ -42,10 +42,12 @@ import { RouterModule } from '@angular/router';
   styleUrl: './cita-new.component.css',
 })
 export class CitaNewComponent implements OnInit {
+  today = new Date();
   identificationForm: FormGroup = new FormGroup({});
   registerForm: FormGroup = new FormGroup({});
   appointmentForm: FormGroup = new FormGroup({});
   specialties: { id: string; name: string }[] = [];
+  formSubmitted = false;
   constructor(
     private patientService: PatientService,
     private formBuilder: FormBuilder,
@@ -54,15 +56,33 @@ export class CitaNewComponent implements OnInit {
   ) {
     this.identificationForm = this.formBuilder.group({
       typeIdentity: [this.typesIdentity[0]?.value, [Validators.required]],
-      identification: ['', [Validators.required]],
+      identification: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{9,10}$/)],
+      ],
     });
     this.registerForm = this.formBuilder.group({
       typeIdentity: [this.typesIdentity[0]?.value, [Validators.required]],
-      identification: ['', [Validators.required]],
-      names: ['', [Validators.required]],
-      lastNames: ['', [Validators.required]],
+      identification: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{9,10}$/)],
+      ],
+      names: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/),
+        ],
+      ],
+      lastnames: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/),
+        ],
+      ],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern(/^09\d{8}$/)]],
       birthdate: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       id: [''],
@@ -85,7 +105,7 @@ export class CitaNewComponent implements OnInit {
   ];
   existUser = false;
   modeRegister = false;
-  currentStep = 1;
+  currentStep = 0;
   especialidades: { id: string; name: string }[] = [];
   appointmentsAvailable: {
     id: 294;
@@ -105,6 +125,7 @@ export class CitaNewComponent implements OnInit {
     intervalos: { hora: string; disponible: boolean }[];
   }[] = [];
   loadingForm = false;
+  doctorSelected: any = {};
 
   ngOnInit() {
     this.appointmentForm.patchValue({ date: new Date() });
@@ -123,7 +144,9 @@ export class CitaNewComponent implements OnInit {
     }
     this.currentStep++;
   }
+
   consultarUsuario() {
+    this.formSubmitted = true;
     if (this.identificationForm.invalid) {
       console.log('Formulario de identificación inválido');
       this.identificationForm.markAllAsTouched();
@@ -154,11 +177,19 @@ export class CitaNewComponent implements OnInit {
           this.loadingForm = false;
         },
       });
+    this.formSubmitted = false;
   }
   crearUsuario() {
+    this.formSubmitted = true;
+
     this.loadingForm = true;
     if (this.registerForm.invalid) {
       console.log('Formulario de identificación inválido');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al crear usuario',
+        detail: 'Por favor llene todos los campos correctamente',
+      });
       this.registerForm.markAllAsTouched();
       this.loadingForm = false;
       return;
@@ -166,8 +197,11 @@ export class CitaNewComponent implements OnInit {
     this.patientService
       .createPatientExternal(this.registerForm.value)
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           console.log('Usuario creado:', response);
+          this.identificationForm.patchValue({
+            identification: response.identification,
+          });
           this.registerForm.patchValue(response);
           this.messageService.add({
             severity: 'success',
@@ -190,6 +224,7 @@ export class CitaNewComponent implements OnInit {
           this.loadingForm = false;
         },
       });
+    this.formSubmitted = false;
   }
   seleccionarCita() {
     this.loadingForm = true;
@@ -216,6 +251,22 @@ export class CitaNewComponent implements OnInit {
     const names = doctor ? `${doctor.nombres} ${doctor.apellidos}` : '';
     return names;
   }
+  seleccionarDoctor(event: any) {
+    const idSeleccionado = event.value; // este es el id que devuelve el p-select
+    this.doctorSelected =
+      this.appointmentsAvailable.find(
+        (a) => a.consultorio.doctor.id === idSeleccionado,
+      ) || null;
+  }
+  consultorios() {
+    return this.appointmentsAvailable
+      .map((a) => a.consultorio?.doctor)
+      .filter((d): d is NonNullable<typeof d> => !!d)
+      .map((d) => ({
+        id: d.id,
+        name: `${d.nombres} ${d.apellidos}`,
+      }));
+  }
   consultarHorarioDisponible() {
     // if (this.appointmentForm.invalid) {
     //   console.log('Formulario de cita inválido');
@@ -235,6 +286,15 @@ export class CitaNewComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.appointmentsAvailable = response;
+
+          console.log('Horario disponible:', response);
+
+          const primerDoctor =
+            this.appointmentsAvailable[0]?.consultorio?.doctor;
+          if (primerDoctor) {
+            this.appointmentForm.patchValue({ doctorId: primerDoctor.id });
+            this.doctorSelected = this.appointmentsAvailable[0];
+          }
           console.log('Horario disponible:', response);
         },
       });

@@ -17,10 +17,12 @@ export class AdminComponent implements OnInit {
     username: '',
     password: '',
     role: '',
-    especialidad: '',
+    especialidadId: '',
     cedula: '',
     email: '',
     empresa: '',
+    nombres: '',
+    apellidos: '',
   };
   errorMessage = '';
   successMessage = '';
@@ -90,16 +92,18 @@ export class AdminComponent implements OnInit {
       return;
     }
 
-    if (this.newUser.role === 'doctor' && !this.newUser.especialidad) {
+    if (this.newUser.role === 'doctor' && !this.newUser.especialidadId) {
       this.errorMessage =
         'Por favor seleccione una especialidad para el doctor';
       return;
     }
 
+    console.log('USUARIO', this.newUser); // Depuración
+
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-
+    // return;
     this.userService.createUser(this.newUser).subscribe({
       next: (response) => {
         this.successMessage = 'Usuario creado exitosamente';
@@ -151,10 +155,12 @@ export class AdminComponent implements OnInit {
       username: '',
       password: '',
       role: '',
-      especialidad: '',
+      especialidadId: '',
       cedula: '',
       email: '',
       empresa: '',
+      nombres: '',
+      apellidos: '',
     };
   }
 

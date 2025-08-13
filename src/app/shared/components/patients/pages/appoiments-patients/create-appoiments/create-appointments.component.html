@@ -32,34 +32,58 @@
               formControlName="date"
               [inline]="true"
               styleClass=" custom-datepicker"
+              [minDate]="today"
               (onSelect)="consultarHorarioDisponible()"
             />
           </div>
 
           <div class="flex flex-column items-center" style="width: 60%">
-            <div class="flex align-items-center gap-4 w-full">
-              <label
-                class="text-3xl text-blue-500 font-bold"
-                for="identification"
-                >Especialidad:</label
-              >
-              <p-select
-                optionLabel="name"
-                [optionValue]="'id'"
-                [options]="specialties"
-                placeholder="Seleccione una especialidad"
-                class=""
-                formControlName="specialty"
-                (onChange)="consultarHorarioDisponible()"
-              />
+            <div class="flex justify-content-center items-center gap-4 p-4">
+              <div class="flex align-items-center gap-4 w-full">
+                <label
+                  class="text-3xl text-blue-500 font-bold"
+                  for="identification"
+                  >Especialidad:</label
+                >
+                <p-select
+                  optionLabel="name"
+                  [optionValue]="'id'"
+                  [options]="specialties"
+                  placeholder="Seleccione una especialidad"
+                  class=""
+                  formControlName="specialty"
+                  (onChange)="consultarHorarioDisponible()"
+                />
+              </div>
+              <div class="flex align-items-center gap-4 w-full" *ngIf="this.appointmentForm.get('specialty')?.value && appointmentsAvailable.length > 0">
+                <label
+                  class="text-3xl text-blue-500 font-bold"
+                  for="identification"
+                  >Doctor:</label
+                >
+                <p-select
+                  optionLabel="name"
+                  optionValue="id"
+                  [options]="consultorios()"
+                  placeholder="Seleccione un doctor"
+                  (onChange)="seleccionarDoctor($event)"
+                  formControlName="doctorId" 
+                />
+              </div>
             </div>
             @if (this.appointmentForm.get('specialty')?.value) {
               @if (appointmentsAvailable.length > 0) {
-                <div *ngFor="let item of appointmentsAvailable">
+                <div>
+                  <!-- <div *ngFor="let item of appointmentsAvailable"> -->
                   <div class="">
                     <p class="text-2xl mb-0">
-                      DR. {{ item.consultorio.doctor.nombres.toUpperCase() }}
-                      {{ item.consultorio.doctor.apellidos.toUpperCase() }}
+                      DR.
+                      {{
+                        doctorSelected?.consultorio?.doctor.nombres.toUpperCase()
+                      }}
+                      {{
+                        doctorSelected?.consultorio?.doctor.apellidos.toUpperCase()
+                      }}
                     </p>
                   </div>
                   <div
@@ -70,7 +94,7 @@
                     <p class="">Horarios de atención</p>
                     <div class="flex flex-wrap gap-4 ml-4">
                       <div
-                        *ngFor="let times of item.intervalos"
+                        *ngFor="let times of doctorSelected?.intervalos"
                         [ngClass]="{
                           'bg-blue-500 text-white':
                             times.hora === appointmentForm.get('time')?.value,
@@ -85,22 +109,22 @@
                         (click)="
                           seleccionarHora(
                             times.hora,
-                            item.consultorio.doctor.id,
-                            item.consultorio.id
+                            doctorSelected?.consultorio?.doctor?.id,
+                            doctorSelected?.consultorio?.id
                           )
                         "
                         (keydown.enter)="
                           seleccionarHora(
                             times.hora,
-                            item.consultorio.doctor.id,
-                            item.consultorio.id
+                            doctorSelected?.consultorio?.doctor?.id,
+                            doctorSelected?.consultorio?.id
                           )
                         "
                         (keydown.space)="
                           seleccionarHora(
                             times.hora,
-                            item.consultorio.doctor.id,
-                            item.consultorio.id
+                            doctorSelected?.consultorio?.doctor?.id,
+                            doctorSelected?.consultorio?.id
                           )
                         "
                       >
@@ -195,6 +219,7 @@
                 <input
                   id="identification"
                   pInputText
+                  readonly
                   [value]="this.user.identification"
                 />
               </div>
@@ -202,7 +227,7 @@
                 <label class="mb-2 text-blue-500 font-bold" for="names">
                   Nombres:</label
                 >
-                <input id="names" pInputText [value]="this.user.names" />
+                <input id="names" pInputText [value]="this.user.names" readonly />
               </div>
             </div>
             <div class="flex gap-4 align-items-center justify-content-center">
@@ -221,7 +246,7 @@
                 <label class="mb-2 text-blue-500 font-bold" for="doctor">
                   Doctor:</label
                 >
-                <input id="doctor" pInputText [value]="nameDoctor" />
+                <input id="doctor" pInputText [value]="nameDoctor" readonly />
               </div>
             </div>
             <div class="flex gap-4 align-items-center justify-content-center">
@@ -244,6 +269,7 @@
                 >
                 <input
                   id="time"
+                  readonly
                   pInputText
                   [value]="this.appointmentForm.get('time')?.value"
                 />

@@ -94,6 +94,25 @@
           Regístrate
         </button>
       </div>
+        <div class="text-center mt-0">
+        <span>¿Deseas agendar una cita rápida?</span>
+        <button
+          type="button"
+          class="register-link bg-transparent border-0 p-0"
+          style="
+            margin-left: 5px;
+            color: white;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+          "
+          (click)="goToAppointment()"
+          (keyup.enter)="goToAppointment()"
+          tabindex="0"
+        >
+          Agendar
+        </button>
+      </div>
     </form>
   </div>
 </div>

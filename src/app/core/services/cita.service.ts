@@ -103,7 +103,7 @@ export class CitasService {
     const params = new HttpParams().set('search', query).set('limit', '10'); // Ajusta este número según necesites
 
     return this.http
-      .get<PacienteResponse>(`${this.apiUrl}/api/patients`, {
+      .get<PacienteResponse>(`${this.apiUrl}/patients`, {
         params,
       })
       .pipe(
@@ -124,7 +124,7 @@ export class CitasService {
   // Obtener doctores
   getDoctores(): Observable<Doctor[]> {
     return this.http
-      .get<ApiResponse<Doctor[]>>(`${this.apiUrl}/api/admin/users`, {
+      .get<ApiResponse<Doctor[]>>(`${this.apiUrl}/admin/users`, {
         headers: this.getHeaders(),
         params: { role: 'doctor' },
       })
@@ -148,7 +148,7 @@ export class CitasService {
   // Obtener consultorios
   getConsultorios(): Observable<Consultorio[]> {
     return this.http
-      .get<any>(`${this.apiUrl}/api/consultorios`, {
+      .get<any>(`${this.apiUrl}/consultorios`, {
         headers: this.getHeaders(),
       })
       .pipe(
@@ -226,7 +226,7 @@ export class CitasService {
 
     return this.http
       .get<ApiResponse<{ disponible: boolean }>>(
-        `${this.apiUrl}/api/citas/disponibilidad`, // Cambiado a /disponibilidad
+        `${this.apiUrl}/citas/disponibilidad`, // Cambiado a /disponibilidad
         {
           params,
           headers: this.getHeaders(),
@@ -257,7 +257,7 @@ export class CitasService {
           );
         }
         return this.http
-          .post<ApiResponse<Cita>>(`${this.apiUrl}/api/citas`, citaData, {
+          .post<ApiResponse<Cita>>(`${this.apiUrl}/citas`, citaData, {
             headers: this.getHeaders(),
           })
           .pipe(
@@ -343,7 +343,7 @@ export class CitasService {
   getCitasByConsultorio(consultorioId: number): Observable<any[]> {
     return this.http
       .get<{ success: boolean; data: any[] }>(
-        `${this.apiUrl}/api/citas/consultorio/${consultorioId}`,
+        `${this.apiUrl}/citas/consultorio/${consultorioId}`,
         {
           headers: this.getHeaders(),
         },
@@ -379,7 +379,7 @@ export class CitasService {
       .set('doctorId', doctorId.toString());
 
     return this.http
-      .get<any>(`${this.apiUrl}/api/citas/horarios-disponibles`, {
+      .get<any>(`${this.apiUrl}/citas/horarios-disponibles`, {
         headers: this.getHeaders(),
         params,
       })
