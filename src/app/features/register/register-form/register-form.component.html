@@ -158,6 +158,14 @@
             >La contraseña debe tener al menos 8 caracteres</small
           >
         }
+        @if (
+          registerForm.controls['password'].errors?.['pattern'] && formSubmitted
+        ) {
+          <small style="color: red">
+            La contraseña debe tener al menos una mayúscula, una minúscula, un
+            número y un signo especial
+          </small>
+        }
       </div>
       <div class="flex flex-column gap-2 col-12 py-2">
         <label for="confirm_password" class="font-medium"

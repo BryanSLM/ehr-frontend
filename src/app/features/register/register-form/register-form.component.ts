@@ -90,7 +90,16 @@ export class RegisterFormComponent implements OnInit {
             Validators.pattern(/^\d+$/),
           ],
         ],
-        password: ['', [Validators.required, Validators.minLength(8)]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
+            ),
+          ],
+        ],
         confirm_password: ['', [Validators.required]],
       },
       {
