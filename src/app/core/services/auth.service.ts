@@ -141,7 +141,7 @@ export class AuthService {
     console.log('Enviando reset password con token');
 
     return this.http
-      .post(`${this.apiUrl}/api/auth/reset-password`, {
+      .post(`${this.apiUrl}/auth/reset-password`, {
         token,
         newPassword, // Mantener como newPassword para coincidir con el backend
       })
