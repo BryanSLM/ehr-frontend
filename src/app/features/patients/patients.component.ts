@@ -51,18 +51,45 @@ export class PatientsComponent implements OnInit {
     this.loadPatients();
   }
 
-  changePage(page: number) {
-    if (page >= 1 && page <= this.totalPages) {
+  changePage(page: number | string) {
+    if (typeof page === 'number' && page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.loadPatients();
     }
   }
 
-  getPages(): number[] {
-    const pages: number[] = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
+  getPages(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    const total = this.totalPages;
+    const current = this.currentPage;
+
+    if (total <= 7) {
+      for (let i = 1; i <= total; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+
+      if (current > 4) {
+        pages.push('...');
+      }
+
+      const start = Math.max(2, current - 1);
+      const end = Math.min(total - 1, current + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (current < total - 3) {
+        pages.push('...');
+      }
+
+      if (total > 1) {
+        pages.push(total);
+      }
     }
+
     return pages;
   }
 
@@ -81,7 +108,7 @@ export class PatientsComponent implements OnInit {
 
   deletePatient(id: string) {
     if (confirm('¿Está seguro de eliminar este paciente?')) {
-      this.patientService.deletePatient(id).subscribe({
+      this.patientService.deletePatient(Number(id)).subscribe({
         next: () => {
           this.loadPatients();
           // Aquí podrías mostrar un mensaje de éxito

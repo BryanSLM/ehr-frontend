@@ -67,8 +67,8 @@
   max-width: 400px;
   animation: fadeIn 1s ease-out;
   left: 3em;
-  width: 23em;
-  height: 25em;
+  width: 25em;
+  height: 30em;
 }
 
 /* ANIMACIÓN ORIGINAL */
@@ -149,10 +149,14 @@
 }
 
 .forgot-password-link {
-  color: #047CDB;
+  color: #006eff;
   text-decoration: none;
   font-size: 0.9rem;
-  
+ position: relative;
+  top: -0.2em; /* Ajusta la posición vertical del enlace */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-weight: 500;
+  transition: color 0.3s ease; /* Transición suave para el color */
 }
 
 .forgot-password-link:hover {

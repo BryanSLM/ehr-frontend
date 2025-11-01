@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { VitalSignsService } from '../../core/services/vital-signs.service';
+import { PatientService } from '../../core/services/patient.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -19,8 +20,15 @@ export class EnfermeraDashboardComponent {
   error = '';
   filterForm: FormGroup;
 
+  // Alertas de pacientes sin identificación
+  pacientesSinIdentificacion: any[] = [];
+  mostrarAlertas: boolean[] = [];
+
+  @ViewChild('alertAudio', { static: false }) alertAudio!: ElementRef<HTMLAudioElement>;
+
   constructor(
     private vitalSignsService: VitalSignsService,
+    private patientService: PatientService,
     private fb: FormBuilder,
     private router: Router
   ) {
@@ -37,6 +45,28 @@ export class EnfermeraDashboardComponent {
   ngOnInit() {
     this.loadPendingAppointments();
     this.loadCompletedVitalSigns();
+    this.checkPacientesSinIdentificacion();
+  }
+
+  checkPacientesSinIdentificacion() {
+    this.patientService.getPatients({}).subscribe({
+      next: (data) => {
+        // Filtrar pacientes con identificacion no_identificado o que empiece con 0000
+        this.pacientesSinIdentificacion = (data.patients || data).filter((p: any) =>
+          p.tipo_identificacion === 'no_identificado' ||
+          (typeof p.cedula === 'string' && p.cedula.startsWith('0000'))
+        );
+        this.mostrarAlertas = this.pacientesSinIdentificacion.map(() => true);
+        // Las alertas NO se ocultan automáticamente, son persistentes
+      },
+      error: (error) => {
+        console.error('Error al obtener pacientes:', error);
+      }
+    });
+  }
+
+  irAEditarPaciente(paciente: any) {
+    this.router.navigate(['/patients', paciente.id, 'edit']);
   }
 
   loadPendingAppointments() {

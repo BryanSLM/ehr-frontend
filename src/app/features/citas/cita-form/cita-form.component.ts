@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
-import { CitasService } from '../../../core/services/cita.service';
-import { Consultorio } from '../../../interfaces/consultorio.interface';
+import { CitasService, Consultorio } from '../../../core/services/cita.service';
+import { EspecialidadesService } from '../../../core/services/especialidades.service';
+import { Especialidad } from '../../../core/interfaces';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { CitaHorarioSelectorComponent } from '../horario/cita-horario-selector/cita-horario-selector.component';
@@ -22,12 +23,15 @@ interface HorarioSeleccionado {
   hora: string;
 }
 
+// Interfaces
 interface Doctor {
   id: number;
   username: string;
   especialidad: string;
-  role: string;
+  role?: string;
+  roles?: string[];
   active: boolean;
+  tipo?: string;
 }
 
 interface HorarioDisponible {
@@ -43,8 +47,8 @@ interface HorarioDisponible {
     CommonModule, 
     ReactiveFormsModule, 
     RouterModule,
-    CitaHorarioSelectorComponent // Asegúrate de que este componente sea standalone
-  ] as const, // Agregar 'as const' para ayudar con el análisis estático
+    CitaHorarioSelectorComponent
+  ] as const,
   templateUrl: './cita-form.component.html',
   styleUrls: ['./cita-form.component.scss']
 })
@@ -70,6 +74,7 @@ export class CitaFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private citasService: CitasService,
+    private especialidadesService: EspecialidadesService,
     public router: Router,
     private route: ActivatedRoute
   ) {
@@ -77,20 +82,13 @@ export class CitaFormComponent implements OnInit {
       pacienteId: ['', Validators.required],
       pacienteBuscador: [''],
       especialidad: ['', Validators.required],
-      doctorId: ['', Validators.required],
+      doctorId: [{ value: '', disabled: true }, Validators.required],
       consultorioId: ['', Validators.required],
-      fecha: ['', Validators.required],
-      hora: [{ value: '', disabled: false }, Validators.required],
+      fecha: [{ value: '', disabled: true }, Validators.required],
+      hora: [{ value: '', disabled: true }, Validators.required],
       notas: ['']
     });
-
-    // Deshabilitar campos que dependen de selecciones previas
-    this.citaForm.get('doctorId')?.disable();
-    this.citaForm.get('fecha')?.disable();
-    this.citaForm.get('hora')?.disable();
   }
-
-  
 
   ngOnInit(): void {
     this.isEditing = this.route.snapshot.params['id'] !== undefined;
@@ -102,13 +100,24 @@ export class CitaFormComponent implements OnInit {
 
     // Suscribirse a cambios en especialidad
     this.citaForm.get('especialidad')?.valueChanges.subscribe(especialidad => {
+      console.log('Cambio de especialidad:', especialidad);
+      console.log('Doctores disponibles:', this.doctores);
+      
       this.citaForm.patchValue({ doctorId: '' });
       if (especialidad) {
-        // Filtrar doctores por especialidad seleccionada
-        this.doctoresFiltrados = this.doctores.filter(
-          doctor => doctor.especialidad === especialidad && doctor.active
-        );
-        this.citaForm.get('doctorId')?.enable();
+        // Obtener doctores por especialidad del servidor
+        this.citasService.getDoctoresByEspecialidad(especialidad).subscribe({
+          next: (doctores) => {
+            this.doctoresFiltrados = doctores;
+            console.log('Doctores filtrados:', this.doctoresFiltrados);
+            this.citaForm.get('doctorId')?.enable();
+          },
+          error: (error) => {
+            console.error('Error al obtener doctores por especialidad:', error);
+            this.error = 'Error al cargar los doctores de la especialidad';
+            this.doctoresFiltrados = [];
+          }
+        });
       } else {
         this.doctoresFiltrados = [];
         this.citaForm.get('doctorId')?.disable();
@@ -154,6 +163,11 @@ export class CitaFormComponent implements OnInit {
 
    // Suscribirse a cambios en doctorId
    this.citaForm.get('doctorId')?.valueChanges.subscribe(doctorId => {
+    console.log('=== CAMBIO EN DOCTOR ===');
+    console.log('DoctorId seleccionado:', doctorId);
+    console.log('Doctores disponibles:', this.doctores);
+    console.log('Consultorios disponibles:', this.consultorios);
+    
     if (doctorId) {
       const doctorSeleccionado = this.doctores.find(d => d.id === Number(doctorId));
       console.log('Doctor seleccionado:', doctorSeleccionado);
@@ -161,6 +175,7 @@ export class CitaFormComponent implements OnInit {
       if (doctorSeleccionado) {
         // Buscar el consultorio en la lista ya cargada
         const consultorioAsignado = this.consultorios.find(c => c.doctorId === doctorSeleccionado.id);
+        console.log('Consultorio encontrado:', consultorioAsignado);
         
         if (consultorioAsignado) {
           this.consultorioSeleccionado = consultorioAsignado;
@@ -168,19 +183,23 @@ export class CitaFormComponent implements OnInit {
             consultorioAsignado.descripcion ? ' - ' + consultorioAsignado.descripcion : ''
           }`;
           this.citaForm.patchValue({ consultorioId: consultorioAsignado.id });
+          console.log('Consultorio asignado al formulario:', consultorioAsignado.id);
           
           // Cargar citas existentes para este consultorio
-          this.citasService.getCitasByConsultorio(consultorioAsignado.id).subscribe({
-            next: (citas) => {
-              this.citasExistentes = citas;
-              console.log('Citas existentes cargadas:', this.citasExistentes);
-            },
-            error: (error) => {
-              console.error('Error al cargar citas existentes:', error);
-              this.error = 'Error al cargar horarios disponibles';
-            }
-          });
+          if (consultorioAsignado.id) {
+            this.citasService.getCitasByConsultorio(consultorioAsignado.id).subscribe({
+              next: (citas) => {
+                this.citasExistentes = citas;
+                console.log('Citas existentes cargadas:', this.citasExistentes);
+              },
+              error: (error: any) => {
+                console.error('Error al cargar citas existentes:', error);
+                this.error = 'Error al cargar horarios disponibles';
+              }
+            });
+          }
         } else {
+          console.log('No se encontró consultorio para el doctor:', doctorSeleccionado.id);
           this.consultorioAsignado = 'No tiene consultorio asignado';
           this.consultorioSeleccionado = null;
           this.citaForm.patchValue({ consultorioId: '' });
@@ -192,14 +211,14 @@ export class CitaFormComponent implements OnInit {
       this.citaForm.patchValue({ consultorioId: '' });
     }
 
-
-  // Resetear campos dependientes
-  this.citaForm.patchValue({
-    fecha: '',
-    hora: ''
-  });
-  this.horariosDisponibles = [];
-  this.citaForm.get('hora')?.disable();
+    // Resetear campos dependientes
+    this.citaForm.patchValue({
+      fecha: '',
+      hora: ''
+    });
+    this.horariosDisponibles = [];
+    this.citaForm.get('hora')?.disable();
+    console.log('=== FIN CAMBIO EN DOCTOR ===');
 });
 
     // Suscribirse a cambios en fecha
@@ -239,6 +258,7 @@ export class CitaFormComponent implements OnInit {
     this.citasService.getPacientes().subscribe({
       next: (pacientes) => {
         this.pacientes = pacientes;
+        console.log('Pacientes cargados:', pacientes.length);
       },
       error: (error) => {
         console.error('Error al cargar pacientes:', error);
@@ -250,43 +270,57 @@ export class CitaFormComponent implements OnInit {
     // Cargar consultorios y doctores
     this.citasService.getConsultorios().subscribe({
       next: (consultorios) => {
+        console.log('Consultorios cargados:', consultorios);
         this.consultorios = consultorios;
         
         // Cargar doctores después de tener los consultorios
         this.citasService.getDoctores().subscribe({
           next: (doctores) => {
+            console.log('Doctores cargados:', doctores);
             this.doctores = doctores.filter(d => d.active);
+            console.log('Doctores activos:', this.doctores);
             
             // Inicializar doctoresFiltrados como vacío
             this.doctoresFiltrados = [];
             
-            this.especialidades = Array.from(new Set(
-              this.doctores
-                .map(d => d.especialidad)
-                .filter((esp): esp is string => esp !== undefined)
-            ));
-            
-            // Si estamos editando, cargar la cita
-            if (this.isEditing) {
-              this.cargarCita(this.route.snapshot.params['id']);
-            }
-            
-            this.loading = false;
+                // Cargar especialidades desde el servicio
+            console.log('Iniciando carga de especialidades...');
+            this.especialidadesService.obtenerEspecialidades().subscribe(
+              (especialidades: Especialidad[]) => {
+                console.log('Respuesta del servicio de especialidades:', especialidades);
+                this.especialidades = especialidades.map(esp => esp.nombre);
+                console.log('Especialidades cargadas:', this.especialidades);
+                console.log('Especialidades disponibles:', this.especialidades);
+                
+                // Si estamos editando, cargar la cita
+                if (this.isEditing) {
+                  this.cargarCita(this.route.snapshot.params['id']);
+                }
+                
+                this.loading = false;
+              },
+              (error: any) => {
+                console.error('Error al cargar especialidades:', error);
+                this.error = 'Error al cargar las especialidades';
+                this.loading = false;
+              }
+            );
           },
-          error: (error) => {
+          error: (error: any) => {
             console.error('Error al cargar doctores:', error);
             this.error = 'Error al cargar los doctores';
             this.loading = false;
           }
         });
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error al cargar consultorios:', error);
         this.error = 'Error al cargar los consultorios';
         this.loading = false;
       }
     });
   }
+
   selectPaciente(paciente: Paciente) {
     console.log('Paciente seleccionado:', paciente);
     this.citaForm.patchValue({
@@ -315,38 +349,45 @@ export class CitaFormComponent implements OnInit {
         if (consultorio) {
           this.consultorioSeleccionado = consultorio;
           // Cargar citas existentes
-          this.citasService.getCitasByConsultorio(consultorio.id).subscribe({
-            next: (citas) => {
-              this.citasExistentes = citas.filter(c => c.id !== id); // Excluir la cita actual
-              
-              // Establecer valores del formulario
-              this.citaForm.patchValue({
-                pacienteId: cita.pacienteId,
-                consultorioId: cita.consultorioId,
-                doctorId: cita.doctorId,
-                fecha: cita.fecha,
-                hora: cita.hora,
-                notas: cita.notas
-              });
-  
-              // Cargar el nombre del paciente en el buscador
-              const paciente = this.pacientes.find(p => p.id === cita.pacienteId);
-              if (paciente) {
+          if (consultorio.id) {
+            this.citasService.getCitasByConsultorio(consultorio.id).subscribe({
+              next: (citas) => {
+                this.citasExistentes = citas.filter(c => c.id !== id); // Excluir la cita actual
+                
+                // Establecer valores del formulario
                 this.citaForm.patchValue({
-                  pacienteBuscador: `${paciente.primer_nombre} ${paciente.apellido_paterno} - ${paciente.cedula}`
+                  pacienteId: cita.pacienteId,
+                  consultorioId: cita.consultorioId,
+                  doctorId: cita.doctorId,
+                  fecha: cita.fecha,
+                  hora: cita.hora,
+                  notas: cita.notas
                 });
+    
+                // Cargar el nombre del paciente en el buscador
+                const paciente = this.pacientes.find(p => p.id === cita.pacienteId);
+                if (paciente) {
+                  this.citaForm.patchValue({
+                    pacienteBuscador: `${paciente.primer_nombre} ${paciente.apellido_paterno} - ${paciente.cedula}`
+                  });
+                }
+    
+                // Habilitar campos dependientes
+                this.citaForm.get('fecha')?.enable();
+                this.citaForm.get('hora')?.enable();
+              },
+              error: (error: any) => {
+                console.error('Error al cargar citas:', error);
+                this.error = 'Error al cargar las citas';
+                this.loading = false;
               }
-  
-              // Habilitar campos dependientes
-              this.citaForm.get('fecha')?.enable();
-              this.citaForm.get('hora')?.enable();
-            }
-          });
+            });
+          }
         }
-  
+        
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.error = 'Error al cargar la cita';
         this.loading = false;
         console.error('Error:', error);
@@ -355,14 +396,72 @@ export class CitaFormComponent implements OnInit {
   }
 
   onHorarioSeleccionado(evento: {fecha: string, hora: string}) {
+    console.log('Horario seleccionado:', evento);
+    
+    // Habilitar los campos antes de establecer los valores
+    this.citaForm.get('fecha')?.enable();
+    this.citaForm.get('hora')?.enable();
+    
+    // Establecer los valores
     this.citaForm.patchValue({
       fecha: evento.fecha,
       hora: evento.hora
     });
+    
+    console.log('Campos habilitados y valores establecidos');
+    console.log('Fecha:', this.citaForm.get('fecha')?.value);
+    console.log('Hora:', this.citaForm.get('hora')?.value);
+    console.log('Campo fecha habilitado:', !this.citaForm.get('fecha')?.disabled);
+    console.log('Campo hora habilitado:', !this.citaForm.get('hora')?.disabled);
+  }
+
+  // Método para verificar si el formulario es válido
+  isFormValid(): boolean {
+    const form = this.citaForm;
+    
+    // Obtener valores de los campos
+    const pacienteId = form.get('pacienteId')?.value;
+    const especialidad = form.get('especialidad')?.value;
+    const doctorId = form.get('doctorId')?.value;
+    const consultorioId = form.get('consultorioId')?.value;
+    const fecha = form.get('fecha')?.value;
+    const hora = form.get('hora')?.value;
+    
+    // Debugging detallado
+    console.log('=== DEBUGGING FORMULARIO ===');
+    console.log('Formulario válido:', form.valid);
+    console.log('pacienteId:', pacienteId);
+    console.log('especialidad:', especialidad);
+    console.log('doctorId:', doctorId);
+    console.log('consultorioId:', consultorioId);
+    console.log('fecha:', fecha);
+    console.log('hora:', hora);
+    console.log('Errores del formulario:', form.errors);
+    console.log('Estado de los controles:', {
+      pacienteId: form.get('pacienteId')?.errors,
+      especialidad: form.get('especialidad')?.errors,
+      doctorId: form.get('doctorId')?.errors,
+      consultorioId: form.get('consultorioId')?.errors,
+      fecha: form.get('fecha')?.errors,
+      hora: form.get('hora')?.errors
+    });
+    console.log('===========================');
+    
+    // Verificar que todos los campos requeridos tengan valor
+    const isValid = form.valid && 
+                   pacienteId && 
+                   especialidad && 
+                   doctorId && 
+                   consultorioId && 
+                   fecha && 
+                   hora;
+    
+    console.log('Formulario es válido:', isValid);
+    return isValid;
   }
 
   onSubmit() {
-    if (this.citaForm.valid) {
+    if (this.isFormValid()) {
       const citaData = {
         pacienteId: this.citaForm.get('pacienteId')?.value,
         consultorioId: this.citaForm.get('consultorioId')?.value,
@@ -429,6 +528,7 @@ export class CitaFormComponent implements OnInit {
   cancelar() {
     this.router.navigate(['/secretaria/citas']);
   }
+
   agregarPaciente() {
     this.router.navigate(['/patients/new']);
   }

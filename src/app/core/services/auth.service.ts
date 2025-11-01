@@ -9,8 +9,10 @@ import { environment } from '../../../environments/environment';
 interface User {
   id: number;
   username: string;
-  role: string;
+  roles: string[];
   active: boolean;
+  identificacion: string;
+  tipo_identificacion: 'cedula' | 'pasaporte' | 'no_identificado';
 }
 
 interface LoginResponse {
@@ -25,21 +27,37 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
   private tokenKey = 'token';
   private userKey = 'user';
+  private showRoleSelection = false;
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {}
 
-  login(username: string, password: string): Observable<LoginResponse> {
-    console.log('Iniciando login para:', username);
-    
-    return this.http.post<LoginResponse>(`${this.apiUrl}/api/auth/login`, { 
-      username, 
-      password 
+  setActiveRole(role: string): void {
+    const user = this.getUser();
+    if (user) {
+      localStorage.setItem('activeRole', role);
+    }
+  }
+
+  getActiveRole(): string | null {
+    return localStorage.getItem('activeRole');
+  }
+
+  getUserRoles(): string[] {
+    const user = this.getUser();
+    return user?.roles || [];
+  }
+
+
+  login(identificacion: string, password: string, selectedRole: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/api/auth/login`, {
+      identificacion,
+      password,
+      selectedRole
     }).pipe(
       tap(response => {
-        console.log('Respuesta del login:', response);
         if (response.token) {
           this.setSession(response);
         }
@@ -51,9 +69,34 @@ export class AuthService {
     );
   }
 
+  redirectToRoleDashboard(role: string): void {
+    switch(role.toLowerCase()) {
+      case 'administrador':
+        this.router.navigate(['/admin']);
+        break;
+      case 'doctor':
+      case 'dentista':
+        this.router.navigate(['/doctor']);
+        break;
+      case 'secretaria':
+        this.router.navigate(['/secretaria']);
+        break;
+      case 'enfermera':
+        this.router.navigate(['/enfermera']);
+        break;
+      default:
+        this.router.navigate(['/unauthorized']);
+    }
+  }
+
   private setSession(response: LoginResponse): void {
     localStorage.setItem(this.tokenKey, response.token);
     localStorage.setItem(this.userKey, JSON.stringify(response.user));
+    
+    // Establecer el primer rol como rol activo si el usuario tiene roles
+    if (response.user.roles && response.user.roles.length > 0) {
+      this.setActiveRole(response.user.roles[0]);
+    }
   }
   
 
@@ -86,29 +129,28 @@ export class AuthService {
     return null;
   }
 
+
   isSecretary(): boolean {
     const user = this.getUser();
-    return user?.role === 'SECRETARIA';
+    return user?.roles?.includes('secretaria') || false;
   }
 
+
+  // Devuelve el rol activo seleccionado por el usuario
   getUserRole(): string {
-    try {
-      const userStr = localStorage.getItem('user');
-      if (!userStr) return '';
-      
-      const user = JSON.parse(userStr);
-      return user.role || '';
-    } catch (error) {
-      console.error('Error al obtener el rol:', error);
-      return '';
-    }
+    return this.getActiveRole() || '';
+  }
+
+  // Verifica si el rol activo es el requerido
+  hasActiveRole(requiredRole: string): boolean {
+    const activeRole = this.getActiveRole();
+    return activeRole ? activeRole.toLowerCase() === requiredRole.toLowerCase() : false;
   }
 
   hasRole(requiredRole: string): boolean {
-    const userRole = this.getUserRole();
-    return userRole === requiredRole;
+    const userRoles = this.getUserRoles();
+    return userRoles.some(role => role.toLowerCase() === requiredRole.toLowerCase());
   }
-
   isUserActive(): boolean {
     const user = this.getUser();
     return user ? user.active : false;
@@ -148,3 +190,4 @@ export class AuthService {
 }
 
 }
+

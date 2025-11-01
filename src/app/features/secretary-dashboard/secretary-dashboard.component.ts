@@ -4,6 +4,7 @@ import { RouterModule, RouterOutlet, RouterLink, RouterLinkActive, Router } from
 import { PatientsComponent } from '../patients/patients.component';
 import { ConsultoriosComponent } from '../consultorios/consultorios.component';
 import { CitasListComponent } from '../citas/citas-list/citas-list.component';
+import { PatientService } from '../../core/services/patient.service';
 
 @Component({
   selector: 'app-secretary-dashboard',
@@ -24,7 +25,33 @@ import { CitasListComponent } from '../citas/citas-list/citas-list.component';
 export class SecretaryDashboardComponent {
   activeTab = 'patients';
 
-  constructor(private router: Router) {}
+  pacientesSinIdentificacion: any[] = [];
+  mostrarAlertas: boolean[] = [];
+
+  constructor(private router: Router, private patientService: PatientService) {}
+
+  ngOnInit() {
+    this.checkPacientesSinIdentificacion();
+  }
+
+  checkPacientesSinIdentificacion() {
+    this.patientService.getPatients({}).subscribe({
+      next: (data) => {
+        this.pacientesSinIdentificacion = (data.patients || data).filter((p: any) =>
+          p.tipo_identificacion === 'no_identificado' ||
+          (typeof p.cedula === 'string' && p.cedula.startsWith('0000'))
+        );
+        this.mostrarAlertas = this.pacientesSinIdentificacion.map(() => true);
+      },
+      error: (error) => {
+        console.error('Error al obtener pacientes:', error);
+      }
+    });
+  }
+
+  irAEditarPaciente(paciente: any) {
+    this.router.navigate(['/patients', paciente.id, 'edit']);
+  }
 
   setActiveTab(tab: string) {
     console.log('Cambiando a tab:', tab);

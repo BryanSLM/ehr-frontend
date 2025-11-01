@@ -19,6 +19,8 @@ export interface Consultorio {
     id: number;
     username: string;
     especialidad: string;
+    tipo?: string;
+    roles?: string[];
   };
 }
 
@@ -26,6 +28,7 @@ export interface Doctor {
   id: number;
   username: string;
   especialidad: string;
+  tipo?: string;
 }
 
 @Injectable({

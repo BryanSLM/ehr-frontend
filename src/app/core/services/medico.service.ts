@@ -16,9 +16,8 @@ export class MedicoService {
   ) { }
 
   getPacientesConSignos(): Observable<any> {
-    const medicoId = this.authService.getUser()?.id;
-    return this.http.get(`${this.apiUrl}/evoluciones/medico/${medicoId}/pacientes-con-signos`);
-}
+    return this.http.get(`${this.apiUrl}/evoluciones/medico/pacientes-con-signos`);
+  }
 
   obtenerDatosPaciente(pacienteId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/patients/${pacienteId}`).pipe(
@@ -117,8 +116,15 @@ export class MedicoService {
   }
 
   getPacientesClasificados(): Observable<any> {
-    const medicoId = this.authService.getUser()?.id;
-    return this.http.get(`${this.apiUrl}/evoluciones/medico/${medicoId}/pacientes-clasificados`);
+    const user = this.authService.getUser();
+    const isDentista = user?.roles.includes('dentista');
+
+    let url = `${this.apiUrl}/evoluciones/medico/pacientes-clasificados`;
+    if (isDentista) {
+      url += '?requiereSignosVitales=true';
+    }
+    
+    return this.http.get(url);
 }
 
 getPacientesOtrosMedicos(): Observable<any> {
@@ -164,6 +170,7 @@ esMedicoAutor(evolucion: any): boolean {
   const medicoId = this.authService.getUser()?.id;
   return evolucion.medicoId === medicoId;
 }
+
   
   eliminarEvolucion(evolucionId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/evoluciones/${evolucionId}`).pipe(
@@ -204,6 +211,22 @@ esMedicoAutor(evolucion: any): boolean {
 
 obtenerMedicamentoPorId(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/prescripciones/medicamentos/${id}`);
+}
+
+// Métodos para nombres comerciales
+getNombresComerciales(medicamentoId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/medicamentos/${medicamentoId}/nombres-comerciales`);
+}
+
+agregarNombreComercial(medicamentoId: number, nombreComercial: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/medicamentos/nombres-comerciales`, {
+        medicamento_id: medicamentoId,
+        nombre_comercial: nombreComercial
+    });
+}
+
+eliminarNombreComercial(nombreComercialId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/medicamentos/nombres-comerciales/${nombreComercialId}`);
 }
 }
 

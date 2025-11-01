@@ -4,7 +4,31 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Consultorio } from '../../interfaces/consultorio.interface';
+
+export interface Consultorio {
+  id?: number;
+  nombre: string;
+  especialidad: string;
+  estado: boolean | 'activo';
+  doctorId?: number;
+  numero?: string;
+  descripcion?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface HorarioConsultorio {
+  id?: number;
+  consultorioId: number;
+  dia: string;
+  horaInicio: string;
+  horaFin: string;
+  fecha?: Date;
+  estado: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  consultorio?: Consultorio;
+}
 
 // Interfaces
 interface Cita {
@@ -76,8 +100,10 @@ interface Doctor {
   id: number;
   username: string;
   especialidad: string;
-  role: string;
+  role?: string;
+  roles?: string[];
   active: boolean;
+  tipo?: string;
 }
 
 @Injectable({
@@ -102,40 +128,84 @@ export class CitasService {
     
     const params = new HttpParams()
       .set('search', query)
-      .set('limit', '10'); // Ajusta este número según necesites
+      .set('limit', '10');
     
     return this.http.get<PacienteResponse>(`${this.apiUrl}/api/patients`, {
-      params
+      params,
+      headers: this.getHeaders()
     }).pipe(
       map(response => {
         console.log('Respuesta del servidor:', response);
-        return response.patients || [];
+        if (response && response.patients) {
+          return response.patients;
+        }
+        return [];
+      }),
+      catchError(error => {
+        console.error('Error en searchPacientes:', error);
+        return of([]);
       })
     );
   }
 
   // Actualizar también el método getPacientes si lo usas en otro lugar
   getPacientes(): Observable<Paciente[]> {
-    return this.http.get<PacienteResponse>(`${this.apiUrl}/api/patients`).pipe(
-      map(response => response.patients || [])
+    return this.http.get<PacienteResponse>(`${this.apiUrl}/api/patients`, {
+      headers: this.getHeaders()
+    }).pipe(
+      map(response => {
+        if (response && response.patients) {
+          return response.patients;
+        }
+        return [];
+      }),
+      catchError(error => {
+        console.error('Error en getPacientes:', error);
+        return of([]);
+      })
     );
   }
 
-  // Obtener doctores
-  getDoctores(): Observable<Doctor[]> {
-    return this.http.get<ApiResponse<Doctor[]>>(`${this.apiUrl}/api/admin/users`, {
+  // Obtener doctores y dentistas por especialidad
+  getDoctoresByEspecialidad(especialidad: string): Observable<Doctor[]> {
+    const params = new HttpParams().set('especialidad', especialidad);
+    return this.http.get<{success: boolean, data: Doctor[]}>(`${this.apiUrl}/api/users/doctors`, {
       headers: this.getHeaders(),
-      params: { role: 'doctor' }
+      params
     }).pipe(
       map(response => {
-        console.log('Respuesta completa de doctores:', JSON.stringify(response, null, 2));
-        if (Array.isArray(response)) {
-          return response;
+        console.log('Respuesta de doctores por especialidad:', JSON.stringify(response, null, 2));
+        if (response && response.data) {
+          return response.data.map(prof => ({
+            ...prof,
+            especialidad: prof.roles?.includes('dentista') ? 'Odontología' : prof.especialidad || '',
+            roles: prof.roles || []
+          }));
         }
-        if ('data' in response && response.data) {
-          return response.data;
+        return [];
+      })
+    );
+  }
+
+  // Obtener todos los doctores y dentistas
+  getDoctores(): Observable<Doctor[]> {
+    return this.http.get<{success: boolean, data: Doctor[]}>(`${this.apiUrl}/api/admin/users`, {
+      headers: this.getHeaders(),
+      params: { roles: 'doctor,dentista' }  // Obtener ambos roles
+    }).pipe(
+      map(response => {
+        console.log('Respuesta completa de profesionales:', JSON.stringify(response, null, 2));
+        let profesionales: Doctor[] = [];
+        
+        if (response && response.data) {
+          profesionales = response.data;
         }
-        return [] as Doctor[]; // Retornar array vacío si no hay datos
+
+        return profesionales.map(prof => ({
+          ...prof,
+          especialidad: prof.roles?.includes('dentista') ? 'Odontología' : prof.especialidad || '',
+          roles: prof.roles || []
+        }));
       })
     );
   }
@@ -147,13 +217,17 @@ export class CitasService {
     }).pipe(
       map(response => {
         console.log('Respuesta completa de consultorios:', JSON.stringify(response, null, 2));
+        let consultorios: Consultorio[] = [];
         if (Array.isArray(response)) {
-          return response;
+          consultorios = response;
+        } else if (response && response.data) {
+          consultorios = response.data;
         }
-        if (response && response.data) {
-          return response.data;
-        }
-        return [];
+        // Asegurarse de que cada consultorio tenga el estado correcto
+        return consultorios.map(c => ({
+          ...c,
+          estado: c.estado || 'activo'
+        }));
       })
     );
   }

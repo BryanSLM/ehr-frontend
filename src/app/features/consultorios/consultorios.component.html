@@ -38,8 +38,8 @@
             name="doctorId"
             required>
             <option [ngValue]="0">Seleccione un doctor</option>
-            <option *ngFor="let doctor of doctores" [value]="doctor.id">
-              {{ doctor.username }} - {{ doctor.especialidad }}
+            <option *ngFor="let profesional of doctores" [value]="profesional.id">
+              {{ profesional.username }} - {{ profesional.tipo === 'Dentista' ? 'Odontología' : profesional.especialidad }}
             </option>
           </select>
         </div>
@@ -117,7 +117,7 @@
       <tbody>
         <tr *ngFor="let consultorio of consultorios">
           <td>{{ consultorio.numero }}</td>
-          <td>{{ getDoctorName(consultorio.doctorId) }}</td>
+          <td>{{ getDoctorName(consultorio) }}</td>
           <td>{{ consultorio.descripcion }}</td>
           <td>
             <div *ngFor="let horario of consultorio.horarios" class="horario-item">

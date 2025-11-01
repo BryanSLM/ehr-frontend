@@ -27,19 +27,22 @@ export class AuthGuard {
       return false;
     }
 
-    const userRole = this.authService.getUserRole();
-    console.log('Rol del usuario:', userRole);
+    const activeRole = this.authService.getActiveRole();
+    console.log('Rol activo del usuario:', activeRole);
 
     const requiredRoles = route.data['roles'] as Array<string>;
     console.log('Roles requeridos:', requiredRoles);
 
     if (requiredRoles && requiredRoles.length > 0) {
-      if (!requiredRoles.includes(userRole)) {
-        console.log(`Acceso denegado. Roles requeridos: ${requiredRoles}, Rol actual: ${userRole}`);
+      const hasRequiredRole = requiredRoles.some(role =>
+        activeRole && activeRole.toLowerCase() === role.toLowerCase()
+      );
+      if (!hasRequiredRole) {
+        console.log(`Acceso denegado. Roles requeridos: ${requiredRoles}, Rol activo: ${activeRole}`);
         this.router.navigate(['/unauthorized']);
         return false;
       } else {
-        console.log('Acceso permitido - Rol coincide');
+        console.log('Acceso permitido - Rol activo coincide');
       }
     }
 

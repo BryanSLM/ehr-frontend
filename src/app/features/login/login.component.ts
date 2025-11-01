@@ -14,10 +14,13 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   formData = {
-    username: '',
-    password: '',
+    identificacion: '',
+  password: '',
     selectedRole: ''
   };
+
+  availableRoles: string[] = ['administrador', 'doctor', 'dentista', 'secretaria', 'enfermera'];
+
 
   errorMessage = '';
   successMessage = '';
@@ -40,56 +43,73 @@ export class LoginComponent {
  togglePasswordVisibility() {
   this.showPassword = !this.showPassword;
 }
-  login() {
-    // Validación de campos
-    if (!this.formData.username || !this.formData.password) {
-      this.errorMessage = 'Por favor complete todos los campos';
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    this.authService.login(
-      this.formData.username,
-      this.formData.password
-    ).subscribe({
-      next: (response) => {
-        if (!response.user.active) {
-          this.errorMessage = 'Usuario desactivado. Contacte al administrador.';
-          this.isLoading = false;
-          return;
-        }
-
-        // Guardar datos en localStorage
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-
-        const userRole = response.user.role.toLowerCase();
-
-        // Redirigir según el rol
-        switch (response.user.role) {
-          case 'administrador':
-            this.router.navigate(['/admin']);
-            break;
-          case 'doctor':
-            this.router.navigate(['/doctor']);
-            break;
-          case 'secretaria':
-            this.router.navigate(['/secretaria']);
-            break;
-          case 'enfermera':
-            this.router.navigate(['/enfermera']);
-            break;
-          default:
-            this.router.navigate(['/']);
-        }
-      },
-      error: (error) => {
-        console.error('Error en login:', error);
-        this.errorMessage = error.error?.message || 'Error en el inicio de sesión';
-        this.isLoading = false;
-      }
-    });
+login() {
+  if (!this.formData.identificacion || !this.formData.password || !this.formData.selectedRole) {
+    this.errorMessage = 'Por favor complete todos los campos y seleccione un rol';
+    return;
   }
+
+  this.isLoading = true;
+  this.errorMessage = '';
+
+  this.authService.login(
+    this.formData.identificacion,
+    this.formData.password,
+    this.formData.selectedRole
+  ).subscribe({
+    next: (response) => {
+      if (!response.user.active) {
+        this.errorMessage = 'Usuario desactivado. Contacte al administrador.';
+        this.isLoading = false;
+        return;
+      }
+
+      // Validar que el usuario tiene el rol seleccionado
+      if (!response.user.roles.includes(this.formData.selectedRole)) {
+        this.errorMessage = 'No tiene el rol seleccionado';
+        this.isLoading = false;
+        return;
+      }
+
+      this.authService.setActiveRole(this.formData.selectedRole);
+      this.redirectBasedOnRole(this.formData.selectedRole);
+    },
+    error: (error) => {
+      console.error('Error en login:', error);
+      this.errorMessage = error.error?.message || 'Error en el inicio de sesión';
+      this.isLoading = false;
+    }
+  });
+}
+
+selectRole() {
+  if (!this.formData.selectedRole) {
+    this.errorMessage = 'Por favor seleccione un rol';
+    return;
+  }
+
+  this.authService.setActiveRole(this.formData.selectedRole);
+  this.redirectBasedOnRole(this.formData.selectedRole);
+}
+
+private redirectBasedOnRole(role: string) {
+  switch (role.toLowerCase()) {
+    case 'administrador':
+      this.router.navigate(['/admin']);
+      break;
+    case 'doctor':
+    case 'dentista':
+      this.router.navigate(['/doctor']);
+      break;
+    case 'secretaria':
+      this.router.navigate(['/secretaria']);
+      break;
+    case 'enfermera':
+      this.router.navigate(['/enfermera']);
+      break;
+    default:
+      this.router.navigate(['/']);
+  }
+}
+      
 }

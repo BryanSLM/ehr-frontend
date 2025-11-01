@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { AdminComponent } from './features/admin/admin.component';
+import { OdontogramaComponent } from './features/medico-dashboard/pages/odontograma/odontograma.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { PatientsComponent } from './features/patients/patients.component';
 import { ConsultoriosComponent } from './features/consultorios/consultorios.component';
@@ -40,7 +41,7 @@ export const routes: Routes = [
     path: 'patients',
     component: PatientsComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['administrador', 'doctor', 'secretaria'] } 
+    data: { roles: ['administrador', 'doctor', 'dentista', 'secretaria'] } 
   },
   {
     path: 'patients/new',
@@ -64,7 +65,7 @@ export const routes: Routes = [
   {
     path: 'doctor',
     canActivate: [AuthGuard],
-    data: { roles: ['doctor'] },
+    data: { roles: ['doctor', 'dentista'] },
     children: [
       {
         path: '',
@@ -83,12 +84,20 @@ export const routes: Routes = [
         component: VitalSignsListComponent
       },
       {
-        path: 'evoluciones-paciente/:id',  // Corregido aquí
+        path: 'evoluciones-paciente/:id',
         component: EvolucionesPacienteComponent
       },
       {
         path: 'pacientes',
         component: PacientesMedicoComponent
+      },
+      {
+        path: 'odontograma/edit/:id',
+        component: OdontogramaComponent
+      },
+      {
+        path: 'odontograma/view/:id',
+        component: OdontogramaComponent
       },
     ]
   },
@@ -191,7 +200,7 @@ export const routes: Routes = [
         component: VitalSignsFormComponent
       }
     ]
-},
+  },
   { 
     path: '**', 
     redirectTo: '/login' 

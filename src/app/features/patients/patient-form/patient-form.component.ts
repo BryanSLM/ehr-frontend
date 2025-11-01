@@ -14,7 +14,7 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class PatientFormComponent implements OnInit {
   patientForm: FormGroup;
-   empresas: string[] = ['CARDIOVASC', 'INVITROMED', 'Empresa 3'];
+   empresas: string[] = ['CARDIOVASC', 'INVITROMED', 'Centro de Especialidades Médicas Prado Gómez'];
   isEditing = false;
   patientId: string | null = null;
   loading = false;
@@ -24,6 +24,12 @@ export class PatientFormComponent implements OnInit {
   provincias: any[] = [];
   cantones: any[] = [];
   parroquias: any[] = [];
+  paises: string[] = [
+    'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Costa Rica',
+    'Cuba', 'Ecuador', 'El Salvador', 'Guatemala', 'Haití', 'Honduras',
+    'México', 'Nicaragua', 'Panamá', 'Paraguay', 'Perú', 'República Dominicana',
+    'Uruguay', 'Venezuela'
+  ];
 
   // Nuevas propiedades para manejar el tab activo
   activeTab = 'patients';
@@ -39,6 +45,7 @@ export class PatientFormComponent implements OnInit {
       // Datos personales obligatorios
       apellido_paterno: ['', Validators.required],
       primer_nombre: ['', Validators.required],
+      tipo_identificacion: ['cedula', Validators.required], // Nuevo campo
       cedula: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       fecha_nacimiento: ['', Validators.required],
       lugar_nacimiento: ['', Validators.required],
@@ -71,6 +78,77 @@ export class PatientFormComponent implements OnInit {
       parentesco_emergencia: [''],
       direccion_emergencia: [''],
       telefono_emergencia: ['']
+    });
+
+    // Escuchar cambios en tipo_identificacion para actualizar validaciones
+    this.patientForm.get('tipo_identificacion')?.valueChanges.subscribe(tipo => {
+      const cedulaControl = this.patientForm.get('cedula');
+      // Solo estos campos serán requeridos si es 'no_identificado'
+      const camposSiempreRequeridos = ['apellido_paterno', 'primer_nombre'];
+      const camposCondicionales = [
+        'fecha_nacimiento',
+        'lugar_nacimiento',
+        'nacionalidad',
+        'sexo',
+        'empresa'
+      ];
+      if (tipo === 'cedula' || tipo === 'pasaporte') {
+        // Restaurar todos los validadores requeridos
+        [...camposSiempreRequeridos, ...camposCondicionales].forEach(campo => {
+          this.patientForm.get(campo)?.setValidators(Validators.required);
+          this.patientForm.get(campo)?.updateValueAndValidity();
+        });
+        if (tipo === 'cedula') {
+          cedulaControl?.setValidators([Validators.required, Validators.pattern('^[0-9]{10}$')]);
+        } else {
+          cedulaControl?.setValidators([Validators.required, Validators.pattern('^[A-Z0-9]{6,18}$')]);
+        }
+        cedulaControl?.enable();
+      } else if (tipo === 'no_identificado') {
+        // Solo nombre y apellido paterno requeridos
+        camposSiempreRequeridos.forEach(campo => {
+          this.patientForm.get(campo)?.setValidators(Validators.required);
+          this.patientForm.get(campo)?.updateValueAndValidity();
+        });
+        camposCondicionales.forEach(campo => {
+          this.patientForm.get(campo)?.clearValidators();
+          this.patientForm.get(campo)?.updateValueAndValidity();
+        });
+        cedulaControl?.clearValidators();
+        cedulaControl?.setValue('');
+        cedulaControl?.disable();
+      }
+      cedulaControl?.updateValueAndValidity();
+    });
+
+    // Escuchar cambios en lugar_nacimiento para auto-llenar nacionalidad
+    this.patientForm.get('lugar_nacimiento')?.valueChanges.subscribe(pais => {
+      if (pais) {
+        const nacionalidadMap: { [key: string]: string } = {
+          'Argentina': 'Argentina',
+          'Bolivia': 'Boliviana',
+          'Brasil': 'Brasileña',
+          'Chile': 'Chilena',
+          'Colombia': 'Colombiana',
+          'Costa Rica': 'Costarricense',
+          'Cuba': 'Cubana',
+          'Ecuador': 'Ecuatoriana',
+          'El Salvador': 'Salvadoreña',
+          'Guatemala': 'Guatemalteca',
+          'Haití': 'Haitiana',
+          'Honduras': 'Hondureña',
+          'México': 'Mexicana',
+          'Nicaragua': 'Nicaragüense',
+          'Panamá': 'Panameña',
+          'Paraguay': 'Paraguaya',
+          'Perú': 'Peruana',
+          'República Dominicana': 'Dominicana',
+          'Uruguay': 'Uruguaya',
+          'Venezuela': 'Venezolana'
+        };
+        const nacionalidad = nacionalidadMap[pais] || '';
+        this.patientForm.get('nacionalidad')?.setValue(nacionalidad);
+      }
     });
   }
 
@@ -109,6 +187,14 @@ export class PatientFormComponent implements OnInit {
     }).catch(error => {
       console.error('Error al redirigir:', error);
     });
+  }
+
+  // Método para filtrar solo números en el campo cédula si corresponde
+  onCedulaInput(event: any) {
+    if (this.patientForm.get('tipo_identificacion')?.value === 'cedula') {
+      const value = event.target.value.replace(/[^0-9]/g, '');
+      this.patientForm.get('cedula')?.setValue(value, { emitEvent: false });
+    }
   }
 
   // Resto de los métodos existentes...
@@ -155,8 +241,9 @@ export class PatientFormComponent implements OnInit {
   loadPatient() {
     if (this.patientId) {
       this.loading = true;
-      this.patientService.getPatientById(this.patientId).subscribe({
-        next: (patient) => {
+      this.patientService.getPatient(Number(this.patientId)).subscribe({
+        next: (response) => {
+          const patient = response.data;
           // Formatear la fecha antes de asignarla al formulario
           if (patient.fecha_nacimiento) {
             patient.fecha_nacimiento = formatDate(
@@ -206,15 +293,30 @@ export class PatientFormComponent implements OnInit {
   
       const patientData = { ...this.patientForm.value };
   
-      // Formatear la fecha si existe
+      // Formatear la fecha si existe y es válida
       if (patientData.fecha_nacimiento) {
         const date = new Date(patientData.fecha_nacimiento);
-        patientData.fecha_nacimiento = date.toISOString().split('T')[0];
+        if (!isNaN(date.getTime())) {
+          patientData.fecha_nacimiento = date.toISOString().split('T')[0];
+        } else {
+          patientData.fecha_nacimiento = null;
+        }
+      } else {
+        patientData.fecha_nacimiento = null;
+      }
+      // Si sexo está vacío, enviarlo como null
+      if (patientData.sexo === '') {
+        patientData.sexo = null;
+      }
+  
+      // Si es no identificado, poner valor temporal
+      if (!this.isEditing && patientData.tipo_identificacion === 'no_identificado') {
+        patientData.cedula = 'no_identificado';
       }
   
       // Determinar si es actualización o creación
       const request = this.isEditing && this.patientId
-        ? this.patientService.updatePatient(this.patientId, patientData)
+        ?       this.patientService.updatePatient(Number(this.patientId), patientData)
         : this.patientService.createPatient(patientData);
   
       request.subscribe({
@@ -224,6 +326,22 @@ export class PatientFormComponent implements OnInit {
           this.successMessage = this.isEditing 
             ? 'Paciente actualizado con éxito'
             : 'Paciente creado con éxito';
+
+          // Si es nuevo y no identificado, actualizar con el código secuencial
+          if (!this.isEditing && patientData.tipo_identificacion === 'no_identificado') {
+            const id = response.data?.id;
+            if (id) {
+              const codigo = id.toString().padStart(6, '0');
+              this.patientService.updatePatient(id, { cedula: codigo }).subscribe({
+                next: () => {
+                  console.log('Código secuencial asignado:', codigo);
+                },
+                error: (error) => {
+                  console.error('Error al actualizar código secuencial:', error);
+                }
+              });
+            }
+          }
   
           // Esperar un momento antes de navegar
           setTimeout(() => {

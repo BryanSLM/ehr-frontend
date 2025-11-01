@@ -50,12 +50,24 @@ export class CitaHorarioSelectorComponent implements OnInit {
       // Usar directamente los horarios configurados
       this.horariosSemana = this.consultorio.horarios
       .filter((h: any) => h.horaInicio && h.horaFin && h.fecha)
-      .map((h: any) => ({
+      .map((h: any) => {
+        // Asegurar que la fecha esté en formato correcto
+        let fecha = h.fecha;
+        if (typeof fecha === 'string') {
+          // Si es una fecha en formato string, convertirla a Date y luego a ISO string
+          const fechaObj = new Date(fecha);
+          fecha = fechaObj.toISOString().split('T')[0];
+        } else if (fecha instanceof Date) {
+          fecha = fecha.toISOString().split('T')[0];
+        }
+        
+        return {
         dia: h.dia,
-        fecha: h.fecha,
+          fecha: fecha,
         horaInicio: h.horaInicio,
         horaFin: h.horaFin
-      }));
+        };
+      });
 
     // Ordenar los horarios por fecha
     this.horariosSemana.sort((a, b) => 
@@ -132,14 +144,19 @@ export class CitaHorarioSelectorComponent implements OnInit {
   
     const fecha = this.diaSeleccionado.fecha;
     
+    console.log('Intentando seleccionar hora:', { fecha, hora, consultorioId: this.consultorio.id });
+    
     this.citaService.verificarDisponibilidad(fecha, hora, this.consultorio.id)
       .pipe(take(1))
       .subscribe({
         next: (disponible: boolean) => {
+          console.log('Disponibilidad verificada:', disponible);
           if (disponible) {
             this.horaSeleccionada = hora;
+            console.log('Emitiendo horario seleccionado:', { fecha, hora });
             this.horarioSeleccionado.emit({ fecha, hora });
           } else {
+            console.log('Horario no disponible');
             const horarioIndex = this.horasDisponibles.findIndex(h => h.hora === hora);
             if (horarioIndex !== -1) {
               this.horasDisponibles[horarioIndex] = {

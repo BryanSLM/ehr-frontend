@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { OdontogramaService } from '../../core/services/odontograma.service';
 
 @Component({
   selector: 'app-medico-dashboard',
@@ -21,16 +22,20 @@ export class MedicoDashboardComponent implements OnInit {
   filterForm: FormGroup;
   pacientesOtrosMedicos: any[] = [];
 
+  canEditOdontograma: boolean = false;
+
   constructor(
     private medicoService: MedicoService,
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private odontogramaService: OdontogramaService
   ) {
     this.filterForm = this.fb.group({
       busqueda: [''],
       fecha: ['']
     });
+    this.canEditOdontograma = this.odontogramaService.canEditOdontograma();
   }
 
   ngOnInit() {
@@ -187,8 +192,17 @@ verEvolucionesOtroMedico(pacienteId: number) {
     this.router.navigate(['/doctor/pacientes']);
   }
 
+  verOdontograma(pacienteId: number) {
+    // Verificar si el usuario tiene permisos de edición
+    if (this.canEditOdontograma) {
+      this.router.navigate(['/doctor/odontograma/edit', pacienteId]);
+    } else {
+      this.router.navigate(['/doctor/odontograma/view', pacienteId]);
+    }
+  }
+
   cerrarSesion() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
-  }
+}

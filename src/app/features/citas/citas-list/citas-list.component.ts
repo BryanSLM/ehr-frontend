@@ -4,28 +4,7 @@ import { CitasService } from '../../../core/services/cita.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-interface Cita {
-  id: number;
-  pacienteId: number;
-  consultorioId: number;
-  fecha: string;
-  hora: string;
-  estado: 'pendiente' | 'atendido' | 'cancelado';
-  paciente?: {
-    primer_nombre: string;
-    segundo_nombre: string;
-    apellido_paterno: string;
-    apellido_materno: string;
-    cedula: string;
-  };
-  doctor?: {
-    username: string;
-    especialidad: string;
-  };
-  consultorio?: {
-    numero: string;
-  };
-}
+import { Cita } from '../../../core/interfaces/cita.interface';
 
 @Component({
   selector: 'app-citas-list',
@@ -57,7 +36,8 @@ export class CitasListComponent implements OnInit {
 
 
     this.citaService.getAllCitas().subscribe({
-      next: (citas: Cita[]) => {
+      next: (response: any) => {
+        const citas = response.data || response;
         console.log('Citas recibidas:', citas);
         this.citas = citas;
         this.citasSinFiltrar = [...citas];

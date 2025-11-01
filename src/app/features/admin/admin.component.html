@@ -75,16 +75,32 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="cedula"><i class="fas fa-id-card"></i> Cédula</label>
-              <input type="text"
-                     id="cedula"
-                     name="cedula"
-                     [(ngModel)]="newUser.cedula"
-                     class="form-control"
-                     required
-                     placeholder="Ingrese número de cédula">
+              <label for="tipo_identificacion"><i class="fas fa-id-card"></i> Tipo de Identificación</label>
+              <select class="form-control"
+                      id="tipo_identificacion"
+                      name="tipo_identificacion"
+                      [(ngModel)]="newUser.tipo_identificacion"
+                      required>
+                <option value="cedula">Cédula</option>
+                <option value="pasaporte">Pasaporte</option>
+                <option value="no_identificado">No Identificado</option>
+              </select>
             </div>
           </div>
+        <!-- Modificar el input de identificación para que no sea requerido cuando es no_identificado -->
+<div class="col-md-6">
+  <div class="form-group">
+    <label for="identificacion"><i class="fas fa-id-card"></i> Número de Identificación</label>
+    <input type="text"
+           id="identificacion"
+           name="identificacion"
+           [(ngModel)]="newUser.identificacion"
+           class="form-control"
+           [required]="newUser.tipo_identificacion !== 'no_identificado'"
+           [placeholder]="'Ingrese ' + (newUser.tipo_identificacion === 'cedula' ? 'cédula' : newUser.tipo_identificacion === 'pasaporte' ? 'pasaporte' : 'identificación (opcional)')">
+  </div>
+</div>
+      
           <div class="col-md-6">
             <div class="form-group">
               <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
@@ -99,21 +115,23 @@
           </div>
         </div>
 
-        <!-- Rol y Especialidad -->
+        <!-- Roles y Especialidad -->
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="role"><i class="fas fa-user-tag"></i> Rol</label>
-              <select class="form-control"
-                      id="role"
-                      name="role"
-                      [(ngModel)]="newUser.role"
-                      required>
-                <option value="">Seleccione un rol</option>
-                <option *ngFor="let role of roles" [value]="role">
-                  {{ role | titlecase }}
-                </option>
-              </select>
+              <label><i class="fas fa-user-tag"></i> Roles</label>
+              <div class="role-options">
+                <div class="form-check" *ngFor="let role of roles">
+                  <ng-container *ngIf="role !== 'administrador'">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           [id]="'role-' + role"
+                           [checked]="selectedRoles.includes(role)"
+                           (change)="handleCheckboxChange($event, role)">
+                    <label class="form-check-label" [for]="'role-' + role">{{ role | titlecase }}</label>
+                  </ng-container>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-md-6" *ngIf="shouldShowEspecialidad()">
@@ -157,9 +175,8 @@
             <tr>
               <th>ID</th>
               <th>Usuario</th>
-              <th>Cédula</th>
-              <th>Email</th>
-              <th>Rol</th>
+              <th>Cédula / Email</th>
+              <th>Roles</th>
               <th>Especialidad</th>
               <th>Empresa</th>
               <th>Estado</th>
@@ -173,18 +190,25 @@
                 <i class="fas fa-user-circle"></i>
                 {{ user.username }}
               </td>
-              <td>{{ user.cedula }}</td>
-              <td>{{ user.email }}</td>
               <td>
-                <span class="badge" [ngClass]="getRoleBadgeClass(user.role)">
-                  {{ user.role | titlecase }}
-                </span>
+                <div><strong>Cédula:</strong> {{ user.identificacion || '-' }}</div>
+                <div><strong>Email:</strong> {{ user.email || '-' }}</div>
               </td>
               <td>
-                <span *ngIf="user.role === 'doctor'">
+                <ng-container *ngIf="user.roles && user.roles.length > 0; else noRoles">
+                  <span *ngFor="let role of user.roles" class="badge me-1" [ngClass]="getRoleBadgeClass(role)">
+                    {{ role | titlecase }}
+                  </span>
+                </ng-container>
+                <ng-template #noRoles>
+                  <span class="badge bg-secondary">Sin rol</span>
+                </ng-template>
+              </td>
+              <td>
+                <span *ngIf="user.roles && user.roles.includes('doctor')">
                   {{ user.especialidad || 'No especificada' }}
                 </span>
-                <span *ngIf="user.role !== 'doctor'">-</span>
+                <span *ngIf="!user.roles || !user.roles.includes('doctor')">-</span>
               </td>
               <td>{{user.empresa}}</td>
               <td>
@@ -193,12 +217,32 @@
                 </span>
               </td>
               <td>
-                <button class="btn btn-sm" 
-                        [ngClass]="user.active ? 'btn-outline-danger' : 'btn-outline-success'"
-                        (click)="toggleUserStatus(user)">
-                  <i class="fas" [ngClass]="user.active ? 'fa-user-slash' : 'fa-user-check'"></i>
-                  {{ user.active ? 'Desactivar' : 'Activar' }}
-                </button>
+                <div class="d-flex gap-2 align-items-center">
+                  <!-- Botón Editar -->
+                  <button class="btn btn-sm btn-outline-primary d-flex align-items-center" 
+                          (click)="editUser(user)"
+                          title="Editar usuario">
+                    <i class="fas fa-edit me-1"></i>
+                    <span>Editar</span>
+                  </button>
+
+                  <!-- Botón Activar/Desactivar -->
+                  <button class="btn btn-sm d-flex align-items-center" 
+                          [ngClass]="user.active ? 'btn-outline-danger' : 'btn-outline-success'"
+                          (click)="toggleUserStatus(user)"
+                          [title]="user.active ? 'Desactivar usuario' : 'Activar usuario'">
+                    <i class="fas me-1" [ngClass]="user.active ? 'fa-user-slash' : 'fa-user-check'"></i>
+                    <span>{{ user.active ? 'Desactivar' : 'Activar' }}</span>
+                  </button>
+
+                  <!-- Botón Eliminar -->
+                  <button class="btn btn-sm btn-outline-danger d-flex align-items-center" 
+                          (click)="deleteUser(user)"
+                          title="Eliminar usuario">
+                    <i class="fas fa-trash me-1"></i>
+                    <span>Eliminar</span>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -207,6 +251,121 @@
           <i class="fas fa-users-slash"></i>
           <p>No hay usuarios registrados</p>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de edición de usuario -->
+<div class="modal" [class.show]="editingUser" *ngIf="editingUser">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Usuario</h5>
+        <button type="button" class="close" (click)="cancelEdit()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editUserForm="ngForm">
+          <!-- Username -->
+          <div class="mb-3">
+            <label for="editUsername" class="form-label">
+              <i class="fas fa-user"></i> Usuario
+            </label>
+            <input type="text"
+                   class="form-control"
+                   id="editUsername"
+                   name="username"
+                   [(ngModel)]="editingUser.username"
+                   required>
+          </div>
+
+          <!-- Tipo de Identificación -->
+          <div class="mb-3">
+            <label for="editTipoIdentificacion" class="form-label">
+              <i class="fas fa-id-card"></i> Tipo de Identificación
+            </label>
+            <select class="form-control"
+                    id="editTipoIdentificacion"
+                    name="tipo_identificacion"
+                    [(ngModel)]="editingUser.tipo_identificacion"
+                    required>
+              <option value="cedula">Cédula</option>
+              <option value="pasaporte">Pasaporte</option>
+              <option value="no_identificado">No Identificado</option>
+            </select>
+          </div>
+
+          <!-- Número de Identificación -->
+          <div class="mb-3">
+            <label for="editIdentificacion" class="form-label">
+              <i class="fas fa-id-card"></i> Número de Identificación
+            </label>
+            <input type="text"
+                   class="form-control"
+                   id="editIdentificacion"
+                   name="identificacion"
+                   [(ngModel)]="editingUser.identificacion"
+                   [required]="editingUser.tipo_identificacion !== 'no_identificado'"
+                   [placeholder]="'Ingrese ' + (editingUser.tipo_identificacion === 'cedula' ? 'cédula' : editingUser.tipo_identificacion === 'pasaporte' ? 'pasaporte' : 'identificación (opcional)')">
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="editEmail" class="form-label">
+              <i class="fas fa-envelope"></i> Correo Electrónico
+            </label>
+            <input type="email"
+                   class="form-control"
+                   id="editEmail"
+                   name="email"
+                   [(ngModel)]="editingUser.email"
+                   required
+                   email>
+          </div>
+
+          <!-- Especialidad (solo para doctores) -->
+          <div class="mb-3" *ngIf="selectedRoles.includes('doctor')">
+            <label for="editEspecialidad" class="form-label">
+              <i class="fas fa-stethoscope"></i> Especialidad
+            </label>
+            <select class="form-control"
+                    id="editEspecialidad"
+                    name="especialidad"
+                    [(ngModel)]="editingUser.especialidad"
+                    required>
+              <option value="">Seleccione una especialidad</option>
+              <option *ngFor="let esp of especialidades" [value]="esp">
+                {{ esp }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Roles actuales (solo mostrar) -->
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="fas fa-user-tag"></i> Roles Actuales
+            </label>
+            <div>
+              <span *ngFor="let role of selectedRoles" class="badge me-1" [ngClass]="getRoleBadgeClass(role)">
+                {{ role | titlecase }}
+              </span>
+              <span *ngIf="!selectedRoles?.length" class="text-muted">Sin roles asignados</span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="button" 
+                class="btn btn-primary" 
+                (click)="saveUserChanges()"
+                [disabled]="!editUserForm.form.valid || (selectedRoles.includes('doctor') && !editingUser.especialidad)">
+          <i class="fas fa-save"></i> Guardar Cambios
+        </button>
       </div>
     </div>
   </div>

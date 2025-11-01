@@ -24,6 +24,8 @@
       <label>Hora de inicio:</label>
       <input type="time" 
              [(ngModel)]="nuevoHorario.horaInicio" 
+             (ngModelChange)="formatTime('horaInicio')"
+             step="300"
              class="form-control">
     </div>
 
@@ -31,6 +33,8 @@
       <label>Hora de fin:</label>
       <input type="time" 
              [(ngModel)]="nuevoHorario.horaFin" 
+             (ngModelChange)="formatTime('horaFin')"
+             step="300"
              class="form-control">
     </div>
 

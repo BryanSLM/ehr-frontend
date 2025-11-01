@@ -79,13 +79,17 @@ export class PdfService {
     doc.text('Indicaciones', middleX + margin, currentY + 10);
     
     if (evolucion.prescripciones?.length > 0) {
-        // Tabla de medicamentos
-        const medicamentosData = evolucion.prescripciones.map((p: any) => [
-            p.nombre_generico,
+        // Tabla de medicamentos con nombres genéricos y comerciales
+        const medicamentosData = evolucion.prescripciones.map((p: any) => {
+            const nombreCompleto = p.nombre_comercial ? 
+                `${p.nombre_generico}\n(${p.nombre_comercial})` : 
+                p.nombre_generico;
+            return [
+                nombreCompleto,
             p.concentracion,
-            p.forma_farmaceutica,
-            p.cantidad
-        ]);
+                p.forma_farmaceutica
+            ];
+        });
 
         // @ts-ignore
         doc.autoTable({
@@ -94,19 +98,33 @@ export class PdfService {
             body: medicamentosData,
             margin: { left: margin },
             tableWidth: (pageWidth/2) - (margin * 2),
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [41, 128, 185], textColor: 255 }
+            styles: { fontSize: 9 },
+            headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+            didDrawCell: function(data: any) {
+                // Ajustar altura de celda para medicamentos con nombre comercial
+                if (data.section === 'body' && data.column.index === 0) {
+                    const cellText = data.cell.text.join('\n');
+                    if (cellText.includes('(') && cellText.includes(')')) {
+                        data.row.height = 15;
+                    }
+                }
+            }
         });
 
         // Tabla de indicaciones
-        const indicacionesData = evolucion.prescripciones.map((p: any) => [
-            p.nombre_generico,
+        const indicacionesData = evolucion.prescripciones.map((p: any) => {
+            const nombreCompleto = p.nombre_comercial ? 
+                `${p.nombre_generico}\n(${p.nombre_comercial})` : 
+                p.nombre_generico;
+            return [
+                nombreCompleto,
             p.dosis,
             p.frecuencia,
             p.via_administracion,
             p.duracion_tratamiento,
-            p.indicaciones_adicionales
-        ]);
+                p.indicaciones_adicionales || ''
+            ];
+        });
 
         // @ts-ignore
         doc.autoTable({
@@ -115,8 +133,17 @@ export class PdfService {
             body: indicacionesData,
             margin: { left: middleX + margin },
             tableWidth: (pageWidth/2) - (margin * 2),
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [41, 128, 185], textColor: 255 }
+            styles: { fontSize: 9 },
+            headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+            didDrawCell: function(data: any) {
+                // Ajustar altura de celda para medicamentos con nombre comercial
+                if (data.section === 'body' && data.column.index === 0) {
+                    const cellText = data.cell.text.join('\n');
+                    if (cellText.includes('(') && cellText.includes(')')) {
+                        data.row.height = 15;
+                    }
+                }
+            }
         });
     }
 

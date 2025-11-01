@@ -147,6 +147,24 @@ export class ConsultorioHorarioComponent implements OnInit {
     this.horariosChange.emit(this.horariosLista);
   }
 
+  formatTime(field: 'horaInicio' | 'horaFin') {
+    if (!this.nuevoHorario[field]) return;
+    
+    // Asegurarse de que el tiempo tenga el formato correcto (HH:MM)
+    const time = this.nuevoHorario[field];
+    const [hours, minutes] = time.split(':');
+    
+    if (hours && minutes) {
+      // Convertir a formato de 12 horas para mostrar AM/PM
+      const hourNum = parseInt(hours, 10);
+      const period = hourNum >= 12 ? 'PM' : 'AM';
+      const displayHour = hourNum % 12 || 12;
+      
+      // Actualizar el valor en el modelo con el formato HH:MM
+      this.nuevoHorario[field] = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    }
+  }
+
   formatearFecha(fecha: string): string {
     try {
       if (!fecha) return 'Fecha no disponible';

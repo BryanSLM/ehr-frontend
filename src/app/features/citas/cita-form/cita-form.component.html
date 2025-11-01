@@ -87,7 +87,6 @@
         id="doctor" 
         formControlName="doctorId"
         class="form-control"
-        [disabled]="!citaForm.get('especialidad')?.value"
       >
         <option value="">Seleccione un doctor</option>
         <option *ngFor="let doctor of doctoresFiltrados" [value]="doctor.id">
@@ -150,7 +149,7 @@
       </button>
       <button 
         type="submit" 
-        [disabled]="!citaForm.valid || loading"
+        [disabled]="!isFormValid() || loading"
         class="btn-guardar">
         {{ isEditing ? 'Actualizar' : 'Crear' }} Cita
       </button>

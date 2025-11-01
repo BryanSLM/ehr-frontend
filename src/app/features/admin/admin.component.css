@@ -1,17 +1,144 @@
 .admin-dashboard {
-  padding: 2rem;
+  padding: 2rem 1rem; /* Reducido el padding horizontal para más espacio útil */
   background-color: #E5E7EB;
   min-height: 100vh;
   border-radius: 0.8em;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Sombra más notoria pero sin distorsión */
-  margin-bottom: 3rem; /* Agrega espacio extra al final */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  margin: 0 -3rem 3rem -3rem; /* Aumentados los márgenes negativos */
+  width: calc(100% + 6rem); /* Ajustado para los nuevos márgenes */
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Contenedor para el formulario y la tabla */
+.form-card, .users-card {
+  max-width: 2600px; /* Aumentado significativamente el ancho máximo */
+  width: 98%; /* Asegurar que use casi todo el espacio disponible */
+  margin: 0 auto; /* Centrar los elementos */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustes para el formulario */
+.create-user-form {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Hacer los inputs más anchos */
+.form-control {
+  max-width: none; /* Eliminar el ancho máximo si existe */
+  width: 100%;
 }
 
 
 .table-responsive {
-  max-height: 400px; /* Altura máxima antes de encogerse */
-  overflow-y: auto; /* Habilita el scroll vertical */
-  transition: max-height 0.3s ease-in-out; /* Animación al expandir */
+  max-height: 600px;
+  overflow-y: auto;
+  transition: max-height 0.3s ease-in-out;
+  border-radius: 8px;
+  background-color: #fff;
+  margin: 0 -1px; /* Evitar bordes dobles */
+  padding: 0 1px; /* Mantener el scroll visible */
+}
+
+/* Ajustes adicionales para la tabla */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th {
+  padding: 1rem;
+  font-size: 0.95rem;
+  background-color: #f8f9fa;
+}
+
+.table td {
+  padding: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Hacer las columnas más proporcionales */
+.table th:nth-child(1) { width: 5%; }  /* ID */
+.table th:nth-child(2) { width: 12%; } /* Usuario */
+.table th:nth-child(3) { width: 18%; } /* Cédula/Email */
+.table th:nth-child(4) { width: 15%; } /* Roles */
+.table th:nth-child(5) { width: 15%; } /* Especialidad */
+.table th:nth-child(6) { width: 12%; } /* Empresa */
+.table th:nth-child(7) { width: 8%; }  /* Estado */
+.table th:nth-child(8) { width: 15%; } /* Acciones */
+
+/* Estilos para la tabla */
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  color: #495057;
+  font-weight: 600;
+  padding: 12px;
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+/* Estilos para los botones de acción */
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-sm i {
+  font-size: 0.875rem;
+}
+
+/* Hover effects para los botones */
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-outline-success:hover {
+  background-color: #198754;
+  color: white;
+}
+
+/* Gap entre botones */
+.d-flex.gap-2 {
+  gap: 0.5rem !important;
+}
+
+/* Estilos para los badges de estado y roles */
+.badge {
+  padding: 0.5em 0.8em;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 4px;
+}
+
+/* Efecto hover en las filas de la tabla */
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .dashboard-header {
@@ -106,6 +233,30 @@
   }
 }
 
+.role-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1050;
+}
+
+.modal.show {
+  display: block;
+}
+
+.badge {
+  margin-right: 5px;
+}
 .form-group {
   margin-bottom: 1.5rem;
   

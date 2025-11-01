@@ -94,6 +94,103 @@
               </div>
             </div>
 
+            <!-- Examen Físico -->
+            <div class="content-section" *ngIf="evolucion.examenFisico || evolucion.examenFisicoId">
+              <h6><i class="fas fa-user-md me-2"></i>Examen Físico</h6>
+              
+              
+              <app-examen-fisico
+                [evolucionId]="evolucion.id"
+                [examenFisicoId]="evolucion.examenFisico?.id"
+                [canEdit]="evolucion.puedeEditar"
+                [soloResumen]="true">
+              </app-examen-fisico>
+            </div>
+
+
+            <!-- Resumen del Odontograma -->
+            <div class="content-section" *ngIf="evolucion.odontograma">
+              <h6><i class="fas fa-tooth me-2"></i>Resumen del Odontograma</h6>
+              
+              <!-- Información del odontograma -->
+              <div class="mb-3">
+                <small class="text-muted">
+                  <i class="fas fa-calendar me-1"></i>
+                  Fecha: {{ evolucion.odontograma.fecha | date:'dd/MM/yyyy HH:mm' }}
+                  <span *ngIf="evolucion.odontograma.observaciones" class="ms-3">
+                    <i class="fas fa-comment me-1"></i>
+                    Observaciones: {{ evolucion.odontograma.observaciones }}
+                  </span>
+                </small>
+              </div>
+
+              <!-- Piezas seleccionadas -->
+              <div *ngIf="evolucion.odontograma.piezas?.length > 0; else noPiezas">
+                <div class="table-responsive">
+                  <table class="table table-sm table-striped">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Pieza</th>
+                        <th>Cara</th>
+                        <th>Diagnóstico</th>
+                        <th>Procedimiento</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let pieza of evolucion.odontograma.piezas">
+                        <td>
+                          <span class="badge bg-primary">{{ pieza.numeroPieza }}</span>
+                        </td>
+                        <td>
+                           <span *ngIf="pieza.cara && pieza.cara !== 'otro'" class="badge bg-secondary">{{ getNombreCara(pieza.cara) }}</span>
+                           <span *ngIf="pieza.cara === 'otro'" class="badge bg-secondary">Otro</span>
+                           <span *ngIf="!pieza.cara" class="text-muted">-</span>
+                        </td>
+                        <td>
+                           <span *ngIf="pieza.diagnostico" class="text-success">
+                             <i class="fas fa-stethoscope me-1"></i>
+                             {{ pieza.diagnostico.nombre }}
+                             <small class="text-muted">({{ pieza.diagnostico.codigo }})</small>
+                           </span>
+                           <span *ngIf="!pieza.diagnostico && pieza.diagnostico_texto" class="text-success">
+                             <i class="fas fa-stethoscope me-1"></i>
+                             {{ pieza.diagnostico_texto }}
+                             <small class="text-muted">(Personalizado)</small>
+                           </span>
+                           <span *ngIf="!pieza.diagnostico && !pieza.diagnostico_texto" class="text-muted">-</span>
+                        </td>
+                        <td>
+                           <span *ngIf="pieza.procedimiento" class="text-info">
+                             <i class="fas fa-tools me-1"></i>
+                             {{ pieza.procedimiento.nombre }}
+                             <small class="text-muted">({{ pieza.procedimiento.codigo }})</small>
+                           </span>
+                           <span *ngIf="!pieza.procedimiento && pieza.procedimiento_texto" class="text-info">
+                             <i class="fas fa-tools me-1"></i>
+                             {{ pieza.procedimiento_texto }}
+                             <small class="text-muted">(Personalizado)</small>
+                           </span>
+                           <span *ngIf="!pieza.procedimiento && !pieza.procedimiento_texto" class="text-muted">-</span>
+                        </td>
+                        <td>
+                          <span *ngIf="pieza.descripcion" class="text-dark">{{ pieza.descripcion }}</span>
+                          <span *ngIf="!pieza.descripcion" class="text-muted">-</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <ng-template #noPiezas>
+                <div class="alert alert-info">
+                  <i class="fas fa-info-circle me-2"></i>
+                  No hay piezas seleccionadas en este odontograma.
+                </div>
+              </ng-template>
+            </div>
+
             <!-- Diagnósticos -->
             <div class="content-section" *ngIf="evolucion.diagnosticos?.length">
               <h6>Diagnósticos:</h6>
@@ -116,9 +213,22 @@
               <ul class="list-group">
                 <li class="list-group-item" *ngFor="let prescripcion of evolucion.prescripciones">
                   <div class="prescription-item">
-                    <strong>{{ prescripcion.nombre_generico }}</strong>
-                    <span class="prescription-details">{{ prescripcion.dosis }}</span>
-                    <small class="text-muted">{{ prescripcion.indicaciones_adicionales }}</small>
+                    <div class="medication-names">
+                      <div class="generic-name">
+                        <strong>Genérico:</strong> {{ prescripcion.nombre_generico }}
+                      </div>
+                      <div class="commercial-name" *ngIf="prescripcion.nombre_comercial">
+                        <strong>Comercial:</strong> {{ prescripcion.nombre_comercial }}
+                      </div>
+                    </div>
+                    <div class="prescription-details">
+                      <span class="dosis">{{ prescripcion.dosis }}</span>
+                      <span class="frecuencia">{{ prescripcion.frecuencia }}</span>
+                      <span class="duracion">{{ prescripcion.duracion_tratamiento }}</span>
+                    </div>
+                    <small class="text-muted" *ngIf="prescripcion.indicaciones_adicionales">
+                      {{ prescripcion.indicaciones_adicionales }}
+                    </small>
                   </div>
                 </li>
               </ul>

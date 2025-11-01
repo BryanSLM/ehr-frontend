@@ -260,3 +260,168 @@
   outline: 2px solid #4299e1;
   outline-offset: 2px;
 }
+
+/* Estilos para nombres comerciales */
+.nombres-comerciales-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  z-index: 1050;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 2px;
+}
+
+.nombres-comerciales-header {
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.nombres-comerciales-items {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.nombre-comercial-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.nombre-comercial-item:hover {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.nombre-comercial-item:last-child {
+  border-bottom: none;
+}
+
+.nombre-comercial-item:active {
+  background-color: #bbdefb;
+}
+
+/* Estilos para el botón de agregar */
+.position-relative .btn-outline-primary {
+  z-index: 1001;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* Estilos para el modal */
+.modal {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  max-width: 500px;
+}
+
+/* Estilos para las sugerencias de medicamentos */
+.medicamentos-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  z-index: 1050;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 2px;
+}
+
+.medicamento-suggestion-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.medicamento-suggestion-item:hover {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.medicamento-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.medicamento-suggestion-item:active {
+  background-color: #bbdefb;
+}
+
+.medicamento-suggestion-item strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.medicamento-suggestion-item small {
+  color: #666;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Mejorar el espaciado entre campos para evitar interferencias */
+.medicamento-card .row {
+  margin-bottom: 1rem;
+}
+
+.medicamento-card .col-md-4,
+.medicamento-card .col-md-6 {
+  margin-bottom: 0.5rem;
+}
+
+/* Asegurar que los campos de entrada tengan suficiente espacio */
+.form-control {
+  position: relative;
+  z-index: 1;
+}
+
+/* Mejorar la visibilidad de las listas desplegables */
+.nombres-comerciales-list,
+.medicamentos-suggestions {
+  border: 1px solid #007bff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+/* Estilos para el estado activo de los elementos */
+.nombre-comercial-item.active,
+.medicamento-suggestion-item.active {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nombres-comerciales-list,
+  .medicamentos-suggestions {
+    max-height: 150px;
+  }
+  
+  .nombre-comercial-item,
+  .medicamento-suggestion-item {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}

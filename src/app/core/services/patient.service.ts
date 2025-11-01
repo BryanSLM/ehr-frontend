@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Patient } from '../interfaces/patient.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,24 +12,24 @@ export class PatientService {
 
   constructor(private http: HttpClient) {}
 
-  getPatients(params: any): Observable<any> {
-    return this.http.get(this.apiUrl, { params });
+  getPatients(params?: any): Observable<{ patients: Patient[]; total: number; pages: number }> {
+    return this.http.get<{ patients: Patient[]; total: number; pages: number }>(this.apiUrl, { params });
   }
 
-  getPatientById(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  getPatient(id: number): Observable<{ data: Patient }> {
+    return this.http.get<{ data: Patient }>(`${this.apiUrl}/${id}`);
   }
 
-  createPatient(patient: any): Observable<any> {
-    return this.http.post(this.apiUrl, patient);
-}
-
-  updatePatient(id: string, patient: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, patient);
+  createPatient(patient: Partial<Patient>): Observable<{ data: Patient; id: number }> {
+    return this.http.post<{ data: Patient; id: number }>(this.apiUrl, patient);
   }
 
-  deletePatient(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  updatePatient(id: number, patient: Partial<Patient>): Observable<{ data: Patient }> {
+    return this.http.put<{ data: Patient }>(`${this.apiUrl}/${id}`, patient);
+  }
+
+  deletePatient(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }
 
   getProvincias(): Observable<any> {

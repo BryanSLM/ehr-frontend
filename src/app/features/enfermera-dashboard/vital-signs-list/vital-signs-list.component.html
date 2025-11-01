@@ -45,7 +45,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let record of vitalSigns">
-            <td>{{ record.fecha_medicion | date:'dd/MM/yyyy' }}</td>
+            <td>{{ record.fecha_medicion | date:'dd/MM/yyyy':'UTC' }}</td>
             <td>{{ record.paciente?.primer_nombre }} {{ record.paciente?.apellido_paterno }}</td>
             <td data-label="Temperatura" class="numeric-value">{{ record.temperatura }}°C</td>
             <td data-label="Presión Arterial" class="numeric-value">{{ record.presion_arterial }}</td>

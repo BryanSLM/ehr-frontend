@@ -7,13 +7,15 @@ import { AuthService } from '../../../core/services/auth.service';
 import { PdfService } from '../../../core/services/pdf.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CertificadoMedicoModalComponent } from '../certificado-medico-modal/certificado-medico-modal.component';
+import { OdontogramaComponent } from '../pages/odontograma/odontograma.component';
+import { ExamenFisicoComponent } from '../examen-fisico/examen-fisico.component';
 
 
 
 @Component({
   selector: 'app-evoluciones-paciente',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, OdontogramaComponent, ExamenFisicoComponent],
   templateUrl: './evoluciones-paciente.component.html',
   styleUrls: ['./evoluciones-paciente.component.css']
 })
@@ -68,8 +70,8 @@ export class EvolucionesPacienteComponent implements OnInit {
             const diagnosticosFormateados = evolucion.diagnosticos?.map((diagnostico: any) => ({
               ...diagnostico,
               cie: {
-                CODIGO: diagnostico.cie?.CODIGO || diagnostico.cie?.codigo,
-                NOMBRE: diagnostico.cie?.NOMBRE || diagnostico.cie?.nombre
+                codigo: diagnostico.cie?.codigo || diagnostico.cie?.CODIGO,
+                nombre: diagnostico.cie?.nombre || diagnostico.cie?.NOMBRE
               }
             }));
   
@@ -81,6 +83,18 @@ export class EvolucionesPacienteComponent implements OnInit {
           });
   
           console.log('Evoluciones procesadas:', this.evoluciones);
+          console.log('Datos completos de evoluciones:', JSON.stringify(this.evoluciones, null, 2));
+          
+          // Debug específico para odontogramas
+          this.evoluciones.forEach((evol, index) => {
+            console.log(`Evolución ${index + 1} (ID: ${evol.id}):`);
+            console.log(`  - odontograma:`, evol.odontograma ? 'PRESENTE' : 'AUSENTE');
+            if (evol.odontograma) {
+              console.log(`    - Odontograma ID: ${evol.odontograma.id}`);
+              console.log(`    - Piezas: ${evol.odontograma.piezas ? evol.odontograma.piezas.length : 0}`);
+              console.log(`    - Odontograma completo:`, JSON.stringify(evol.odontograma, null, 2));
+            }
+          });
         } else {
           this.error = 'Error al cargar los datos del paciente';
         }
@@ -98,6 +112,7 @@ export class EvolucionesPacienteComponent implements OnInit {
     event.stopPropagation();
     this.showDropdown = !this.showDropdown;
   }
+
 
   @HostListener('document:click')
   clickout() {
@@ -184,5 +199,19 @@ verMasDetalles(evolucionId: number) {
   cerrarSesion() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  // Método para obtener el nombre completo de la cara dental
+  getNombreCara(codigoCara: string): string {
+    const carasMap: { [key: string]: string } = {
+      'M': 'Mesial',
+      'D': 'Distal',
+      'V': 'Vestibular',
+      'P': 'Palatina',
+      'O': 'Oclusal',
+      'L': 'Lingual',
+      'I': 'Incisal'
+    };
+    return carasMap[codigoCara] || codigoCara || '-';
   }
 }

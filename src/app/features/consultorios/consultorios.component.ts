@@ -273,9 +273,12 @@ export class ConsultoriosComponent implements OnInit {
     }, 3000);
   }
 
-  getDoctorName(doctorId: number): string {
-    const doctor = this.doctores.find(d => d.id === doctorId);
-    return doctor ? `${doctor.username} - ${doctor.especialidad}` : 'No asignado';
+  getDoctorName(consultorio: Consultorio): string {
+    if (!consultorio.doctor) return 'No asignado';
+    const doctor = consultorio.doctor;
+    const tipo = doctor.tipo || (doctor.roles?.includes('dentista') ? 'Dentista' : 'Doctor');
+    const especialidad = tipo === 'Dentista' ? 'Odontología' : doctor.especialidad;
+    return `${doctor.username} - ${especialidad}`;
   }
 
   formatHorarios(horarios: Horario[]): string {
