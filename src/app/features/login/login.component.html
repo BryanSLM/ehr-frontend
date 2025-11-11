@@ -1,41 +1,41 @@
 <div class="login-container">
-  <!-- Panel Izquierdo -->
+  <!-- Panel Izquierdo (fondo curvo) -->
+  <div class="left-panel-form"></div>
+
+  <!-- Contenido visual del panel izquierdo -->
   <div class="left-panel">
     <div class="left-panel-content">
-      <img class="background"  src="/assets/background.png" alt="background">
-      <p class="caption">Modulo de Atención Médica</p>
+      <img class="background" src="/assets/logoLoginbackground.png" alt="Imagen Login">
+      <p class="caption">Módulo de Atención Médica</p>
     </div>
   </div>
-  
-  <!-- Panel Derecho -->
+
+  <!-- Panel Derecho (formulario) -->
   <div class="right-panel">
     <form (ngSubmit)="login()" #loginForm="ngForm" class="login-form">
-      <h2>Iniciar Sesión</h2>
-      
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
+      <h2 class="text-center mb-4">Iniciar Sesión</h2>
+
+      <!-- Mensajes -->
+      <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+      <!-- Identificación -->
+      <div class="mb-3">
+        <label for="identificacion" class="form-label">Identificación</label>
+        <input
+          type="text"
+          id="identificacion"
+          name="identificacion"
+          [(ngModel)]="formData.identificacion"
+          required
+          class="form-control"
+          placeholder="Ingrese su número de identificación"
+        >
       </div>
-  
-      <div *ngIf="successMessage" class="alert alert-success">
-        {{ successMessage }}
-      </div>
-  
-    <!-- Reemplazar el campo de usuario por identificación -->
-<div class="form-group">
-  <label for="identificacion">Identificación</label>
-  <input
-    type="text"
-    id="identificacion"
-    name="identificacion"
-    [(ngModel)]="formData.identificacion"
-    required
-    class="form-control"
-    placeholder="Ingrese su número de identificación"
-  >
-</div>
-  
-      <div class="form-group">
-        <label for="password">Contraseña</label>
+
+      <!-- Contraseña -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
         <div class="input-group">
           <input
             [type]="showPassword ? 'text' : 'password'"
@@ -44,38 +44,48 @@
             [(ngModel)]="formData.password"
             required
             class="form-control"
-            (input)="onPasswordInput($event)" 
+            placeholder="Ingrese su contraseña"
+            (input)="onPasswordInput($event)"
           >
-          <span class="input-group-text" *ngIf="isTyping" (click)="togglePasswordVisibility()" style="cursor: pointer;">
-            <img [src]="showPassword ? '/assets/ojo.png' : '/assets/ojo_invisible.png'" alt="eye-icon" class="eye-icon">
-          </span>
+          <button 
+            type="button" 
+            class="input-group-text bg-white border-start-0"
+            *ngIf="isTyping"
+            (click)="togglePasswordVisibility()"
+          >
+            <img [src]="showPassword ? '/assets/ojo.png' : '/assets/ojo_invisible.png'" 
+                 alt="eye-icon" class="eye-icon">
+          </button>
         </div>
-        
       </div>
-  
-      <!-- Selector de rol (visible solo cuando hay múltiples roles) -->
-      <div class="form-group">
-        <label for="role">Seleccione su rol</label>
+
+      <!-- Rol -->
+      <div class="mb-3">
+        <label for="role" class="form-label">Seleccione su rol</label>
         <select
           id="role"
           name="selectedRole"
           [(ngModel)]="formData.selectedRole"
           required
-          class="form-control"
+          class="form-select"
         >
           <option value="">Seleccione un rol</option>
-          <option *ngFor="let role of availableRoles" [value]="role">
-            {{role}}
-          </option>
+          <option *ngFor="let role of availableRoles" [value]="role">{{ role }}</option>
         </select>
       </div>
-  <div class="text-end mt-1">
-          <a routerLink="/forgot-password" class="forgot-password-link">¿Olvidó su contraseña?</a>
-        </div>
+
+      <!-- Olvidó contraseña -->
+      <div class="text-end mb-3">
+        <a routerLink="/forgot-password" class="forgot-password-link text-decoration-none">
+          ¿Olvidó su contraseña?
+        </a>
+      </div>
+
+      <!-- Botón -->
       <button 
-        type="submit" 
-        [disabled]="isLoading || !loginForm.form.valid || !formData.selectedRole" 
-        class="btn btn-primary"
+        type="submit"
+        [disabled]="isLoading || !loginForm.form.valid || !formData.selectedRole"
+        class="btn btn-primary w-100"
       >
         {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
       </button>
