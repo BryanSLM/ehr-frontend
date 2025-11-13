@@ -6,6 +6,8 @@ import { ConsultoriosComponent } from '../consultorios/consultorios.component';
 import { CitasListComponent } from '../citas/citas-list/citas-list.component';
 import { PatientService } from '../../core/services/patient.service';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-secretary-dashboard',
   standalone: true,
@@ -32,6 +34,20 @@ export class SecretaryDashboardComponent {
 
   ngOnInit() {
     this.checkPacientesSinIdentificacion();
+    this.enableAutoCloseOnLinkClick(); // 👈 activa el cierre automático del menú hamburguesa
+  }
+
+  // 🔹 cierra el menú hamburguesa cuando se selecciona un link
+  enableAutoCloseOnLinkClick() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        const collapse = bootstrap.Collapse.getInstance(navbarCollapse);
+        if (collapse) collapse.hide();
+      });
+    });
   }
 
   checkPacientesSinIdentificacion() {
