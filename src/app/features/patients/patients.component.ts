@@ -107,6 +107,9 @@ export class PatientsComponent implements OnInit {
   }
 
   deletePatient(id: string) {
+
+    
+
     if (confirm('¿Está seguro de eliminar este paciente?')) {
       this.patientService.deletePatient(Number(id)).subscribe({
         next: () => {
