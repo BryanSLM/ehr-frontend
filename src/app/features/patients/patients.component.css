@@ -43,7 +43,7 @@
 
 .header h2 {
   margin: 0;
-  color: #212529da;
+  color: #000000da;
   font-size: 1.6rem;
   white-space: nowrap;
 }
@@ -146,7 +146,7 @@
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(74, 99, 144, 0.08);
+  background-color: #4a639014;
 }
 
 /* ------------------------------
