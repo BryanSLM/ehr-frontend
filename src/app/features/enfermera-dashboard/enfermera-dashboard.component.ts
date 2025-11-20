@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { VitalSignsService } from '../../core/services/vital-signs.service';
 import { PatientService } from '../../core/services/patient.service';
+import { NavbarComponent } from './navbar/navbar.component';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -8,7 +9,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-enfermera-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule,NavbarComponent],
   templateUrl: './enfermera-dashboard.component.html',
   styleUrl: './enfermera-dashboard.component.css'
 })

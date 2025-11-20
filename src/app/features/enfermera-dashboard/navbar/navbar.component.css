@@ -1,0 +1,169 @@
+/* ===== CONTENEDOR GENERAL ===== */
+.custom-navbar {
+  background: url('/assets/navbar_secre.png') no-repeat center center;
+  background-size: cover;
+  padding: 0.2rem 0.8rem; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
+  min-height: 60px; 
+}
+
+.container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+}
+
+/* ===== LOGO + TÍTULOS ===== */
+.navbar-header {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem; 
+}
+
+/* ===== LOGO MÁS GRANDE ===== */
+.navbar-logo {
+  width: 150px; 
+  height: auto;
+  cursor: pointer;
+  margin-left: 0.7em;
+  margin-top: -5px;
+}
+
+/* ===== TÍTULO ===== */
+.navbar-brand div {
+  color: #fff;
+   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ===== SUBTÍTULO ===== */
+.navbar-subtitle {
+  font-size: 1rem;
+  margin-top: -3px;
+  color: #fff;
+}
+
+/* ===== BOTÓN DE CERRAR SESIÓN ===== */
+.navbar-links {
+  margin-left: auto; 
+  display: flex;
+  align-items: center;
+}
+
+.btn-cerrar-sesion {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1.2px solid #E61B48;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.btn-cerrar-sesion:hover {
+  background-color: #ff0037;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(230, 27, 72, 0.2);
+}
+
+/* ========== RESPONSIVE GLOBAL ========== */
+
+@media (max-width: 768px) {
+
+  .container-fluid {
+    flex-direction: column;      
+    align-items: center;        
+    text-align: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  /* LOGO más centrado y con más margen abajo */
+  .navbar-logo {
+    width: 200px;                
+    margin: 0 auto;
+    margin-bottom: 0.3rem;
+  }
+
+  /* TÍTULO Y SUBTÍTULO centrados y más arriba */
+  .navbar-brand {
+    flex-direction: column;
+    gap: 0.3rem;
+    margin: 0;
+  }
+
+  .navbar-brand div {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .navbar-subtitle {
+    font-size: 0.95rem;
+    margin-top: -5px;
+  }
+
+  /* BOTÓN OCUPA TODO EL ANCHO */
+  .navbar-links {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-cerrar-sesion {
+    width: 95%;                    
+    justify-content: center;
+    font-size: 1.1rem;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-cerrar-sesion i {
+    font-size: 1.3rem;
+  }
+}
+
+/* ----- Laptops pequeñas (≤ 1200px) ----- */
+@media (max-width: 1200px) {
+
+  .navbar-brand {
+    gap: 2rem;
+  }
+
+  .navbar-logo {
+    width: 140px;
+  }
+}
+
+/* ----- Pantallas grandes (≥ 1600px) ----- */
+@media (min-width: 1600px) {
+
+  .navbar-logo {
+    width: 180px;
+  }
+
+  .navbar-brand div {
+    font-size: 1.3rem;
+  }
+
+  .navbar-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .btn-cerrar-sesion {
+    font-size: 1.1rem;
+    padding: 0.5rem 0.8rem;
+  }
+}
