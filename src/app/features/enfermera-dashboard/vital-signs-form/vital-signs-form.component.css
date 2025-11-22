@@ -3,29 +3,27 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2.5rem;
-  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+  background: #eef3ef;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 /* Estilos mejorados para el título */
 .form-header h2 {
-  color: #2c3e50;
+  color: #000000;
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 3px solid #e9ecef;
+  border-bottom: 3px solid #1e6372;
   font-weight: 700;
   font-size: 2.2rem;
-  letter-spacing: -0.5px;
 }
 
 /* Estilos mejorados para las tarjetas */
 .card {
   border: none;
   border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  background: #ffffff;
+  transition: all 0.5s ease;
+  background: #eef3ef;
   overflow: hidden;
 }
 
@@ -45,7 +43,7 @@
 }
 
 .form-label {
-  color: #2c3e50;
+  color: #1e6372;
   font-weight: 600;
   font-size: 1rem;
   margin-bottom: 0.8rem;
@@ -83,38 +81,37 @@
   padding: 0.9rem 1.2rem;
 }
 
+input[readonly] {
+  cursor: default;
+}
 /* Estilos mejorados para los botones */
 .btn {
   padding: 1rem 2rem;
   font-weight: 600;
-  border-radius: 12px;
+  border-radius: 4px;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   font-size: 0.95rem;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  background: #3498db;
   border: none;
-  box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+
 }
 
-.btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
+.btn-primary:hover{
+  background-color: #0367B0;
+  
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
-  border: none;
-  box-shadow: 0 4px 15px rgba(160, 174, 192, 0.3);
+  background: #95a5a6;
+  border: #95a5a6;
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
-  transform: translateY(-2px);
+  background-color: #1e6372;
 }
 
 /* Estilos mejorados para las alertas */
@@ -146,12 +143,12 @@
 
 /* Estilos mejorados para campos inválidos */
 .form-control.is-invalid {
-  border-color: #fc8181;
+  border-color: #ff6f6f;
   background-image: none;
 }
 
 .invalid-feedback {
-  color: #047f8f;
+  color: #ff6f6f;
   font-size: 0.9rem;
   margin-top: 0.5rem;
   display: flex;
@@ -175,6 +172,7 @@
 
   .card-body {
     padding: 1.5rem;
+    
   }
 
   .form-header h2 {
@@ -239,11 +237,10 @@
 
   /* Estilos para la tarjeta de información del paciente */
 .patient-info-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, #1e6372 20%, #184e5a 80%);
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid #dee2e6;
   margin-top: 1rem;
   transition: all 0.3s ease;
 }
@@ -266,10 +263,9 @@
 .patient-name {
   font-size: 2rem;
   font-weight: 700;
-  color: #2c3e50;
+  color:#ffffff;
   margin: 0;
   line-height: 1.2;
-  letter-spacing: -0.5px;
 }
 
 .patient-id {
@@ -280,16 +276,16 @@
 }
 
 .id-label {
-  font-size: 1rem;
-  color: #6c757d;
+  font-size: 1.1rem;
+  color: #000000;
   font-weight: 500;
 }
 
 .id-number {
   font-size: 1.1rem;
-  color: #2c3e50;
+  color: #ffffff;
   font-weight: 600;
-  background: rgba(52, 152, 219, 0.1);
+  background: rgba(2, 255, 251, 0.1);
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
 }

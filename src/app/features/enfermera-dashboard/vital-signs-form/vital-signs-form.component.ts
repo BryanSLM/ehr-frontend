@@ -96,6 +96,15 @@ export class VitalSignsFormComponent implements OnInit {
       });
     }
   }
+  
+  isInvalid(field: string) {
+  const control = this.vitalSignsForm.get(field);
+  return control?.invalid && control?.touched;
+}
+
+get imc() {
+  return this.calculateIMC();
+}
 
   loadCitaDetails(citaId: number) {
     console.log('Iniciando loadCitaDetails con ID:', citaId);
