@@ -1,0 +1,51 @@
+<nav class="custom-navbar navbar navbar-expand-lg">
+  <div class="container-fluid">
+
+    <!-- LOGO + TÍTULOS -->
+    <div class="navbar-header">
+      <span class="navbar-brand">
+        <img src="/assets/logo.png" alt="Logo" class="navbar-logo" />
+        <div>
+          Sistema de Gestión Médica
+          <p class="navbar-subtitle">Panel Doctor</p>
+        </div>
+      </span>
+    </div>
+
+    <!-- BOTÓN HAMBURGUESA -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarMenu"
+      aria-controls="navbarMenu"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- MENÚ -->
+    <div class="collapse navbar-collapse" id="navbarMenu">
+      <div class="navbar-links">
+
+        <a class="nav-link" routerLink="/doctor" routerLinkActive="active">
+          <i class="fas fa-stethoscope"></i>
+          Evoluciones
+        </a>
+
+        <a class="nav-link" routerLink="/doctor/pacientes" routerLinkActive="active">
+          <i class="fas fa-procedures"></i>
+          Pacientes
+        </a>
+
+        <button class="btn-cerrar-sesion" (click)="cerrarSesion()">
+          <i class="fas fa-sign-out-alt"></i>
+          Cerrar Sesión
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</nav>

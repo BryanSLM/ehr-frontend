@@ -6,16 +6,15 @@ import { MedicoService } from '../../../core/services/medico.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { PdfService } from '../../../core/services/pdf.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarMedicoComponent } from '../navbar-medico/navbar-medico.component'
 import { CertificadoMedicoModalComponent } from '../certificado-medico-modal/certificado-medico-modal.component';
 import { OdontogramaComponent } from '../pages/odontograma/odontograma.component';
 import { ExamenFisicoComponent } from '../examen-fisico/examen-fisico.component';
 
-
-
 @Component({
   selector: 'app-evoluciones-paciente',
   standalone: true,
-  imports: [CommonModule, RouterModule, OdontogramaComponent, ExamenFisicoComponent],
+  imports: [CommonModule, RouterModule, OdontogramaComponent, ExamenFisicoComponent,NavbarMedicoComponent],
   templateUrl: './evoluciones-paciente.component.html',
   styleUrls: ['./evoluciones-paciente.component.css']
 })

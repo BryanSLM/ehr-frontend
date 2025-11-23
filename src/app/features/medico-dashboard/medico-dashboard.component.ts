@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MedicoService } from '../../core/services/medico.service';
+import { NavbarMedicoComponent } from './navbar-medico/navbar-medico.component'
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +11,7 @@ import { OdontogramaService } from '../../core/services/odontograma.service';
 @Component({
   selector: 'app-medico-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule,NavbarMedicoComponent],
   templateUrl: './medico-dashboard.component.html',
   styleUrls: ['./medico-dashboard.component.css']
 })

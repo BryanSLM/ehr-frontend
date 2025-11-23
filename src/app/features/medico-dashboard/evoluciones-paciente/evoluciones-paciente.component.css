@@ -7,7 +7,7 @@
 
 /* Cabecera del paciente */
 .card-header.bg-primary {
-  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+  background:#E61B48;
   border: none;
   padding: 1.5rem;
 }

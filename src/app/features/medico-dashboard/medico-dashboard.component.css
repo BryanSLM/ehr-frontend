@@ -1,26 +1,3 @@
-/* Estilos del navbar */
-
-.custom-navbar {
-  background: url('/assets/navbar_doc.png') no-repeat center center;
-  background-size: cover;
-  padding: 1rem;
-  margin-left: -10px;
-  margin-right: -7px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  position: relative;
-  padding-top: 5px;
-}
-
-.navbar-logo {
-  width: 300px;
-  height: auto;
-  margin-right: 10px;
-  display: inline-block;
-  margin-left: 0.7em;
-  cursor: pointer;
-  margin-top: -15px;
-}
-
 /* 🔹 Asegura que los elementos internos del navbar estén sobre la imagen */
 .container-fluid {
   display: flex;
@@ -30,104 +7,6 @@
   margin: 0 auto;
   position: relative;
   z-index: 2;
-}
-
-.navbar-brand {
-  color: #3D539F;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  font-size: 1.4rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 2;
-  margin-left: -10px;
-  margin-top: 20px; /* Ajusta según lo necesites */
-}
-
-.navbar-links {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.navbar-subtitle {
-  font-size: 1rem; /* Tamaño más pequeño */
-  color: #6b7280; /* Un gris más suave */
-  margin-top: -2px; /* Ajusta la separación */
-  margin-left: 3.5em;
-  display: block; /* Asegura que esté debajo */
-}
-
-.nav-link {
-  color: #3D539F;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  /* Grosor del subrayado */
-  background-color: #E61B48;
-  /* Color del subrayado */
-  transform: scaleX(0);
-  /* Inicia invisible */
-  transform-origin: bottom right;
-  transition: transform 0.3s ease;
-  /* Transición del subrayado */
-}
-
-.nav-link:hover::after {
-  transform: scaleX(1);
-  /* El subrayado crece de izquierda a derecha */
-  transform-origin: bottom left;
-}
-
-.nav-link:hover {
-  transform: translateY(-1px);
-  /* border-bottom: 1px solid #E61B48;  Subrayado con un color específico  */
-}
-
-.logout-icon {
-  font-size: 1.7rem;
-  /* Ajusta el tamaño del icono */
-  color: #E61B48;
-  /* Color rojo como el botón anterior */
-  cursor: pointer;
-  transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
-  /* Transiciones suaves */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  /* Espaciado para mejor apariencia */
-  padding-left: 1em;
-  padding-right: 1em;
-
-  /* 🔹 Simula negrita con sombra de texto */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-
-}
-
-.logout-icon:hover {
-  color: #c82333;
-  /* Color más oscuro en hover */
-  text-shadow: none;
-  /* Quita el efecto de sombra en hover */
-  transform: translateY(-1px);
 }
 
 
@@ -164,6 +43,18 @@
 }
 
 /* Estilos de las tarjetas de pacientes */
+.card-header{
+  background: #9bd1AF;
+}
+.card-header2{
+  background: #1e6372;
+}
+.card-header3{
+  background: #2596be;
+}
+.card-body{
+  background: #eef3ef;
+}
 .patient-card {
   background: #ffffff;
   border-radius: 15px;
@@ -185,6 +76,7 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  
 }
 
 .patient-info h3 {
@@ -195,7 +87,7 @@
 }
 
 .cedula {
-  color: #6c757d;
+  color: #383f46;
   margin: 0.25rem 0 0 0;
   font-size: 0.9rem;
 }

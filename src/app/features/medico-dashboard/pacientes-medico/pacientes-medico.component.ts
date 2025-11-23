@@ -5,11 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { PatientService } from '../../../core/services/patient.service';
 import { PatientsComponent } from '../../patients/patients.component';
 import { AuthService } from '../../../core/services/auth.service';
-
+import {NavbarMedicoComponent} from '../navbar-medico/navbar-medico.component'
 @Component({
   selector: 'app-pacientes-medico',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule,NavbarMedicoComponent],
   templateUrl: './pacientes-medico.component.html',
   styleUrls: ['./pacientes-medico.component.css']
 })

@@ -1,30 +1,6 @@
-<nav class="custom-navbar">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <span class="navbar-brand">
-          <img src="/assets/logo.png" alt="Logo" class="navbar-logo">
-          <div>
-            Sistema de Gestión Médica
-            <p class="navbar-subtitle">Panel Doctor</p>
-          </div>
-        </span>
-      </div>
-      <div class="navbar-links">
-        <a class="nav-link" [routerLink]="['/doctor']" routerLinkActive="active">
-            <i class="fas fa-stethoscope"></i>
-                Evoluciones
-          </a>
-        <a class="nav-link" [routerLink]="['/doctor/pacientes']" routerLinkActive="active">
-          <i class="fas fa-procedures"></i>
-          Pacientes
-        </a>
-        <button class="btn-cerrar-sesion" (click)="cerrarSesion()">
-          <i class="fas fa-sign-out-alt"></i>
-          Cerrar Sesión
-        </button>
-      </div>
-    </div>
-  </nav>
+<!--Navbar-->
+<app-navbar-medico></app-navbar-medico>
+<!-- Contenedor principal 3 contenedores-->
 <div class="container mt-4">
     <!-- Filtros
     <div class="filter-section">
@@ -67,8 +43,8 @@
     </div>
 
     <!-- Sección de Pacientes Sin Evolución -->
-    <div class="card mb-4">
-        <div class="card-header bg-warning">
+    <div class="card mb-4" >
+        <div class="card-header " >
             <h4 class="mb-0 text-white">
                 <i class="fas fa-user-clock me-2"></i>
                 Pacientes Pendientes de Evolución
@@ -102,7 +78,7 @@
 
     <!-- Sección de Pacientes Con Evolución -->
     <div class="card">
-        <div class="card-header bg-success">
+        <div class="card-header card-header2">
             <h4 class="mb-0 text-white">
                 <i class="fas fa-user-check me-2"></i>
                 Pacientes con Evoluciones
@@ -140,8 +116,12 @@
                     <p class="text-muted text-center">No hay pacientes con evoluciones registradas</p>
                 </div>
             </div>
-            <div class="card mt-4">
-                <div class="card-header bg-info">
+        </div>
+    </div>
+
+
+     <div class="card mt-4">
+                <div class="card-header card-header3 ">
                     <h4 class="mb-0 text-white">
                         <i class="fas fa-users me-2"></i>
                         Todos los Pacientes con Evolución
@@ -175,6 +155,4 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 </div>
