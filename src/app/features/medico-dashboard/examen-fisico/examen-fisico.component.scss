@@ -1,37 +1,41 @@
-.examen-fisico { position: relative; }
-.mapa .body-part.active { border-color: #0d6efd; background: #e7f1ff; }
-.panel-lateral { 
-  width: 400px; 
-  max-width: 100%; 
-  min-height: 500px;
+/* =============================
+   CONTENEDOR GENERAL
+============================= */
+.examen-fisico {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
-.lesiones-grid { display: flex; flex-wrap: wrap; }
-.overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); pointer-events: none; border-radius: 6px; }
-.bloqueado { filter: grayscale(0.6); }
-.cuerpos { 
-  display: flex; 
-  gap: 16px; 
-  margin-bottom: 12px; 
+
+
+/* =============================
+   MAPA DEL CUERPO (SVGs)
+============================= */
+.cuerpos {
+  display: flex;
+  flex-wrap: wrap; /* permite que los SVG bajen en pantallas pequeñas */
+  gap: 1.5rem;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .body-svg-container {
   position: relative;
   cursor: pointer;
+  flex: 0 1 260px; /* permite adaptación automática */
 }
 
-.body-svg { 
-  width: 200px; 
-  height: 400px;
-  border: 1px solid #ddd; 
-  border-radius: 4px;
-  transition: transform 0.2s ease;
+.body-svg-container svg {
+  width: 100%;
+  height: auto;        /* mejor para responsive */
+  max-width: 260px;
 }
 
-.body-svg:hover {
-  transform: scale(1.02);
-}
 
+/* =============================
+   PUNTOS INTERACTIVOS
+============================= */
 .body-point {
   transition: all 0.2s ease;
   cursor: pointer;
@@ -39,7 +43,7 @@
 
 .body-point:hover {
   fill: #ff4444 !important;
-  r: 5 !important;
+  r: 6 !important;
   stroke: #fff !important;
   stroke-width: 1 !important;
 }
@@ -48,7 +52,100 @@
   fill: #0d6efd !important;
   stroke: #fff !important;
   stroke-width: 2 !important;
-  r: 5 !important;
+  r: 6 !important;
 }
 
 
+/* =============================
+   PANEL LATERAL
+============================= */
+.panel-lateral {
+  width: 100%;
+  max-width: 420px;
+  min-height: 450px;
+}
+
+/* versión responsiva ----------------------- */
+@media (max-width: 992px) {
+  .panel-lateral {
+    max-width: 100%;
+    margin-top: 1.5rem;
+  }
+}
+
+
+/* =============================
+   VARIOS
+============================= */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  pointer-events: none;
+  border-radius: 6px;
+}
+
+.bloqueado {
+  filter: grayscale(0.6);
+}
+
+.lesiones-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+/* =============================
+   EFECTOS VISUALES
+============================= */
+.body-svg {
+  width: 200px;
+  height: 400px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.body-svg:hover {
+  transform: scale(1.03);
+}
+
+
+/* =============================
+   RESPONSIVE ESPECÍFICO
+============================= */
+
+/* SVG más pequeños en pantallas pequeñas */
+@media (max-width: 576px) {
+  .body-svg-container {
+    flex: 0 1 180px;
+  }
+  .body-svg-container svg {
+    max-width: 180px;
+  }
+}
+
+/* Ajuste de SVG en tablets */
+@media (max-width: 768px) {
+  .body-svg-container {
+    flex: 0 1 220px;
+  }
+  .body-svg-container svg {
+    max-width: 220px;
+  }
+}
+
+/* En pantallas grandes mostrar más grande */
+@media (min-width: 1400px) {
+  .body-svg-container svg {
+    max-width: 300px;
+  }
+}
+
+
+/* =============================
+   EXPERIENCIA EN HOVER
+============================= */
+.body-svg-container:hover {
+  transform: scale(1.01);
+}

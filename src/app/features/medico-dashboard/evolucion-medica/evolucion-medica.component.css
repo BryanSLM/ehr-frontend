@@ -2,12 +2,12 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 5rem;
 }
 
 /* Tarjeta de información del paciente */
 .patient-info-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient( 135deg, #1e6372 20%, #184e5a 80%);
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -23,12 +23,12 @@
 .patient-details h3 {
   margin: 0;
   font-size: 1.8rem;
-  color: #2c3e50;
+  color: #000000;
   font-weight: 600;
 }
 
 .patient-id {
-  color: #6c757d;
+  color: #f0f4f7;
   font-size: 1.1rem;
   margin-top: 0.5rem;
 }
@@ -45,13 +45,14 @@
 }
 
 .card-header {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, #eef3ef 30%, #2b6d7c 100%);
   border-bottom: 1px solid #e9ecef;
   padding: 1.5rem;
   border-radius: 12px 12px 0 0;
 }
 
-.card-header h4 {
+.card-header h4,
+.card-header h5 {
   margin: 0;
   color: #2c3e50;
   font-weight: 600;
@@ -76,14 +77,16 @@
   margin-left: 4px;
 }
 
-.form-control {
+.form-control,
+.form-select {
   border: 2px solid #e9ecef;
   border-radius: 8px;
   padding: 0.75rem;
   transition: all 0.3s ease;
 }
 
-.form-control:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #4299e1;
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
 }
@@ -94,12 +97,56 @@
   opacity: 0.8;
 }
 
+/* Form controls pequeños */
+.form-control-sm,
+.form-select-sm {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Signos vitales */
+.vital-sign-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #4299e1;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.vital-sign-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.vital-sign-card i {
+  font-size: 2rem;
+}
+
+.vital-sign-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.vital-sign-info label {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.vital-sign-info span {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
 /* Sección de diagnósticos */
 .diagnosticos-section {
   margin: 20px 0;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
 }
 
 .diagnosticos-legend {
@@ -108,23 +155,31 @@
   color: #666;
 }
 
-/* Tabla de diagnósticos */
-.table {
+/* Tablas */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 1rem;
-  overflow: visible !important;
+}
+
+.table {
+  margin-bottom: 0;
+  width: 100%;
+  min-width: 800px;
 }
 
 .table th {
   background-color: #f8f9fa;
-  font-size: 0.9em;
-  padding: 12px;
+  font-size: 0.875rem;
+  padding: 0.75rem;
+  white-space: nowrap;
+  font-weight: 600;
 }
 
 .table td {
-  padding: 12px;
+  padding: 0.75rem;
   vertical-align: middle;
-  position: relative !important;
-  overflow: visible !important;
+  position: relative;
 }
 
 /* Sugerencias CIE */
@@ -137,13 +192,14 @@
   top: calc(100% + 5px);
   left: 0;
   width: 100%;
+  min-width: 250px;
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #007bff;
+  border-radius: 8px;
   max-height: 200px;
   overflow-y: auto;
   z-index: 9999 !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
   margin-top: 2px;
 }
 
@@ -155,197 +211,26 @@
 }
 
 .cie-suggestion-item:hover {
-  background-color: #f5f5f5;
+  background-color: #e3f2fd;
+  color: #1976d2;
 }
 
 .cie-suggestion-item:last-child {
   border-bottom: none;
 }
 
-/* Botones */
-.btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-  border: none;
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
-  border: none;
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
-  border: none;
-  padding: 0.25rem 0.5rem;
-}
-
-/* Alertas */
-.alert {
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.alert-success {
-  background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
-  color: #276749;
-}
-
-.alert-danger {
-  background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
-  color: #9b2c2c;
-}
-
-.alert-info {
-  background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
-  color: #2c5282;
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-  }
-
-  .patient-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-
-  .card-body {
-    padding: 1.5rem;
-  }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .cie-suggestions {
-    width: calc(100% - 20px);
-    left: 10px;
-  }
-}
-
-/* Accesibilidad */
-.form-control:focus-visible,
-.btn:focus-visible {
-  outline: 2px solid #4299e1;
-  outline-offset: 2px;
-}
-
-/* Estilos para nombres comerciales */
-.nombres-comerciales-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  z-index: 1050;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 2px;
-}
-
-.nombres-comerciales-header {
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: #666;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-.nombres-comerciales-items {
-  max-height: 150px;
-  overflow-y: auto;
-}
-
-.nombre-comercial-item {
-  padding: 10px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-  transition: background-color 0.2s ease;
-}
-
-.nombre-comercial-item:hover {
-  background-color: #e3f2fd;
-  color: #1976d2;
-}
-
-.nombre-comercial-item:last-child {
-  border-bottom: none;
-}
-
-.nombre-comercial-item:active {
-  background-color: #bbdefb;
-}
-
-/* Estilos para el botón de agregar */
-.position-relative .btn-outline-primary {
-  z-index: 1001;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 12px;
-}
-
-/* Estilos para el modal */
-.modal {
-  display: block;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-dialog {
-  max-width: 500px;
-}
-
-/* Estilos para las sugerencias de medicamentos */
+/* Sugerencias de medicamentos */
 .medicamentos-suggestions {
-  position: absolute;
-  top: 100%;
+  position: absolute !important;
+  top: calc(100% + 5px);
   left: 0;
-  right: 0;
+  width: 100%;
+  min-width: 250px;
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  z-index: 1050;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+  z-index: 9999 !important;
   max-height: 200px;
   overflow-y: auto;
   margin-top: 2px;
@@ -367,10 +252,6 @@
   border-bottom: none;
 }
 
-.medicamento-suggestion-item:active {
-  background-color: #bbdefb;
-}
-
 .medicamento-suggestion-item strong {
   color: #333;
   font-weight: 600;
@@ -380,48 +261,442 @@
   color: #666;
   display: block;
   margin-top: 2px;
+  font-size: 0.8rem;
 }
 
-/* Mejorar el espaciado entre campos para evitar interferencias */
-.medicamento-card .row {
-  margin-bottom: 1rem;
+/* Nombres comerciales */
+.nombres-comerciales-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+  z-index: 9999;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 2px;
 }
 
-.medicamento-card .col-md-4,
-.medicamento-card .col-md-6 {
-  margin-bottom: 0.5rem;
-}
-
-/* Asegurar que los campos de entrada tengan suficiente espacio */
-.form-control {
-  position: relative;
+.nombres-comerciales-header {
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #666;
+  position: sticky;
+  top: 0;
   z-index: 1;
 }
 
-/* Mejorar la visibilidad de las listas desplegables */
-.nombres-comerciales-list,
-.medicamentos-suggestions {
-  border: 1px solid #007bff;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+.nombres-comerciales-items {
+  max-height: 150px;
+  overflow-y: auto;
 }
 
-/* Estilos para el estado activo de los elementos */
-.nombre-comercial-item.active,
-.medicamento-suggestion-item.active {
-  background-color: #007bff;
-  color: white;
+.nombre-comercial-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .nombres-comerciales-list,
-  .medicamentos-suggestions {
-    max-height: 150px;
+.nombre-comercial-item:hover {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.nombre-comercial-item:last-child {
+  border-bottom: none;
+}
+
+.nombre-comercial-item:active {
+  background-color: #bbdefb;
+}
+
+/* Botones */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn i {
+  transition: transform 0.3s ease;
+}
+
+.btn:hover i {
+  transform: scale(1.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+}
+
+.btn-secondary {
+  background: #d1d6d0;
+}
+
+.btn-secondary:hover {
+  background:#1e6372;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+  padding: 0.5rem 0.75rem;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Alertas */
+.alert {
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+  color: #276749;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+  color: #9b2c2c;
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
+  color: #2c5282;
+}
+
+/* Modal */
+.modal {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1060;
+  overflow: auto;
+}
+
+.modal-dialog {
+  max-width: 500px;
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .nombre-comercial-item,
-  .medicamento-suggestion-item {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accesibilidad */
+.form-control:focus-visible,
+.form-select:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
+}
+
+/* Checkboxes personalizados */
+.form-check {
+  padding-left: 1.75rem;
+}
+
+.form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.125rem;
+}
+
+.form-check-label {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ============================================ */
+
+/* Tablets pequeñas y móviles grandes (hasta 768px) */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  /* Información del paciente */
+  .patient-info-card {
+    padding: 1.5rem;
+  }
+
+  .patient-details h3 {
+    font-size: 1.4rem;
+  }
+
+  .patient-id {
+    font-size: 1rem;
+  }
+
+  /* Cards */
+  .card-header {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  /* Signos vitales en dos columnas */
+  .vital-sign-card {
+    padding: 1rem;
+  }
+
+  .vital-sign-card i {
+    font-size: 1.5rem;
+  }
+
+  .vital-sign-info span {
+    font-size: 1rem;
+  }
+
+  /* Checkboxes más espaciados */
+  .form-check {
+    margin-bottom: 0.75rem;
+  }
+
+  /* Botones */
+  .btn {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Tablas */
+  .table {
+    font-size: 0.875rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+
+  /* Sugerencias más pequeñas */
+  .cie-suggestions,
+  .medicamentos-suggestions,
+  .nombres-comerciales-list {
+    max-height: 150px;
+    font-size: 0.875rem;
+  }
+
+  .cie-suggestion-item,
+  .medicamento-suggestion-item,
+  .nombre-comercial-item {
     padding: 8px 10px;
-    font-size: 13px;
+  }
+
+  /* Modal */
+  .modal-dialog {
+    margin: 0.5rem;
+    max-width: 100%;
+  }
+}
+
+/* Móviles pequeños (hasta 576px) */
+@media (max-width: 576px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  /* Información del paciente */
+  .patient-info-card {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .patient-details h3 {
+    font-size: 1.25rem;
+  }
+
+  .patient-id {
+    font-size: 0.9rem;
+  }
+
+  /* Cards más compactos */
+  .card {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .card-header {
+    padding: 0.75rem;
+  }
+
+  .card-header h4,
+  .card-header h5 {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 0.75rem;
+  }
+
+  /* Formularios más compactos */
+  .form-control,
+  .form-select {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .form-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Signos vitales en una columna */
+  .vital-sign-card {
+    padding: 0.75rem;
+  }
+
+  /* Checkboxes en una columna completa */
+  .form-check {
+    width: 100%;
+  }
+
+  /* Botones más pequeños */
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Alertas más compactas */
+  .alert {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Tablas ultra compactas */
+  .table {
+    font-size: 0.75rem;
+    min-width: 700px;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.375rem;
+  }
+
+  /* Iconos más pequeños */
+  i.fa-3x {
+    font-size: 2rem !important;
+  }
+}
+
+/* Tablets landscape y desktop pequeño (768px - 992px) */
+@media (min-width: 768px) and (max-width: 992px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+}
+
+/* Desktop grande (más de 1200px) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .card-body {
+    padding: 2.5rem;
+  }
+}
+
+/* Modo impresión */
+@media print {
+  .btn,
+  .alert {
+    display: none;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+
+  .collapse {
+    display: block !important;
+    height: auto !important;
   }
 }
