@@ -120,6 +120,34 @@ export class ExamenFisicoComponent implements OnInit {
     }
   }
 
+  cerrarPanel(): void {
+  this.parteActiva = null;
+  this.modoEdicion = false;
+}
+
+/**
+ * Limpia el panel sin eliminar datos guardados
+ * Permite hacer un nuevo ingreso en la misma u otra parte
+ */
+limpiarPanel(): void {
+  // Si hay datos sin guardar, podrías mostrar una confirmación
+  if (this.parteActiva && 
+      (this.getLesionesDeParteActiva().length > 0 || this.getObservacionesActiva())) {
+    const confirmar = confirm('¿Limpiar el formulario? Los datos de este formulario se borrar revisa si las datos se agrego a la lista .');
+    if (!confirmar) {
+      return;
+    }
+  }
+  
+  // Limpia la selección actual
+  this.parteActiva = null;
+  this.modoEdicion = false;
+  this.mostrarInputOtro = false;
+  
+  // Opcional: mostrar mensaje de éxito
+  console.log('Panel limpiado. Selecciona una parte del cuerpo para nuevo ingreso.');
+}
+
   cargarExamenFisicoExistente(): void {
     if (!this.evolucionId) return;
     

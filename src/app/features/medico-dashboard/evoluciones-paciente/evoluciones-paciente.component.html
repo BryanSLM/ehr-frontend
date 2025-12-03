@@ -2,12 +2,12 @@
 <div class="container mt-4">
   <!-- Cabecera con información del paciente -->
   <div class="card mb-4" *ngIf="paciente">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header ">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="mb-0">
           {{ paciente.primer_nombre }} {{ paciente.apellido_paterno }}
         </h4>
-        <button class="btn btn-light" (click)="crearNuevaEvolucion()">
+        <button class="btn btn-new" (click)="crearNuevaEvolucion()">
           <i class="fas fa-plus-circle"></i> Nueva Evolución
         </button>
       </div>
@@ -244,14 +244,20 @@
                       </li>
                     </ul>
                   </div>
-                </div>
-                
-                <!-- Botón Ver más -->
+
+                   <!-- Botón Ver más -->
                 <button class="btn btn-link btn-sm text-primary" 
                         (click)="verMasDetalles(evolucion.id)">
                   <i class="fas fa-eye"></i> Ver más
                 </button>
+                </div>
+                
+               
               </div>
+            
+            
+            
+            
             </div>
           </div>
         </div>

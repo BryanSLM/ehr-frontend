@@ -6,15 +6,15 @@
 }
 
 /* Cabecera del paciente */
-.card-header.bg-primary {
-  background:#E61B48;
+.card-header {
+  background: linear-gradient( 135deg, #1e6372 20%, #184e5a 80%);
   border: none;
   padding: 1.5rem;
 }
 
 .card-header h4 {
-  font-size: 1.5rem;
-  color: white;
+  font-size: 1.8rem;
+  color: rgb(255, 255, 255);
   margin: 0;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
@@ -36,8 +36,8 @@
 }
 
 .accordion-button:not(.collapsed) {
-  background: linear-gradient(to right, #f8f9fa, #ffffff);
-  color: #0d6efd;
+  background: linear-gradient(to right, #f8f9fa, #eef3ef);
+  color: #033d0c;
   box-shadow: none;
 }
 
@@ -47,7 +47,7 @@
 
 .accordion-body {
   padding: 1.5rem;
-  background-color: #ffffff;
+  background-color: #eef3ef;
 }
 
 /* Contenido de la evolución */
@@ -115,7 +115,7 @@ h6 {
 
 .prescription-item {
   display: flex;
-  flex-direction: column;
+flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -154,14 +154,13 @@ h6 {
 
 /* Botones y acciones */
 .action-buttons {
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid #0b83fa;
   padding-top: 1rem;
   margin-top: 1rem;
 }
 
 .btn {
   padding: 0.5rem 1rem;
-  border-radius: 6px;
   transition: all 0.2s ease;
   font-weight: 500;
   display: inline-flex;
@@ -170,19 +169,30 @@ h6 {
 }
 
 .btn-sm {
-  padding: 0.375rem 0.75rem;
+padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
+}
+.btn-new{
+  background-color: #235d69;
+    border-color: #000000;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    font-size: 1.1rem;
 }
 
 .btn-link {
   text-decoration: none;
   padding: 0.375rem 0.75rem;
+  background: #5abdfff9;
+  
 }
 
 .btn-link:hover {
   transform: translateY(-1px);
   text-decoration: none;
-  background-color: rgba(13, 110, 253, 0.1);
+  background-color: #e4e4e4;
   border-radius: 6px;
 }
 
@@ -192,25 +202,44 @@ h6 {
 }
 
 .btn-secondary {
-  background: #6c757d;
+  background: #d1d6d0;
   border: none;
+}
+
+.btn-secondary:hover {
+  background:#1e6372;
 }
 
 .btn-warning {
-  background: #ffc107;
+  background-color: #3498db;
   border: none;
-  color: #000;
+  color: #ffffff;
+}
+.btn-warning:hover {
+  background-color: #2d84be;
 }
 
+
+
 .btn-danger {
-  background: #dc3545;
+  background:  #ff0037;
   border: none;
+}
+.btn-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(230, 27, 72, 0.2);
 }
 
 .btn-info {
   background: #0dcaf0;
   border: none;
   color: white;
+}
+.btn-info:hover{
+  background: #08aaca;
+  
 }
 
 .btn:hover {
@@ -227,13 +256,12 @@ h6 {
 .dropdown-menu {
   border: none;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border-radius: 8px;
   padding: 0.5rem;
+  
 }
 
 .dropdown-item {
   padding: 0.5rem 1rem;
-  border-radius: 4px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -283,26 +311,25 @@ h6 {
   .btn-group {
     width: 100%;
     flex-direction: column;
+    align-items: flex-end;
   }
-  
-  .btn {
-    width: 100%;
-  }
-  
-  .btn-link {
-    width: 100%;
+
+  /* 🔥 MISMO TAMAÑO PARA TODOS LOS BOTONES */
+  .btn,
+  .btn-link,
+  .dropdown-toggle {
+    width: 160px;      
     text-align: center;
   }
-  
+
   .dropdown {
     width: 100%;
-  }
-  
-  .dropdown-toggle {
-    width: 100%;
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
 }
+
 
 @media (max-width: 576px) {
   .card-header .d-flex {
@@ -315,51 +342,7 @@ h6 {
   }
 }
 
-.btn-cerrar-sesion {
-  background-color: transparent;
-  color: #E61B48;
-  border: 2px solid #E61B48;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
 
-.btn-cerrar-sesion i {
-  font-size: 1.2rem;
-}
-
-.btn-cerrar-sesion:hover {
-  background-color: #E61B48;
-  color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(230, 27, 72, 0.2);
-}
-.custom-navbar {
-  background: url('/assets/navbar_doc.png') no-repeat center center;
-  background-size: cover;
-  padding: 1rem;
-  margin-left: -10px;
-  margin-right: -7px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  position: relative;
-  padding-top: 5px;
-}
-
-.navbar-logo {
-  width: 300px;
-  height: auto;
-  margin-right: 10px;
-  display: inline-block;
-  margin-left: 0.7em;
-  cursor: pointer;
-  margin-top: -15px;
-}
 
 /* 🔹 Asegura que los elementos internos del navbar estén sobre la imagen */
 .container-fluid {
@@ -372,74 +355,14 @@ h6 {
   z-index: 2;
 }
 
-.navbar-brand {
-  color: #3D539F;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  font-size: 1.4rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 2;
-  margin-left: -10px;
-  margin-top: 20px; /* Ajusta según lo necesites */
-}
 
-.navbar-links {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
 
-.navbar-subtitle {
-  font-size: 1rem; /* Tamaño más pequeño */
-  color: #6b7280; /* Un gris más suave */
-  margin-top: -2px; /* Ajusta la separación */
-  margin-left: 3.5em;
-  display: block; /* Asegura que esté debajo */
-}
 
-.nav-link {
-  color: #3D539F;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-}
 
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  /* Grosor del subrayado */
-  background-color: #E61B48;
-  /* Color del subrayado */
-  transform: scaleX(0);
-  /* Inicia invisible */
-  transform-origin: bottom right;
-  transition: transform 0.3s ease;
-  /* Transición del subrayado */
-}
 
-.nav-link:hover::after {
-  transform: scaleX(1);
-  /* El subrayado crece de izquierda a derecha */
-  transform-origin: bottom left;
-}
 
-.nav-link:hover {
-  transform: translateY(-1px);
-  /* border-bottom: 1px solid #E61B48;  Subrayado con un color específico  */
-}
+
+
 
 .logout-icon {
   font-size: 1.7rem;

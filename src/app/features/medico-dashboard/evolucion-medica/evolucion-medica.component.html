@@ -1,4 +1,6 @@
-<div class="container mt-4">
+<!-- ACORDEÓN - Solo una sección abierta a la vez -->
+<div class="container mt-4" id="acordeonPrincipal">
+  
   <!-- Información del paciente -->
   <div class="patient-info-card mb-4">
     <div class="patient-header d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-3">
@@ -17,7 +19,10 @@
   <div class="card mb-4" [style.display]="((isEditMode || canEdit) && !canEditOdontograma) ? 'block' : 'none'">
     <div class="card-header">
       <h5 class="mb-0">
-        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" data-bs-toggle="collapse" data-bs-target="#examenFisicoCollapse">
+        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#examenFisicoCollapse"
+          (click)="cerrarOtrosSecciones('examenFisico')">
           <i class="fas fa-chevron-down me-2"></i>
           Examen Físico
         </button>
@@ -32,7 +37,10 @@
   <div class="card mb-4" *ngIf="signosVitales">
     <div class="card-header">
       <h5 class="mb-0">
-        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" data-bs-toggle="collapse" data-bs-target="#signosVitalesCollapse">
+        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#signosVitalesCollapse"
+          (click)="cerrarOtrosSecciones('signosVitales')">
           <i class="fas fa-chevron-down me-2"></i>
           <i class="fas fa-heartbeat me-2"></i>
           Signos Vitales
@@ -81,7 +89,10 @@
     <div class="card">
       <div class="card-header">
         <h5 class="mb-0">
-          <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" data-bs-toggle="collapse" data-bs-target="#evolucionCollapse">
+          <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#evolucionCollapse"
+            (click)="cerrarOtrosSecciones('evolucion')">
             <i class="fas fa-chevron-down me-2"></i>
             Evolución Médica
           </button>
@@ -97,7 +108,6 @@
             <textarea class="form-control" id="motivo_consulta" formControlName="motivo_consulta" rows="3" [readonly]="!canEdit"></textarea>
           </ng-template>
         </div>
-
         <div class="mb-4">
           <label for="enfermedad_actual" class="form-label required">Enfermedad o Problema Actual</label>
           <div *ngIf="!canEdit && odontogramaActual; else enfermedadActualEditable" class="form-control bg-light" style="min-height: 3rem; white-space: pre-wrap;">
@@ -107,12 +117,10 @@
             <textarea class="form-control" id="enfermedad_actual" formControlName="enfermedad_actual" rows="3" [readonly]="!canEdit"></textarea>
           </ng-template>
         </div>
-
         <div class="mb-4">
           <label for="antecedentes_personales" class="form-label required">Antecedentes Personales</label>
           <textarea class="form-control" id="antecedentes_personales" formControlName="antecedentes_personales" rows="3" [readonly]="!canEdit"></textarea>
         </div>
-
         <div class="mb-4" formGroupName="antecedentes_familiares">
           <label class="form-label">Antecedentes Familiares</label>
           <div class="row g-2">
@@ -148,7 +156,10 @@
     <div class="card">
       <div class="card-header">
         <h5 class="mb-0">
-          <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" data-bs-toggle="collapse" data-bs-target="#odontogramaCollapse">
+          <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#odontogramaCollapse"
+            (click)="cerrarOtrosSecciones('odontograma')">
             <i class="fas fa-chevron-down me-2"></i>
             <i class="fas fa-tooth me-2"></i>
             Odontograma
@@ -182,7 +193,10 @@
   <div class="card mb-4" *ngIf="odontogramaActual && odontogramaActual.piezas?.length && !canEditOdontograma">
     <div class="card-header bg-info text-white">
       <h6 class="mb-0">
-        <button class="btn btn-link text-decoration-none text-white p-0 w-100 text-start" data-bs-toggle="collapse" data-bs-target="#resumenOdontogramaCollapse">
+        <button class="btn btn-link text-decoration-none text-white p-0 w-100 text-start" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#resumenOdontogramaCollapse"
+          (click)="cerrarOtrosSecciones('resumenOdontograma')">
           <i class="fas fa-chevron-down me-2"></i>
           <i class="fas fa-tooth me-2"></i>
           Resumen del Odontograma
@@ -198,7 +212,10 @@
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="mb-0">
-        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" data-bs-toggle="collapse" data-bs-target="#diagnosticosCollapse">
+        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#diagnosticosCollapse"
+          (click)="cerrarOtrosSecciones('diagnosticos')">
           <i class="fas fa-chevron-down me-2"></i>
           <i class="fas fa-stethoscope me-2"></i>
           DIAGNÓSTICO
@@ -213,12 +230,12 @@
             <table class="table table-bordered table-hover align-middle">
               <thead class="table-light">
                 <tr>
-                  <th style="width: 60px; min-width: 60px;" class="text-center">#</th>
-                  <th style="min-width: 250px;">DIAGNÓSTICO</th>
-                  <th style="width: 150px; min-width: 150px;">CIE</th>
-                  <th style="width: 80px; min-width: 80px;" class="text-center">PRE</th>
-                  <th style="width: 80px; min-width: 80px;" class="text-center">DEF</th>
-                  <th *ngIf="canEdit" style="width: 100px; min-width: 100px;" class="text-center">Acciones</th>
+                  <th class="col-numero">#</th>
+                  <th>DIAGNÓSTICO</th>
+                  <th style="width: 18%;">CIE</th>
+                  <th style="width: 10%;" class="text-center">PRE</th>
+                  <th style="width: 10%;" class="text-center">DEF</th>
+                  <th *ngIf="canEdit" class="col-acciones">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -245,30 +262,10 @@
             </table>
           </div>
         </div>
-        <button *ngIf="canEdit" type="button" class="btn btn-primary" (click)="agregarDiagnostico()">
+        <button *ngIf="canEdit" type="button" class="btn btn-primary mt-3" (click)="agregarDiagnostico()">
           <i class="fas fa-plus-circle me-2"></i>Agregar Diagnóstico
         </button>
       </form>
-    </div>
-  </div>
-
-  <!-- Modal de búsqueda CIE -->
-  <div class="modal" *ngIf="modalVisible" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Buscar Diagnóstico CIE</h5>
-          <button type="button" class="btn-close" (click)="modalVisible = false"></button>
-        </div>
-        <div class="modal-body">
-          <input type="text" class="form-control mb-3" placeholder="Buscar diagnóstico..." [ngModel]="searchTerm" (ngModelChange)="buscarCIE($event, selectedDiagnosticoIndex)">
-          <div class="list-group" *ngIf="cieSuggestions.length > 0">
-            <button type="button" class="list-group-item list-group-item-action" *ngFor="let cie of cieSuggestions" (click)="seleccionarCIE(cie, selectedDiagnosticoIndex)">
-              <strong>{{cie.CODIGO}}</strong> - {{cie.NOMBRE}}
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -276,7 +273,10 @@
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="mb-0">
-        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" data-bs-toggle="collapse" data-bs-target="#prescripcionCollapse">
+        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#prescripcionCollapse"
+          (click)="cerrarOtrosSecciones('prescripcion')">
           <i class="fas fa-chevron-down me-2"></i>
           <i class="fas fa-pills me-2"></i>
           Prescripción de Fármacos
@@ -290,18 +290,18 @@
             <table class="table table-bordered table-hover align-middle">
               <thead class="table-light">
                 <tr>
-                  <th style="width: 60px; min-width: 60px;" class="text-center">#</th>
-                  <th style="width: 140px; min-width: 140px;">Fecha Emisión</th>
-                  <th style="min-width: 180px;">Nombre Genérico</th>
-                  <th style="min-width: 180px;">Nombre Comercial</th>
-                  <th style="min-width: 130px;">Concentración</th>
-                  <th style="min-width: 150px;">Forma Farm.</th>
-                  <th style="min-width: 120px;">Dosis</th>
-                  <th style="min-width: 160px;">Frecuencia</th>
-                  <th style="min-width: 130px;">Duración</th>
-                  <th style="min-width: 150px;">Vía Admin.</th>
-                  <th style="min-width: 180px;">Indicaciones</th>
-                  <th *ngIf="canEdit" style="width: 100px; min-width: 100px;" class="text-center">Acciones</th>
+                  <th class="col-numero">#</th>
+                  <th style="width: 9%;">Fecha</th>
+                  <th style="width: 11%;">Genérico</th>
+                  <th style="width: 11%;">Comercial</th>
+                  <th style="width: 8%;">Conc.</th>
+                  <th style="width: 9%;">Forma</th>
+                  <th style="width: 7%;">Dosis</th>
+                  <th style="width: 10%;">Frecuencia</th>
+                  <th style="width: 7%;">Duración</th>
+                  <th style="width: 9%;">Vía Admin.</th>
+                  <th style="width: 10%;">Indicaciones</th>
+                  <th *ngIf="canEdit" class="col-acciones">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -320,43 +320,27 @@
                     </div>
                   </td>
                   <td class="position-relative">
-                    <input type="text" class="form-control form-control-sm" formControlName="nombre_comercial" [readonly]="!canEdit" placeholder="Seleccione..." (focus)="mostrarListaNombresComerciales(i)" (blur)="cerrarListaConDelay(i)">
-                    <button *ngIf="canEdit && medicamentoSeleccionado[i]" type="button" class="btn btn-sm btn-outline-primary position-absolute" style="right: 5px; top: 50%; transform: translateY(-50%);" (click)="agregarNombreComercial(i)">
-                      <i class="fas fa-plus"></i>
-                    </button>
-                    <div *ngIf="debeMostrarListaNombresComerciales(i)" class="nombres-comerciales-list">
-                      <div class="nombres-comerciales-header">
-                        <span>Nombres comerciales:</span>
-                        <button *ngIf="nombresComerciales[i].length > 3" type="button" class="btn btn-sm btn-link" (click)="toggleMostrarTodos(i)">
-                          {{ mostrarTodos[i] ? 'Ver menos' : 'Ver más' }}
-                        </button>
-                      </div>
-                      <div class="nombres-comerciales-items">
-                        <div *ngFor="let nombre of getNombresComercialesMostrados(i)" class="nombre-comercial-item" (click)="onNombreComercialClick(nombre, i, $event)">
-                          {{ nombre.nombre_comercial }}
-                        </div>
-                      </div>
-                    </div>
+                    <input type="text" class="form-control form-control-sm" formControlName="nombre_comercial" [readonly]="!canEdit" placeholder="Seleccione...">
                   </td>
                   <td><input type="text" class="form-control form-control-sm" formControlName="concentracion" readonly></td>
                   <td><input type="text" class="form-control form-control-sm" formControlName="forma_farmaceutica" readonly></td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="dosis" [readonly]="!canEdit" placeholder="Ej: 1 tableta"></td>
+                  <td><input type="text" class="form-control form-control-sm" formControlName="dosis" [readonly]="!canEdit" placeholder="1 tab"></td>
                   <td>
                     <select class="form-select form-select-sm" formControlName="frecuencia" [disabled]="!canEdit">
-                      <option value="">Seleccione</option>
-                      <option value="cada 4 horas">Cada 4 horas</option>
-                      <option value="cada 6 horas">Cada 6 horas</option>
-                      <option value="cada 8 horas">Cada 8 horas</option>
-                      <option value="cada 12 horas">Cada 12 horas</option>
-                      <option value="cada 24 horas">Cada 24 horas</option>
-                      <option value="una vez al día">Una vez al día</option>
-                      <option value="dos veces al día">Dos veces al día</option>
-                      <option value="tres veces al día">Tres veces al día</option>
+                      <option value="">Sel.</option>
+                      <option value="cada 4 horas">C/4h</option>
+                      <option value="cada 6 horas">C/6h</option>
+                      <option value="cada 8 horas">C/8h</option>
+                      <option value="cada 12 horas">C/12h</option>
+                      <option value="cada 24 horas">C/24h</option>
+                      <option value="una vez al día">1x/día</option>
+                      <option value="dos veces al día">2x/día</option>
+                      <option value="tres veces al día">3x/día</option>
                     </select>
                   </td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="duracion_tratamiento" [readonly]="!canEdit" placeholder="Ej: 7 días"></td>
+                  <td><input type="text" class="form-control form-control-sm" formControlName="duracion_tratamiento" [readonly]="!canEdit" placeholder="7d"></td>
                   <td><input type="text" class="form-control form-control-sm" formControlName="via_administracion" readonly></td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="indicaciones_adicionales" [readonly]="!canEdit" placeholder="Indicaciones"></td>
+                  <td><input type="text" class="form-control form-control-sm" formControlName="indicaciones_adicionales" [readonly]="!canEdit" placeholder="..."></td>
                   <td *ngIf="canEdit" class="text-center">
                     <button type="button" class="btn btn-danger btn-sm" (click)="eliminarMedicamento(i)">
                       <i class="fas fa-trash"></i>
@@ -367,7 +351,7 @@
             </table>
           </div>
         </div>
-        <button *ngIf="canEdit" type="button" class="btn btn-primary" (click)="agregarMedicamento()">
+        <button *ngIf="canEdit" type="button" class="btn btn-primary mt-3" (click)="agregarMedicamento()">
           <i class="fas fa-plus-circle me-2"></i>Agregar Medicamento
         </button>
       </form>
@@ -389,29 +373,4 @@
     </div>
   </div>
 
-  <!-- Modal para agregar nombre comercial -->
-  <div class="modal" *ngIf="modalNombreComercialVisible" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Agregar Nombre Comercial</h5>
-          <button type="button" class="btn-close" (click)="cerrarModalNombreComercial()"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">Medicamento Genérico</label>
-            <input type="text" class="form-control" [value]="medicamentoSeleccionado[indiceMedicamentoActual]?.nombre_generico || ''" readonly>
-          </div>
-          <div>
-            <label class="form-label">Nombre Comercial</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevoNombreComercial" placeholder="Ingrese el nombre comercial">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="cerrarModalNombreComercial()">Cancelar</button>
-          <button type="button" class="btn btn-primary" (click)="guardarNombreComercial()" [disabled]="!nuevoNombreComercial">Guardar</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

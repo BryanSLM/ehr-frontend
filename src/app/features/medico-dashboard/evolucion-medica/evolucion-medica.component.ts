@@ -6,6 +6,9 @@ import { OdontogramaService } from '../../../core/services/odontograma.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+
+declare var bootstrap: any;
+
 interface Diagnostico {
   id: number;
   cieId: number;
@@ -152,6 +155,126 @@ export class EvolucionMedicaComponent implements OnInit {
     return this.prescripcionForm.get('medicamentos') as FormArray;
   }
 
+    // Variable para rastrear la sección abierta actualmente
+  private seccionAbierta: string = '';
+  
+  // Array de IDs de todas las secciones collapse
+  private collapseIds = [
+    'examenFisicoCollapse',
+    'signosVitalesCollapse',
+    'evolucionCollapse',
+    'odontogramaCollapse',
+    'resumenOdontogramaCollapse',
+    'diagnosticosCollapse',
+    'prescripcionCollapse'
+  ];
+
+  ngOnInit(): void {
+  // Inicializar acordeón
+  this.inicializarAcordeon();
+  
+  // Cargar parámetros de ruta
+  this.route.params.subscribe(params => {
+    if (params['id']) {
+      this.evolucionId = +params['id'];
+      this.isEditMode = true;
+      this.cargarEvolucion();
+    } else {
+      // Si no hay ID, estamos creando una nueva evolución
+      this.canEdit = true;
+    }
+  });
+
+  // Cargar parámetros de query
+  this.route.queryParams.subscribe(params => {
+    if (params['pacienteId']) {
+      this.pacienteId = +params['pacienteId'];
+      this.cargarDatosPaciente();
+      
+      // Verificar permisos para el odontograma
+      this.canEditOdontograma = this.odontogramaService.canEditOdontograma();
+      
+      // Mostrar odontograma siempre
+      this.showOdontograma = true;
+    }
+  });
+}
+
+  /**
+   * Inicializa el acordeón cerrando todas las secciones al cargar
+   */
+  private inicializarAcordeon(): void {
+    this.collapseIds.forEach(id => {
+      this.cerrarSeccion(id);
+    });
+  }
+
+  /**
+   * Cierra todas las demás secciones cuando se abre una nueva
+   * @param seccionActual - Nombre de la sección que se está abriendo
+   */
+  cerrarOtrosSecciones(seccionActual: string): void {
+    // Si la sección que se quiere abrir es la misma que está abierta, cerrarla
+    if (this.seccionAbierta === seccionActual) {
+      this.seccionAbierta = '';
+      return;
+    }
+
+    // Cerrar todas las secciones excepto la actual
+    const mapaSeccionesIds: { [key: string]: string } = {
+      'examenFisico': 'examenFisicoCollapse',
+      'signosVitales': 'signosVitalesCollapse',
+      'evolucion': 'evolucionCollapse',
+      'odontograma': 'odontogramaCollapse',
+      'resumenOdontograma': 'resumenOdontogramaCollapse',
+      'diagnosticos': 'diagnosticosCollapse',
+      'prescripcion': 'prescripcionCollapse'
+    };
+
+    // Cerrar todas las demás secciones
+    for (const [seccion, idCollapse] of Object.entries(mapaSeccionesIds)) {
+      if (seccion !== seccionActual) {
+        this.cerrarSeccion(idCollapse);
+      }
+    }
+
+    // Actualizar la sección abierta
+    this.seccionAbierta = seccionActual;
+  }
+
+  /**
+   * Cierra una sección collapse específica
+   * @param idCollapse - ID del elemento collapse a cerrar
+   */
+  private cerrarSeccion(idCollapse: string): void {
+    const elemento = document.getElementById(idCollapse);
+    if (elemento) {
+      const collapse = bootstrap.Collapse.getInstance(elemento);
+      if (collapse) {
+        collapse.hide();
+      } else {
+        // Si no existe instancia, crear una nueva y cerrarla
+        const nuevaInstancia = new bootstrap.Collapse(elemento, {
+          toggle: false
+        });
+        nuevaInstancia.hide();
+      }
+    }
+  }
+
+  /**
+   * Abre una sección collapse específica (opcional, por si necesitas)
+   * @param idCollapse - ID del elemento collapse a abrir
+   */
+  private abrirSeccion(idCollapse: string): void {
+    const elemento = document.getElementById(idCollapse);
+    if (elemento) {
+      const collapse = new bootstrap.Collapse(elemento, {
+        toggle: false
+      });
+      collapse.show();
+    }
+  }
 
   agregarDiagnostico() {
     if (this.canEdit) {
@@ -239,30 +362,7 @@ export class EvolucionMedicaComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.route.params.subscribe(params => {
-      if (params['id']) {
-        this.evolucionId = +params['id'];
-        this.isEditMode = true;
-        this.cargarEvolucion();
-      } else {
-        // Si no hay ID, estamos creando una nueva evolución
-        this.canEdit = true;
-      }
-    });
   
-    this.route.queryParams.subscribe(params => {
-      if (params['pacienteId']) {
-        this.pacienteId = +params['pacienteId'];
-        this.cargarDatosPaciente();
-        // Verificar permisos para el odontograma
-        this.canEditOdontograma = this.odontogramaService.canEditOdontograma();
-        
-        // Mostrar odontograma siempre
-        this.showOdontograma = true;
-      }
-    });
-  }
 
   onSubmit() {
     // Verificar si el usuario es dentista y solo está trabajando con el odontograma
