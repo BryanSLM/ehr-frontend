@@ -209,154 +209,294 @@
   </div>
 
   <!-- Sección de Diagnósticos -->
-  <div class="card mb-4">
-    <div class="card-header">
-      <h5 class="mb-0">
-        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#diagnosticosCollapse"
-          (click)="cerrarOtrosSecciones('diagnosticos')">
-          <i class="fas fa-chevron-down me-2"></i>
-          <i class="fas fa-stethoscope me-2"></i>
-          Diagnóstico
-        </button>
-      </h5>
-    </div>
-    <div class="card-body collapse" id="diagnosticosCollapse">
-      <div class="alert alert-secondary py-2 mb-3">PRE = PRESUNTIVO &nbsp;&nbsp; DEF = DEFINITIVO</div>
-      <form [formGroup]="diagnosticoForm">
-        <div formArrayName="diagnosticos">
-          <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th class="col-numero">#</th>
-                  <th>DIAGNÓSTICO</th>
-                  <th style="width: 18%;">CIE</th>
-                  <th style="width: 10%;" class="text-center">PRE</th>
-                  <th style="width: 10%;" class="text-center">DEF</th>
-                  <th *ngIf="canEdit" class="col-acciones">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let diagnostico of diagnosticos.controls; let i=index" [formGroupName]="i">
-                  <td class="text-center">{{i + 1}}</td>
-                  <td class="position-relative">
-                    <input type="text" formControlName="nombre" class="form-control form-control-sm" (input)="buscarCIE($event, i)" [readonly]="!canEdit" placeholder="Buscar diagnóstico...">
-                    <div *ngIf="cieSuggestions.length > 0 && selectedDiagnosticoIndex === i" class="cie-suggestions">
-                      <div *ngFor="let cie of cieSuggestions" (click)="seleccionarCIE(cie, i)" class="cie-suggestion-item">
-                        <strong>{{cie.CODIGO}}</strong> - {{cie.NOMBRE}}
-                      </div>
-                    </div>
-                  </td>
-                  <td><input type="text" formControlName="codigo" class="form-control form-control-sm" readonly></td>
-                  <td class="text-center align-middle"><input type="radio" [value]="'PRE'" formControlName="tipo" [disabled]="!canEdit"></td>
-                  <td class="text-center align-middle"><input type="radio" [value]="'DEF'" formControlName="tipo" [disabled]="!canEdit"></td>
-                  <td *ngIf="canEdit" class="text-center">
-                    <button type="button" class="btn btn-danger btn-sm" (click)="eliminarDiagnostico(i)">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <button *ngIf="canEdit" type="button" class="btn btn-primary mt-3" (click)="agregarDiagnostico()">
-          <i class="fas fa-plus-circle me-2"></i>Agregar Diagnóstico
-        </button>
-      </form>
-    </div>
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">
+      <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#diagnosticosCollapse"
+        (click)="cerrarOtrosSecciones('diagnosticos')">
+        <i class="fas fa-chevron-down me-2"></i>
+        <i class="fas fa-stethoscope me-2"></i>
+        Diagnóstico
+      </button>
+    </h5>
   </div>
+  <div class="card-body collapse" id="diagnosticosCollapse">
+    <div class="alert alert-secondary py-2 mb-3">PRE = PRESUNTIVO &nbsp;&nbsp; DEF = DEFINITIVO</div>
+    <form [formGroup]="diagnosticoForm">
+      <div formArrayName="diagnosticos">
+        
+        <!-- Vista Desktop: Tabla normal -->
+        <div class="table-responsive d-none d-lg-block">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th class="col-numero">#</th>
+                <th>DIAGNÓSTICO</th>
+                <th style="width: 18%;">CIE</th>
+                <th style="width: 10%;" class="text-center">PRE</th>
+                <th style="width: 10%;" class="text-center">DEF</th>
+                <th *ngIf="canEdit" class="col-acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let diagnostico of diagnosticos.controls; let i=index" [formGroupName]="i">
+                <td class="text-center">{{i + 1}}</td>
+                <td class="position-relative">
+                  <input type="text" formControlName="nombre" class="form-control form-control-sm" 
+                    (input)="buscarCIE($event, i)" [readonly]="!canEdit" placeholder="Buscar diagnóstico...">
+                  <div *ngIf="cieSuggestions.length > 0 && selectedDiagnosticoIndex === i" class="cie-suggestions">
+                    <div *ngFor="let cie of cieSuggestions" (click)="seleccionarCIE(cie, i)" class="cie-suggestion-item">
+                      <strong>{{cie.CODIGO}}</strong> - {{cie.NOMBRE}}
+                    </div>
+                  </div>
+                </td>
+                <td><input type="text" formControlName="codigo" class="form-control form-control-sm" readonly></td>
+                <td class="text-center align-middle"><input type="radio" [value]="'PRE'" formControlName="tipo" [disabled]="!canEdit"></td>
+                <td class="text-center align-middle"><input type="radio" [value]="'DEF'" formControlName="tipo" [disabled]="!canEdit"></td>
+                <td *ngIf="canEdit" class="text-center">
+                  <button type="button" class="btn btn-danger btn-sm" (click)="eliminarDiagnostico(i)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-  <!-- Formulario de Prescripción -->
-  <div class="card mb-4">
-    <div class="card-header">
-      <h5 class="mb-0">
-        <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#prescripcionCollapse"
-          (click)="cerrarOtrosSecciones('prescripcion')">
-          <i class="fas fa-chevron-down me-2"></i>
-          <i class="fas fa-pills me-2"></i>
-          Prescripción de Fármacos
-        </button>
-      </h5>
-    </div>
-    <div class="card-body collapse" id="prescripcionCollapse">
-      <form [formGroup]="prescripcionForm">
-        <div formArrayName="medicamentos">
-          <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th class="col-numero">#</th>
-                  <th style="width: 9%;">Fecha</th>
-                  <th style="width: 11%;">Genérico</th>
-                  <th style="width: 11%;">Comercial</th>
-                  <th style="width: 8%;">Conc.</th>
-                  <th style="width: 9%;">Forma</th>
-                  <th style="width: 7%;">Dosis</th>
-                  <th style="width: 10%;">Frecuencia</th>
-                  <th style="width: 7%;">Duración</th>
-                  <th style="width: 9%;">Vía Admin.</th>
-                  <th style="width: 10%;">Indicaciones</th>
-                  <th *ngIf="canEdit" class="col-acciones">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let medicamento of medicamentos.controls; let i=index" [formGroupName]="i">
-                  <td class="text-center">{{i + 1}}</td>
-                  <td>
-                    <input type="date" class="form-control form-control-sm" formControlName="fecha_emision" [readonly]="!canEdit">
-                  </td>
-                  <td class="position-relative">
-                    <input type="text" class="form-control form-control-sm" formControlName="nombre_generico" (input)="buscarMedicamento($event, i)" [readonly]="!canEdit" placeholder="Buscar...">
-                    <div *ngIf="mostrarSugerenciasMedicamentos && medicamentosSugeridos.length > 0" class="medicamentos-suggestions">
-                      <div *ngFor="let med of medicamentosSugeridos" (click)="seleccionarMedicamento(med, i)" class="medicamento-suggestion-item">
-                        <strong>{{med.nombre_generico}}</strong><br>
-                        <small>{{med.concentracion}} - {{med.forma_farmaceutica}}</small>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="position-relative">
-                    <input type="text" class="form-control form-control-sm" formControlName="nombre_comercial" [readonly]="!canEdit" placeholder="Seleccione...">
-                  </td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="concentracion" readonly></td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="forma_farmaceutica" readonly></td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="dosis" [readonly]="!canEdit" placeholder="1 tab"></td>
-                  <td>
-                    <select class="form-select form-select-sm" formControlName="frecuencia" [disabled]="!canEdit">
-                      <option value="">Sel.</option>
-                      <option value="cada 4 horas">C/4h</option>
-                      <option value="cada 6 horas">C/6h</option>
-                      <option value="cada 8 horas">C/8h</option>
-                      <option value="cada 12 horas">C/12h</option>
-                      <option value="cada 24 horas">C/24h</option>
-                      <option value="una vez al día">1x/día</option>
-                      <option value="dos veces al día">2x/día</option>
-                      <option value="tres veces al día">3x/día</option>
-                    </select>
-                  </td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="duracion_tratamiento" [readonly]="!canEdit" placeholder="7d"></td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="via_administracion" readonly></td>
-                  <td><input type="text" class="form-control form-control-sm" formControlName="indicaciones_adicionales" [readonly]="!canEdit" placeholder="..."></td>
-                  <td *ngIf="canEdit" class="text-center">
-                    <button type="button" class="btn btn-danger btn-sm" (click)="eliminarMedicamento(i)">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Vista Mobile/Tablet: Cards -->
+        <div class="d-lg-none">
+          <div *ngFor="let diagnostico of diagnosticos.controls; let i=index" [formGroupName]="i" 
+               class="diagnostico-card mb-3">
+            <div class="diagnostico-card-header">
+              <span class="badge ">Diagnóstico #{{i + 1}}</span>
+              <button *ngIf="canEdit" type="button" class="btn btn-danger btn-sm" (click)="eliminarDiagnostico(i)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            
+            <div class="diagnostico-card-body">
+              <div class="mb-3 position-relative">
+                <label class="form-label"><strong>Diagnóstico</strong></label>
+                <input type="text" formControlName="nombre" class="form-control" 
+                  (input)="buscarCIE($event, i)" [readonly]="!canEdit" placeholder="Buscar diagnóstico...">
+                <div *ngIf="cieSuggestions.length > 0 && selectedDiagnosticoIndex === i" class="cie-suggestions">
+                  <div *ngFor="let cie of cieSuggestions" (click)="seleccionarCIE(cie, i)" class="cie-suggestion-item">
+                    <strong>{{cie.CODIGO}}</strong> - {{cie.NOMBRE}}
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label"><strong>Código CIE</strong></label>
+                <input type="text" formControlName="codigo" class="form-control" readonly>
+              </div>
+
+              <div class="tipo-diagnostico-group">
+                <label class="form-label d-block"><strong>Tipo de Diagnóstico</strong></label>
+                <div class="d-flex gap-3">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" [value]="'PRE'" formControlName="tipo" 
+                      [id]="'tipo-pre-' + i" [disabled]="!canEdit">
+                    <label class="form-check-label" [for]="'tipo-pre-' + i">Presuntivo</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" [value]="'DEF'" formControlName="tipo" 
+                      [id]="'tipo-def-' + i" [disabled]="!canEdit">
+                    <label class="form-check-label" [for]="'tipo-def-' + i">Definitivo</label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <button *ngIf="canEdit" type="button" class="btn btn-primary mt-3" (click)="agregarMedicamento()">
-          <i class="fas fa-plus-circle me-2"></i>Agregar Medicamento
-        </button>
-      </form>
-    </div>
+
+      </div>
+      <button *ngIf="canEdit" type="button" class="btn btn-primary mt-3 w-100 w-sm-auto" (click)="agregarDiagnostico()">
+        <i class="fas fa-plus-circle me-2"></i>Agregar Diagnóstico
+      </button>
+    </form>
   </div>
+</div>
+
+<!-- Formulario de Prescripción -->
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">
+      <button class="btn btn-link text-decoration-none text-dark p-0 w-100 text-start" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#prescripcionCollapse"
+        (click)="cerrarOtrosSecciones('prescripcion')">
+        <i class="fas fa-chevron-down me-2"></i>
+        <i class="fas fa-pills me-2"></i>
+        Prescripción de Fármacos
+      </button>
+    </h5>
+  </div>
+  <div class="card-body collapse" id="prescripcionCollapse">
+    <form [formGroup]="prescripcionForm">
+      <div formArrayName="medicamentos">
+        
+        <!-- Vista Desktop: Tabla normal -->
+        <div class="table-responsive d-none d-lg-block">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th class="col-numero">#</th>
+                <th style="width: 9%;">Fecha</th>
+                <th style="width: 11%;">Genérico</th>
+                <th style="width: 11%;">Comercial</th>
+                <th style="width: 8%;">Conc.</th>
+                <th style="width: 9%;">Forma</th>
+                <th style="width: 7%;">Dosis</th>
+                <th style="width: 10%;">Frecuencia</th>
+                <th style="width: 7%;">Duración</th>
+                <th style="width: 9%;">Vía Admin.</th>
+                <th style="width: 10%;">Indicaciones</th>
+                <th *ngIf="canEdit" class="col-acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let medicamento of medicamentos.controls; let i=index" [formGroupName]="i">
+                <td class="text-center">{{i + 1}}</td>
+                <td>
+                  <input type="date" class="form-control form-control-sm" formControlName="fecha_emision" [readonly]="!canEdit">
+                </td>
+                <td class="position-relative">
+                  <input type="text" class="form-control form-control-sm" formControlName="nombre_generico" 
+                    (input)="buscarMedicamento($event, i)" [readonly]="!canEdit" placeholder="Buscar...">
+                  <div *ngIf="mostrarSugerenciasMedicamentos && medicamentosSugeridos.length > 0" class="medicamentos-suggestions">
+                    <div *ngFor="let med of medicamentosSugeridos" (click)="seleccionarMedicamento(med, i)" class="medicamento-suggestion-item">
+                      <strong>{{med.nombre_generico}}</strong><br>
+                      <small>{{med.concentracion}} - {{med.forma_farmaceutica}}</small>
+                    </div>
+                  </div>
+                </td>
+                <td class="position-relative">
+                  <input type="text" class="form-control form-control-sm" formControlName="nombre_comercial" [readonly]="!canEdit" placeholder="Seleccione...">
+                </td>
+                <td><input type="text" class="form-control form-control-sm" formControlName="concentracion" readonly></td>
+                <td><input type="text" class="form-control form-control-sm" formControlName="forma_farmaceutica" readonly></td>
+                <td><input type="text" class="form-control form-control-sm" formControlName="dosis" [readonly]="!canEdit" placeholder="1 tab"></td>
+                <td>
+                  <select class="form-select form-select-sm" formControlName="frecuencia" [disabled]="!canEdit">
+                    <option value="">Sel.</option>
+                    <option value="cada 4 horas">C/4h</option>
+                    <option value="cada 6 horas">C/6h</option>
+                    <option value="cada 8 horas">C/8h</option>
+                    <option value="cada 12 horas">C/12h</option>
+                    <option value="cada 24 horas">C/24h</option>
+                    <option value="una vez al día">1x/día</option>
+                    <option value="dos veces al día">2x/día</option>
+                    <option value="tres veces al día">3x/día</option>
+                  </select>
+                </td>
+                <td><input type="text" class="form-control form-control-sm" formControlName="duracion_tratamiento" [readonly]="!canEdit" placeholder="7d"></td>
+                <td><input type="text" class="form-control form-control-sm" formControlName="via_administracion" readonly></td>
+                <td><input type="text" class="form-control form-control-sm" formControlName="indicaciones_adicionales" [readonly]="!canEdit" placeholder="..."></td>
+                <td *ngIf="canEdit" class="text-center">
+                  <button type="button" class="btn btn-danger btn-sm" (click)="eliminarMedicamento(i)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Vista Mobile/Tablet: Cards -->
+        <div class="d-lg-none">
+          <div *ngFor="let medicamento of medicamentos.controls; let i=index" [formGroupName]="i" 
+               class="medicamento-card mb-3">
+            <div class="medicamento-card-header">
+              <span class="badge ">Medicamento #{{i + 1}}</span>
+              <button *ngIf="canEdit" type="button" class="btn btn-danger btn-sm" (click)="eliminarMedicamento(i)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            
+            <div class="medicamento-card-body">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label"><strong><i class="fas fa-calendar me-1"></i>Fecha de Emisión</strong></label>
+                  <input type="date" class="form-control" formControlName="fecha_emision" [readonly]="!canEdit">
+                </div>
+
+                <div class="col-12 position-relative">
+                  <label class="form-label"><strong><i class="fas fa-pills me-1"></i>Nombre Genérico</strong></label>
+                  <input type="text" class="form-control" formControlName="nombre_generico" 
+                    (input)="buscarMedicamento($event, i)" [readonly]="!canEdit" placeholder="Buscar medicamento...">
+                  <div *ngIf="mostrarSugerenciasMedicamentos && medicamentosSugeridos.length > 0" class="medicamentos-suggestions">
+                    <div *ngFor="let med of medicamentosSugeridos" (click)="seleccionarMedicamento(med, i)" class="medicamento-suggestion-item">
+                      <strong>{{med.nombre_generico}}</strong><br>
+                      <small>{{med.concentracion}} - {{med.forma_farmaceutica}}</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label"><strong><i class="fas fa-prescription-bottle me-1"></i>Nombre Comercial</strong></label>
+                  <input type="text" class="form-control" formControlName="nombre_comercial" [readonly]="!canEdit" placeholder="Seleccione...">
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label"><strong>Concentración</strong></label>
+                  <input type="text" class="form-control" formControlName="concentracion" readonly>
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label"><strong>Forma Farmacéutica</strong></label>
+                  <input type="text" class="form-control" formControlName="forma_farmaceutica" readonly>
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label"><strong>Dosis</strong></label>
+                  <input type="text" class="form-control" formControlName="dosis" [readonly]="!canEdit" placeholder="1 tableta">
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label"><strong>Frecuencia</strong></label>
+                  <select class="form-select" formControlName="frecuencia" [disabled]="!canEdit">
+                    <option value="">Seleccionar</option>
+                    <option value="cada 4 horas">Cada 4 horas</option>
+                    <option value="cada 6 horas">Cada 6 horas</option>
+                    <option value="cada 8 horas">Cada 8 horas</option>
+                    <option value="cada 12 horas">Cada 12 horas</option>
+                    <option value="cada 24 horas">Cada 24 horas</option>
+                    <option value="una vez al día">1 vez al día</option>
+                    <option value="dos veces al día">2 veces al día</option>
+                    <option value="tres veces al día">3 veces al día</option>
+                  </select>
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label"><strong>Duración</strong></label>
+                  <input type="text" class="form-control" formControlName="duracion_tratamiento" [readonly]="!canEdit" placeholder="7 días">
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label"><strong>Vía de Administración</strong></label>
+                  <input type="text" class="form-control" formControlName="via_administracion" readonly>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label"><strong>Indicaciones Adicionales</strong></label>
+                  <textarea class="form-control" formControlName="indicaciones_adicionales" 
+                    [readonly]="!canEdit" rows="2" placeholder="Indicaciones especiales..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <button *ngIf="canEdit" type="button" class="btn btn-primary mt-3 w-100 w-sm-auto" (click)="agregarMedicamento()">
+        <i class="fas fa-plus-circle me-2"></i>Agregar Medicamento
+      </button>
+    </form>
+  </div>
+</div>
 
   <!-- Botones de acción -->
   <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-4 mb-4">

@@ -1,13 +1,39 @@
-/* Contenedor principal */
+/* ============================================
+   TABLA DE CONTENIDOS
+   ============================================
+   1. Variables y Reset
+   2. Layout Principal
+   3. Tarjeta de Información del Paciente
+   4. Cards Generales
+   5. Formularios
+   6. Signos Vitales
+   7. Tablas
+   8. Cards de Diagnósticos
+   9. Cards de Medicamentos
+   10. Sugerencias y Dropdowns
+   11. Botones
+   12. Alertas
+   13. Modal
+   14. Animaciones
+   15. Accesibilidad
+   16. Responsive Design
+   17. Modo Impresión
+   ============================================ */
+
+/* ============================================
+   1. LAYOUT PRINCIPAL
+   ============================================ */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 5rem;
 }
 
-/* Tarjeta de información del paciente */
+/* ============================================
+   2. TARJETA DE INFORMACIÓN DEL PACIENTE
+   ============================================ */
 .patient-info-card {
-  background: linear-gradient( 135deg, #1e6372 20%, #184e5a 80%);
+  background: linear-gradient(135deg, #1e6372 20%, #184e5a 80%);
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -32,9 +58,10 @@
   font-size: 1.1rem;
   margin-top: 0.5rem;
 }
-/* Tablas*/
 
-/* Cards generales */
+/* ============================================
+   3. CARDS GENERALES
+   ============================================ */
 .card {
   border: none;
   border-radius: 12px;
@@ -65,7 +92,9 @@
   padding: 2rem;
 }
 
-/* Formularios */
+/* ============================================
+   4. FORMULARIOS
+   ============================================ */
 .form-label {
   color: #2c3e50;
   font-weight: 500;
@@ -98,14 +127,32 @@
   opacity: 0.8;
 }
 
-/* Form controls pequeños */
 .form-control-sm,
 .form-select-sm {
   padding: 0.5rem;
   font-size: 0.875rem;
 }
 
-/* Signos vitales */
+/* Checkboxes personalizados */
+.form-check {
+  padding-left: 1.75rem;
+}
+
+.form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.125rem;
+}
+
+.form-check-label {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+/* ============================================
+   5. SIGNOS VITALES
+   ============================================ */
 .vital-sign-card {
   display: flex;
   align-items: center;
@@ -145,18 +192,9 @@
   color: #2c3e50;
 }
 
-/* Sección de diagnósticos */
-.diagnosticos-section {
-  margin: 20px 0;
-}
-
-.diagnosticos-legend {
-  margin-bottom: 10px;
-  font-size: 0.9em;
-  color: #666;
-}
-
-/* Tablas */
+/* ============================================
+   6. TABLAS
+   ============================================ */
 .table-responsive {
   overflow: visible !important;
   position: relative;
@@ -168,8 +206,6 @@
   min-width: 800px;
   overflow: visible !important;
 }
-
-
 
 .table th {
   background-color: #f8f9fa;
@@ -190,38 +226,202 @@
   overflow: visible !important;
 }
 
-
-/* Scroll personalizado para las sugerencias */
-.cie-suggestions::-webkit-scrollbar,
-.medicamentos-suggestions::-webkit-scrollbar {
-  width: 8px;
+/* ============================================
+   7. CARDS DE DIAGNÓSTICOS
+   ============================================ */
+.diagnostico-card {
+  background: #fff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: slideIn 0.3s ease-out;
 }
 
-
-.cie-suggestions::-webkit-scrollbar-track,
-.medicamentos-suggestions::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
+.diagnostico-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
 }
 
-.cie-suggestions::-webkit-scrollbar-thumb,
-.medicamentos-suggestions::-webkit-scrollbar-thumb {
-  background: #007bff;
-  border-radius: 10px;
+.diagnostico-card:focus-within {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
 }
 
-.cie-suggestions::-webkit-scrollbar-thumb:hover,
-.medicamentos-suggestions::-webkit-scrollbar-thumb:hover {
-  background: #0056b3;
+.diagnostico-card-header {
+  background: linear-gradient( 135deg, #1e6372 20%, #184e5a 80%);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-/* Sugerencias CIE */
+
+.diagnostico-card-header .badge {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient( 135deg, #1e6372 20%, #184e5a 80%);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.389);
+}
+
+.diagnostico-card-header .btn-danger {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.diagnostico-card-body {
+  padding: 1.25rem;
+}
+
+.diagnostico-card-body .form-label {
+  color: #2c3e50;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.diagnostico-card-body .form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.diagnostico-card-body .form-control:focus {
+  border-color: #212121;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.15);
+}
+
+.diagnostico-card-body .form-control[readonly] {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.diagnostico-card .position-relative {
+  position: relative;
+}
+
+.diagnostico-card .cie-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  min-width: auto;
+  max-width: none;
+  margin-top: 4px;
+  z-index: 1050;
+}
+
+.tipo-diagnostico-group {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+/* ============================================
+   8. CARDS DE MEDICAMENTOS
+   ============================================ */
+.medicamento-card {
+  background: #fff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: slideIn 0.3s ease-out;
+}
+
+.medicamento-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.medicamento-card:focus-within {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
+}
+
+.medicamento-card-header {
+  background: linear-gradient( 135deg, #1e6372 20%, #184e5a 80%);;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.medicamento-card-header .badge {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient( 135deg, #1e6372 20%, #184e5a 80%);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.389);
+}
+
+.medicamento-card-header .btn-danger {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.medicamento-card-body {
+  padding: 1.25rem;
+}
+
+.medicamento-card-body .form-label {
+  color: #2c3e50;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.medicamento-card-body .form-label i {
+  color: #1e6372;
+}
+
+.medicamento-card-body .form-control,
+.medicamento-card-body .form-select {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.medicamento-card-body .form-control:focus,
+.medicamento-card-body .form-select:focus {
+  border-color: #1e6372;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.15);
+}
+
+.medicamento-card-body .form-control[readonly] {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.medicamento-card .position-relative {
+  position: relative;
+}
+
+.medicamento-card .medicamentos-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  min-width: auto;
+  max-width: none;
+  margin-top: 4px;
+  z-index: 1050;
+}
+
+/* ============================================
+   9. SUGERENCIAS Y DROPDOWNS
+   ============================================ */
 .position-relative {
   position: relative !important;
 }
 
+/* Sugerencias CIE */
 .cie-suggestions {
-  position: absolute !important; /* Cambiado de relative a absolute */
-  top: 100%; /* Se posiciona justo debajo del input */
+  position: absolute !important;
+  top: 100%;
   left: 0;
   width: auto;
   min-width: 300px;
@@ -234,7 +434,25 @@
   z-index: 10001 !important;
   box-shadow: 0 8px 32px rgba(0, 123, 255, 0.3);
   animation: fadeIn 0.3s ease-out;
-  margin-top: 4px; 
+  margin-top: 4px;
+}
+
+.cie-suggestions::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cie-suggestions::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.cie-suggestions::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 10px;
+}
+
+.cie-suggestions::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
 }
 
 .cie-suggestion-item {
@@ -244,6 +462,7 @@
   transition: background-color 0.2s;
   font-size: 0.875rem;
   line-height: 1.4;
+  
 }
 
 .cie-suggestion-item:hover {
@@ -262,8 +481,8 @@
 
 /* Sugerencias de medicamentos */
 .medicamentos-suggestions {
-  position: absolute !important; /* Cambiado de relative a absolute */
-  top: 100%; /* Se posiciona justo debajo del input */
+  position: absolute !important;
+  top: 100%;
   left: 0;
   width: auto;
   min-width: 320px;
@@ -276,7 +495,25 @@
   z-index: 10001 !important;
   box-shadow: 0 8px 32px rgba(0, 123, 255, 0.3);
   animation: fadeIn 0.3s ease-out;
-  margin-top: 4px; /* Pequeño espacio entre el input y el dropdown */
+  margin-top: 4px;
+}
+
+.medicamentos-suggestions::-webkit-scrollbar {
+  width: 8px;
+}
+
+.medicamentos-suggestions::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.medicamentos-suggestions::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 10px;
+}
+
+.medicamentos-suggestions::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
 }
 
 .medicamento-suggestion-item {
@@ -365,7 +602,9 @@
   background-color: #bbdefb;
 }
 
-/* Botones */
+/* ============================================
+   10. BOTONES
+   ============================================ */
 .btn {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -383,8 +622,7 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
 }
 
 .btn-primary:hover {
@@ -396,7 +634,7 @@
 }
 
 .btn-secondary:hover {
-  background:#1e6372;
+  background: #1e6372;
 }
 
 .btn-success {
@@ -421,7 +659,9 @@
   font-size: 0.875rem;
 }
 
-/* Alertas */
+/* ============================================
+   11. ALERTAS
+   ============================================ */
 .alert {
   border-radius: 8px;
   padding: 1rem 1.5rem;
@@ -447,7 +687,14 @@
   color: #2c5282;
 }
 
-/* Modal */
+.alert-secondary {
+  background: #f8f9fa;
+  color: #666;
+}
+
+/* ============================================
+   12. MODAL
+   ============================================ */
 .modal {
   display: block;
   background-color: rgba(0, 0, 0, 0.5);
@@ -486,7 +733,9 @@
   padding: 1rem 1.5rem;
 }
 
-/* Animaciones */
+/* ============================================
+   13. ANIMACIONES
+   ============================================ */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -498,7 +747,20 @@
   }
 }
 
-/* Accesibilidad */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   14. ACCESIBILIDAD
+   ============================================ */
 .form-control:focus-visible,
 .form-select:focus-visible,
 .btn:focus-visible {
@@ -506,25 +768,8 @@
   outline-offset: 2px;
 }
 
-/* Checkboxes personalizados */
-.form-check {
-  padding-left: 1.75rem;
-}
-
-.form-check-input {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-top: 0.125rem;
-}
-
-.form-check-label {
-  font-size: 0.9rem;
-  color: #2c3e50;
-  cursor: pointer;
-}
-
 /* ============================================
-   RESPONSIVE DESIGN - MOBILE FIRST
+   15. RESPONSIVE DESIGN - MOBILE FIRST
    ============================================ */
 
 /* Tablets pequeñas y móviles grandes (hasta 768px) */
@@ -555,7 +800,7 @@
     padding: 1rem;
   }
 
-  /* Signos vitales en dos columnas */
+  /* Signos vitales */
   .vital-sign-card {
     padding: 1rem;
   }
@@ -568,7 +813,7 @@
     font-size: 1rem;
   }
 
-  /* Checkboxes más espaciados */
+  /* Checkboxes */
   .form-check {
     margin-bottom: 0.75rem;
   }
@@ -594,8 +839,8 @@
     padding: 0.5rem;
   }
 
-  /* Sugerencias más pequeñas */
-    .cie-suggestions,
+  /* Sugerencias */
+  .cie-suggestions,
   .medicamentos-suggestions {
     min-width: 250px;
     max-width: 90vw;
@@ -607,6 +852,7 @@
   .medicamento-suggestion-item {
     padding: 10px 12px;
   }
+
   /* Modal */
   .modal-dialog {
     margin: 0.5rem;
@@ -634,7 +880,7 @@
     font-size: 0.9rem;
   }
 
-  /* Cards más compactos */
+  /* Cards */
   .card {
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -653,7 +899,7 @@
     padding: 0.75rem;
   }
 
-  /* Formularios más compactos */
+  /* Formularios */
   .form-control,
   .form-select {
     padding: 0.5rem;
@@ -661,33 +907,33 @@
   }
 
   .form-label {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     margin-bottom: 0.25rem;
   }
 
-  /* Signos vitales en una columna */
+  /* Signos vitales */
   .vital-sign-card {
     padding: 0.75rem;
   }
 
-  /* Checkboxes en una columna completa */
+  /* Checkboxes */
   .form-check {
     width: 100%;
   }
 
-  /* Botones más pequeños */
+  /* Botones */
   .btn {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
   }
 
-  /* Alertas más compactas */
+  /* Alertas */
   .alert {
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
   }
 
-  /* Tablas ultra compactas */
+  /* Tablas */
   .table {
     font-size: 0.75rem;
     min-width: 700px;
@@ -698,11 +944,13 @@
     padding: 0.375rem;
   }
 
-  /* Iconos más pequeños */
+  /* Iconos */
   i.fa-3x {
     font-size: 2rem !important;
   }
-    .cie-suggestions,
+
+  /* Sugerencias */
+  .cie-suggestions,
   .medicamentos-suggestions {
     min-width: 200px;
     max-height: 150px;
@@ -714,6 +962,38 @@
     padding: 8px 10px;
   }
 
+  /* Cards de diagnósticos y medicamentos */
+  .diagnostico-card-header,
+  .medicamento-card-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .diagnostico-card-header .badge,
+  .medicamento-card-header .badge {
+    text-align: center;
+  }
+
+  .diagnostico-card-header .btn-danger,
+  .medicamento-card-header .btn-danger {
+    width: 100%;
+  }
+
+  .diagnostico-card-body,
+  .medicamento-card-body {
+    padding: 0.75rem;
+  }
+
+  .tipo-diagnostico-group {
+    padding: 0.75rem;
+  }
+
+  .tipo-diagnostico-group .d-flex {
+    flex-direction: column;
+    gap: 0.75rem !important;
+  }
 }
 
 /* Tablets landscape y desktop pequeño (768px - 992px) */
@@ -724,6 +1004,16 @@
 
   .table {
     font-size: 0.9rem;
+  }
+
+  .diagnostico-card,
+  .medicamento-card {
+    margin-bottom: 1rem;
+  }
+
+  .diagnostico-card-body,
+  .medicamento-card-body {
+    padding: 1rem;
   }
 }
 
@@ -738,7 +1028,9 @@
   }
 }
 
-/* Modo impresión */
+/* ============================================
+   16. MODO IMPRESIÓN
+   ============================================ */
 @media print {
   .btn,
   .alert {
@@ -754,5 +1046,25 @@
   .collapse {
     display: block !important;
     height: auto !important;
+  }
+
+  .diagnostico-card,
+  .medicamento-card {
+    border: 1px solid #ddd;
+    box-shadow: none;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  .diagnostico-card-header,
+  .medicamento-card-header {
+    background: #f8f9fa !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .btn-danger {
+    display: none;
   }
 }

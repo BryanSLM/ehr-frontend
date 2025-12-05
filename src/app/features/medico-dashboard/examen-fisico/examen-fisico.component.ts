@@ -133,7 +133,7 @@ limpiarPanel(): void {
   // Si hay datos sin guardar, podrías mostrar una confirmación
   if (this.parteActiva && 
       (this.getLesionesDeParteActiva().length > 0 || this.getObservacionesActiva())) {
-    const confirmar = confirm('¿Limpiar el formulario? Los datos de este formulario se borrar revisa si las datos se agrego a la lista .');
+    const confirmar = confirm('Vaciar el formulario. Los datos ingresados se limpiarán y se mostrarán en el resumen');
     if (!confirmar) {
       return;
     }
