@@ -638,11 +638,12 @@
 }
 
 .btn-success {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+
 }
 
 .btn-success:hover {
-  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
 }
 
 .btn-danger {
