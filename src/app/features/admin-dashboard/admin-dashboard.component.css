@@ -1,158 +1,266 @@
+/* ===========================================================
+    BARRA DE NAVEGACIÓN GENERAL
+   =========================================================== */
 .custom-navbar {
-  background: url('/assets/navbar_admin.png') no-repeat center center;
+  background: url('/assets/navbar_secre.png') no-repeat center center;
   background-size: cover;
-  padding: 1rem;
-  margin-left: -10px;
-  margin-right: -7px;
+  padding: 0.2rem 0.8rem; 
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   position: relative;
-  padding-top: 5px;
-}
-
-.custom-navbar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: none;
-  z-index: 1;
+  z-index: 10;
+  min-height: 60px;
 }
 
 .container-fluid {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
+  justify-content: flex-start;
+  gap: 2rem;
 }
 
+/* ===========================================================
+   LOGO + TÍTULOS
+   =========================================================== */
+.navbar-header {
+  display: flex;
+  align-items: center;
+}
 
 .navbar-brand {
-  color: #3D539F;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  font-size: 1.4rem;
-  font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 10px;
-  z-index: 2;
-  margin-left: -10px;
-  margin-top: 20px; /* Ajusta según lo necesites */
-
+  gap: 0.1rem;
 }
 
+/* Logo */
+.navbar-logo {
+  width: 150px;
+  height: auto;
+  cursor: pointer;
+  margin-left: 0.7em;
+  margin-top: -5px;
+}
+
+/* Título */
+.navbar-brand div {
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Subtítulo */
 .navbar-subtitle {
-  font-size: 1rem; /* Tamaño más pequeño */
-  color: #6b7280; /* Un gris más suave */
-  margin-top: -2px; /* Ajusta la separación */
-  margin-left: 3.5em;
-  display: block; /* Asegura que esté debajo */
+  font-size: 1rem;
+  margin-top: -3px;
+  color: #fff;
 }
 
-
-
+/* ===========================================================
+   LINKS + CERRAR SESIÓN (ESCRITORIO)
+   =========================================================== */
 .navbar-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 20px;
+  color: #fff;
+  justify-content: flex-start !important;
   align-items: center;
+  flex: 1;
 }
 
-.nav-link {
-  color: #3D539F;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+.navbar-links .btn-cerrar-sesion {
+  margin-left: auto; 
+}
+
+.navbar-links a {
+  color: #ffffff !important;
+  font-weight: 500;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 7px;
   cursor: pointer;
-  position: relative;
-  z-index: 2;
 }
 
-.nav-link::after {
+.navbar-links a {
+  position: relative;
+  padding: 0.25rem 0.5rem;
+}
+
+.navbar-links a::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -2px;
   left: 0;
   width: 100%;
-  height: 1.5px;
-  background-color: #E61B48;
+  height: 1.1px;
+  background-color: #1a5562;
   transform: scaleX(0);
-  transform-origin: bottom right;
   transition: transform 0.3s ease;
 }
 
-.nav-link:hover::after {
+.navbar-links a:hover::after {
   transform: scaleX(1);
-  transform-origin: bottom left;
 }
 
-.nav-link:hover {
-  transform: translateY(-1px);
+/* Estilo para link activo */
+.navbar-links a.active {
+  font-weight: 600;
 }
 
-/* Nuevo estilo para el botón de cerrar sesión */
+.navbar-links a.active::after {
+  transform: scaleX(1);
+  background-color: #1a5562;
+}
+
 .btn-cerrar-sesion {
   background-color: transparent;
-  color: #E61B48;
-  border: 2px solid #E61B48;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #ffffff;
+  border: 1.2px solid #E61B48;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
+  gap: 5px;
   transition: all 0.3s ease;
-}
-
-.btn-cerrar-sesion i {
-  font-size: 1.2rem;
+  margin-left: auto;
+  margin-right: 4rem;
+  cursor: pointer;
 }
 
 .btn-cerrar-sesion:hover {
-  background-color: #E61B48;
-  color: white;
+  background-color: #ff0037;
+  color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(230, 27, 72, 0.2);
 }
 
-.navbar-logo {
-  width: 300px;
-  height: auto;
-  margin-right: 10px;
-  display: inline-block;
-  margin-left: 0.7em;
-  cursor: pointer;
-  margin-top: -15px;
+/* ===========================================================
+   MENÚ HAMBURGUESA
+   =========================================================== */
+.navbar-toggler {
+  border-color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.4rem;
+  display: none; /* visible solo en móvil */
 }
 
-@media (max-width: 768px) {
-  .container-fluid {
-    flex-direction: column;
-    gap: 1rem;
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Estado general */
+.navbar-collapse {
+  justify-content: flex-start;
+}
+
+/* ===========================================================
+   MODO MÓVIL (≤ 992px)
+   =========================================================== */
+@media (max-width: 992px) {
+
+  /* Mostrar hamburguesa */
+  .navbar-toggler {
+    display: block;
+    margin-right: auto;
   }
 
+  /* Menú oculto inicialmente */
+  .navbar-collapse {
+    display: none !important;
+    background-color: rgba(26, 85, 98, 0.95);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  /* Cuando Bootstrap lo abre */
+  .navbar-collapse.show {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Links en columna */
   .navbar-links {
     flex-direction: column;
-    width: 100%;
+    gap: 1rem;
+    align-items: flex-start;
   }
 
-  .nav-link {
+  .navbar-links a {
+    width: 100%;
+    color: #fff !important;
+    align-items: flex-start; /* obligatorio para moverlos a la izquierda */
+  }
+}
+
+/* ===========================================================
+   MÓVIL PEQUEÑO (≤ 768px)
+   =========================================================== */
+@media (max-width: 768px) {
+
+  .container-fluid {
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
   }
 
+  .navbar-logo {
+    width: 200px;
+    margin: 0 auto 0.3rem auto;
+  }
+
+  .navbar-brand {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .navbar-brand div {
+    font-size: 1.1rem;
+  }
+
+  .navbar-subtitle {
+    font-size: 0.95rem;
+    margin-top: -5px;
+  }
+
+  .btn-cerrar-sesion i {
+    font-size: 1.3rem;
+  }
+}
+
+/* ===========================================================
+  LAPTOPS PEQUEÑAS (≤ 1200px)
+   =========================================================== */
+@media (max-width: 1200px) {
+  .navbar-brand {
+    gap: 2rem;
+  }
+  .navbar-logo {
+    width: 140px;
+  }
+}
+
+/* ===========================================================
+  PANTALLAS GRANDES (≥ 1600px)
+   =========================================================== */
+@media (min-width: 1600px) {
+  .navbar-logo {
+    width: 180px;
+  }
+  .navbar-brand div {
+    font-size: 1.3rem;
+  }
+  .navbar-subtitle {
+    font-size: 1.1rem;
+  }
   .btn-cerrar-sesion {
-    width: 100%;
-    justify-content: center;
-    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    padding: 0.5rem 0.8rem;
   }
 }
