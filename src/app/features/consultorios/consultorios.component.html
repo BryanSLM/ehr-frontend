@@ -1,6 +1,4 @@
 <div class="consultorios-container">
-  
-
   <!-- Mensajes de alerta -->
   <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show">
     {{ errorMessage }}
@@ -17,7 +15,7 @@
     <form (ngSubmit)="editMode ? updateConsultorio() : createConsultorio()">
       <div class="row g-3">
         <!-- Número de consultorio -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <label for="numero" class="form-label">Número de Consultorio *</label>
           <input 
             type="text" 
@@ -29,7 +27,7 @@
         </div>
 
         <!-- Doctor -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <label for="doctor" class="form-label">Doctor Asignado *</label>
           <select 
             class="form-select" 
@@ -56,14 +54,14 @@
           </textarea>
         </div>
 
-        <!-- Nuevo Selector de Horarios -->
+        <!-- Selector de Horarios -->
         <div class="col-12">
           <div class="horarios-section">
             <h4>Horarios de Atención</h4>
             <app-consultorio-horario
-  [horarios]="consultorioSeleccionado?.horarios || []"
-  (horariosChange)="onHorariosChange($event)">
-</app-consultorio-horario>
+              [horarios]="consultorioSeleccionado?.horarios || []"
+              (horariosChange)="onHorariosChange($event)">
+            </app-consultorio-horario>
           </div>
         </div>
 
@@ -71,17 +69,17 @@
         <div class="col-12">
           <div class="form-actions">
             <button 
+              type="button"
+              class="btn btn-secondary"
+              (click)="resetForm()">
+              Cancelar
+            </button>
+            <button 
               type="submit" 
               class="btn btn-primary me-2"
               [disabled]="isLoading">
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
               {{ isLoading ? 'Guardando...' : (editMode ? 'Actualizar' : 'Guardar') }}
-            </button>
-            <button 
-              type="button"
-              class="btn btn-secondary"
-              (click)="resetForm()">
-              Cancelar
             </button>
           </div>
         </div>
@@ -96,6 +94,7 @@
         <span class="visually-hidden">Cargando...</span>
       </div>
     </div>
+    
     <div class="header">
       <h2>Lista de Consultorios</h2>
       <button 
@@ -104,45 +103,98 @@
         {{ showForm ? 'Cancelar' : 'Nuevo Consultorio' }}
       </button>
     </div>
-    <table class="table table-hover" *ngIf="!isLoading">
-      <thead class="thead-dark">
-        <tr>
-          <th>Número</th>
-          <th>Doctor</th>
-          <th>Descripción</th>
-          <th>Horarios</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let consultorio of consultorios">
-          <td>{{ consultorio.numero }}</td>
-          <td>{{ getDoctorName(consultorio) }}</td>
-          <td>{{ consultorio.descripcion }}</td>
-          <td>
-            <div *ngFor="let horario of consultorio.horarios" class="horario-item">
-              {{ horario.dia }}: {{ horario.horaInicio || '--:--' }} - {{ horario.horaFin || '--:--' }}
+
+    <!-- Vista de tabla para pantallas grandes -->
+    <div class="table-responsive d-none d-md-block" *ngIf="!isLoading">
+      <table class="table table-light ">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Doctor</th>
+            <th>Descripción</th>
+            <th>Horarios</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let consultorio of consultorios">
+            <td><strong>{{ consultorio.numero }}</strong></td>
+            <td>{{ getDoctorName(consultorio) }}</td>
+            <td>{{ consultorio.descripcion }}</td>
+            <td>
+              <div *ngFor="let horario of consultorio.horarios" class="horario-item">
+                <span class="badge bg-secondary">{{ horario.dia }}</span>
+                {{ horario.horaInicio || '--:--' }} - {{ horario.horaFin || '--:--' }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="btn-group" role="group">
+                <button 
+                  class="btn btn-sm btn-primary"
+                  (click)="editConsultorio(consultorio)"
+                  [disabled]="isLoading">
+                  <i class="fas fa-edit"></i> Editar
+                </button>
+                <button 
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteConsultorio(consultorio.id!)"
+                  [disabled]="isLoading">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="consultorios.length === 0">
+            <td colspan="5" class="text-center text-muted">No hay consultorios registrados</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Vista de cards para móviles -->
+    <div class="d-md-none" *ngIf="!isLoading">
+      <div *ngFor="let consultorio of consultorios" class="consultorio-card mb-3">
+        <div class="card-header">
+          <h5>Consultorio {{ consultorio.numero }}</h5>
+        </div>
+        <div class="card-body">
+          <div class="card-info">
+            <strong>Doctor:</strong>
+            <span>{{ getDoctorName(consultorio) }}</span>
+          </div>
+          <div class="card-info">
+            <strong>Descripción:</strong>
+            <span>{{ consultorio.descripcion }}</span>
+          </div>
+          <div class="card-info">
+            <strong>Horarios:</strong>
+            <div class="horarios-mobile">
+              <div *ngFor="let horario of consultorio.horarios" class="horario-item-mobile">
+                <span class="badge bg-secondary">{{ horario.dia }}</span>
+                <span>{{ horario.horaInicio || '--:--' }} - {{ horario.horaFin || '--:--' }}</span>
+              </div>
             </div>
-          </td>
-          <td>
-            <button 
-              class="btn btn-sm btn-primary me-4"
-              (click)="editConsultorio(consultorio)"
-              [disabled]="isLoading">
-              <i class="fas fa-edit"></i> Editar
-            </button>
-            <button 
-              class="btn btn-sm btn-danger"
-              (click)="deleteConsultorio(consultorio.id!)"
-              [disabled]="isLoading">
-              <i class="fas fa-trash"></i> Eliminar
-            </button>
-          </td>
-        </tr>
-        <tr *ngIf="consultorios.length === 0">
-          <td colspan="5" class="text-center">No hay consultorios registrados</td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button 
+            class="btn btn-sm btn-primary flex-fill"
+            (click)="editConsultorio(consultorio)"
+            [disabled]="isLoading">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button 
+            class="btn btn-sm btn-danger flex-fill"
+            (click)="deleteConsultorio(consultorio.id!)"
+            [disabled]="isLoading">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+      
+      <div *ngIf="consultorios.length === 0" class="text-center text-muted p-4">
+        No hay consultorios registrados
+      </div>
+    </div>
   </div>
 </div>
