@@ -6,6 +6,8 @@ import { ConsultoriosComponent } from '../consultorios/consultorios.component';
 import { AdminComponent } from '../admin/admin.component';
 import { CatalogosComponent } from '../admin/catalogos/catalogos.component';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
@@ -28,7 +30,10 @@ export class AdminDashboardComponent implements OnInit {
     private router: Router
   ) {}
 
+  
+
   ngOnInit() {
+     
     if (!this.authService.isAuthenticated()) {
       console.log('Usuario no autenticado');
       this.router.navigate(['/login']);
@@ -44,7 +49,24 @@ export class AdminDashboardComponent implements OnInit {
 
     this.userRole = userRole;
     console.log('Dashboard Admin inicializado - Rol:', this.userRole);
+
+    this.enableAutoCloseOnLinkClick();
+
   }
+
+   enableAutoCloseOnLinkClick() {
+  const navbarCollapse = document.getElementById('navbarMenu');
+  if (!navbarCollapse) return;
+
+  const navItems = document.querySelectorAll('.nav-link, .btn-cerrar-sesion');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const collapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+      collapse.hide();
+    });
+  });
+}
 
   setActiveTab(tab: string) {
     this.activeTab = tab;

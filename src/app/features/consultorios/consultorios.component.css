@@ -1,9 +1,8 @@
 .consultorios-container {
   padding: 2rem;
-  background-color: #E5E7EB;
+  background-color: #EEF3EF;
   min-height: 100vh;
   border-radius: 0.8em;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   margin-bottom: 3rem;
 
   .alert {
